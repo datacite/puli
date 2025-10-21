@@ -34,7 +34,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function HorozontalBarChart() {
+export default function HorizontalBarChart() {
   const barSize = 20;
   const barGap = 30;
   const containerHeight = chartData.length * (barSize + barGap) + 40;
