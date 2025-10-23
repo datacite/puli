@@ -56,7 +56,23 @@ export default function HorizontalBarChart() {
         barCategoryGap={barGap}
         barGap={barGap}
       >
-        <YAxis dataKey="category" type="category" hide />
+        <YAxis
+          dataKey="category"
+          type="category"
+          tick={false}
+          axisLine={false}
+          width={0}
+          yAxisId={0}
+        />
+        <YAxis
+          dataKey="present"
+          type="category"
+          orientation="right"
+          axisLine={false}
+          tickLine={false}
+          tickFormatter={asPercent}
+          yAxisId={1}
+        />
         <XAxis dataKey="present" type="number" hide />
         <Bar
           dataKey="present"
@@ -66,14 +82,6 @@ export default function HorizontalBarChart() {
           stackId={1}
         >
           <LabelList dataKey="category" content={CategoryLabel} />
-        </Bar>
-        <Bar dataKey="absent" fill="#ffffff00" stackId={1}>
-          <LabelList
-            dataKey="present"
-            position="right"
-            fontSize={12}
-            formatter={asPercent}
-          />
         </Bar>
       </BarChart>
     </ChartContainer>
