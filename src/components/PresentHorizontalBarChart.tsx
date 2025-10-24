@@ -9,10 +9,9 @@ import {
   YAxis,
 } from "recharts";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { CHART } from "@/constants";
 
-const BAR_RADIUS = 5;
-
-export const description = "A bar chart with a custom label";
+const BAR = CHART.bar;
 
 const chartData = [
   { category: "creatorName", present: 70 },
@@ -35,26 +34,22 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function HorizontalBarChart() {
-  const barSize = 20;
-  const barGap = 30;
-  const containerHeight = chartData.length * (barSize + barGap) + 40;
+  const containerHeight = chartData.length * (BAR.size + BAR.gap) + 40;
 
   return (
     <ChartContainer
       config={chartConfig}
-      className="min-w-full"
+      className="w-full"
       style={{ height: `${containerHeight}px` }}
     >
       <BarChart
         accessibilityLayer
         data={chartData}
         layout="vertical"
-        margin={{
-          right: 50,
-        }}
-        barSize={barSize}
-        barCategoryGap={barGap}
-        barGap={barGap}
+        margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+        barSize={BAR.size}
+        barCategoryGap={BAR.gap}
+        barGap={BAR.gap}
       >
         <YAxis
           dataKey="category"
@@ -72,13 +67,14 @@ export default function HorizontalBarChart() {
           tickLine={false}
           tickFormatter={asPercent}
           yAxisId={1}
+          tickMargin={0}
         />
         <XAxis dataKey="present" type="number" hide />
         <Bar
           dataKey="present"
           fill="var(--color-present)"
-          background={{ fill: "var(--color-absent)", radius: BAR_RADIUS }}
-          radius={BAR_RADIUS}
+          background={{ fill: "var(--color-absent)", radius: BAR.radius }}
+          radius={BAR.radius}
           stackId={1}
         >
           <LabelList dataKey="category" content={CategoryLabel} />

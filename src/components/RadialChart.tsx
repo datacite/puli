@@ -1,6 +1,12 @@
 "use client";
 
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import {
+  Label,
+  type LabelProps,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+} from "recharts";
 
 import {
   type ChartConfig,
@@ -8,8 +14,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { CHART } from "@/constants";
 
-const BAR_RADIUS = 5;
+const BAR = { ...CHART.bar, size: 20 };
 
 const chartData = [{ category: "creators", present: 70 }].map((item) => ({
   ...item,
@@ -31,59 +38,54 @@ export default function RadialChart() {
   const present = chartData[0].present;
 
   return (
-    <ChartContainer
-      config={chartConfig}
-      className="mx-auto aspect-square w-full max-w-[250px]"
-    >
+    <ChartContainer config={chartConfig} className="aspect-square w-full">
       <RadialBarChart
         data={chartData}
-        barSize={20}
+        barSize={BAR.size}
         startAngle={180}
         endAngle={0}
-        innerRadius={80}
+        innerRadius={60}
         outerRadius={130}
+        margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
       >
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
         />
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                return (
-                  <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) - 16}
-                      className="fill-foreground text-2xl font-bold"
-                    >
-                      {asPercent(present)}
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
-          />
+          <Label content={PresentLabel} />
         </PolarRadiusAxis>
         <RadialBar
           dataKey="present"
           stackId="a"
-          cornerRadius={BAR_RADIUS}
+          cornerRadius={BAR.radius}
           fill="var(--color-present)"
           className="stroke-transparent stroke-2"
-          background={{ fill: "var(--color-absent)", radius: BAR_RADIUS }}
+          background={{ fill: "var(--color-absent)", radius: BAR.radius }}
         />
         <RadialBar
           dataKey="absent"
           fill="#ffffff00"
           stackId="a"
-          cornerRadius={BAR_RADIUS}
+          cornerRadius={BAR.radius}
           className="stroke-transparent stroke-2"
         />
       </RadialBarChart>
     </ChartContainer>
   );
+
+  function PresentLabel({ viewBox }: LabelProps) {
+    if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) return;
+    const { cx, cy = 0 } = viewBox;
+
+    return (
+      <text x={cx} y={cy} textAnchor="middle">
+        <tspan x={cx} y={cy - 6} className="fill-foreground text-3xl">
+          {asPercent(present)}
+        </tspan>
+      </text>
+    );
+  }
 }
 
 function asPercent(value: number) {
