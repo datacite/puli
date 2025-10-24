@@ -1,6 +1,6 @@
+import type { ReactNode } from "react";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -8,30 +8,34 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-import RadialChart from "./RadialChart";
-import PresentChart from "@/components/PresentHorizontalBarChart";
-import DistributionChart from "@/components/DistributionHorizontalBarChart";
+export interface Props {
+  title: string;
+  description: string | ReactNode;
+  columns: ReactNode[];
+}
 
-export default function ChartsCard() {
+export default function ChartsCard(props: Props) {
+  const { title, description, columns } = props;
+  const content = columns.map((c, i) => {
+    if (i === 0) return c;
+
+    return (
+      <>
+        <Separator orientation="vertical" />
+        {c}
+      </>
+    );
+  });
+
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Creators</CardTitle>
-        <CardDescription>
-          The Creators property supports citation and connects resources to
-          people and organizations. Add nameIdentifiers with ORCIDs and RORs and
-          affiliationIdentifiers with RORs for the highest impact.{" "}
-          <a>Learn more</a>
-        </CardDescription>
-        <CardAction></CardAction>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-[150px_min-content_minmax(0,1fr)_min-content_minmax(0,1fr)] grid-flow-col gap-10">
-        <RadialChart />
-        <Separator orientation="vertical" />
-        <PresentChart />
-        <Separator orientation="vertical" />
-        <DistributionChart />
+      <CardContent className="grid grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] grid-flow-col gap-10">
+        {content}
       </CardContent>
     </Card>
   );
