@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import React, { ComponentProps, type ReactNode } from "react";
 import {
   Card,
   CardContent,
@@ -7,34 +7,49 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import HighImpactBadge from "@/components/HighImpactBadge";
+import RadialChart from "@/components/RadialChart";
+import { cn } from "@/lib/utils";
 
-export interface Props {
+export interface Props extends ComponentProps<"div"> {
   title: string;
   description: string | ReactNode;
-  columns: ReactNode[];
+  present: number;
+  columns?: ReactNode[];
+  isHighImpact?: boolean;
 }
 
-export default function ChartsCard(props: Props) {
-  const { title, description, columns } = props;
+export default function ChartsCard({
+  title,
+  description,
+  present,
+  columns = [],
+  isHighImpact = false,
+  className,
+  ...cardProps
+}: Props) {
   const content = columns.map((c, i) => {
-    if (i === 0) return c;
-
     return (
-      <>
+      // biome-ignore lint/suspicious/noArrayIndexKey: OK for static content
+      <React.Fragment key={i}>
         <Separator orientation="vertical" />
         {c}
-      </>
+      </React.Fragment>
     );
   });
 
   return (
-    <Card className="w-full">
+    <Card className={cn("w-full", className)} {...cardProps}>
       <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        <CardTitle>
+          {title}
+          <HighImpactBadge show={isHighImpact} />
+        </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] grid-flow-col gap-10">
+      <CardContent className="grid grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] grid-flow-col gap-8">
+        <RadialChart present={present} />
         {content}
       </CardContent>
     </Card>

@@ -20,7 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sourceSans3.className} antialiased`}>{children}</body>
+      <body
+        className={`${sourceSans3.className} antialiased max-w-7xl mx-auto px-6 bg-gray-100`}
+      >
+        {children}
+      </body>
     </html>
   );
 }

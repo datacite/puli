@@ -8,20 +8,16 @@ import {
   RadialBarChart,
 } from "recharts";
 
-import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
+import { asPercent } from "@/util";
+
+export interface Props {
+  property?: string;
+  present: number;
+}
 
 const BAR = { ...CHART.bar, size: 20 };
-
-const chartData = [{ category: "creators", present: 70 }].map((item) => ({
-  ...item,
-  absent: 100 - item.present,
-}));
 
 const chartConfig = {
   present: {
@@ -34,13 +30,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export default function RadialChart() {
-  const present = chartData[0].present;
+export default function RadialChart(props: Props) {
+  const { property = "property", present } = props;
+  const data = [{ property, present, absent: 100 - present }];
 
   return (
     <ChartContainer config={chartConfig} className="aspect-square w-full">
       <RadialBarChart
-        data={chartData}
+        data={data}
         barSize={BAR.size}
         startAngle={180}
         endAngle={0}
@@ -48,11 +45,16 @@ export default function RadialChart() {
         outerRadius={130}
         margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
       >
-        <ChartTooltip
+        {/* <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
-        />
-        <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+        /> */}
+        <PolarRadiusAxis
+          tick={false}
+          tickLine={false}
+          axisLine={false}
+          domain={[0, 100]}
+        >
           <Label content={PresentLabel} />
         </PolarRadiusAxis>
         <RadialBar
@@ -69,6 +71,7 @@ export default function RadialChart() {
           stackId="a"
           cornerRadius={BAR.radius}
           className="stroke-transparent stroke-2"
+        // background={{ fill: "#00000000", radius: BAR.radius }}
         />
       </RadialBarChart>
     </ChartContainer>
@@ -86,8 +89,4 @@ export default function RadialChart() {
       </text>
     );
   }
-}
-
-function asPercent(value: number) {
-  return `${value}%`;
 }
