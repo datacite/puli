@@ -1,3 +1,4 @@
+import type { Props as OverviewProps } from "@/components/OverviewCard";
 import type { Props } from "@/components/ChartsCard";
 import PresentBar from "@/components/PresentBar";
 import PresentChart from "@/components/PresentChart";
@@ -5,6 +6,20 @@ import DistributionChart from "@/components/DistributionChart";
 import LearnMore from "@/components/LearnMore";
 
 import * as data from "@/exampleData";
+
+export const overview: OverviewProps = {
+  totalDois: 20_000,
+  doiRegistrationsData: [
+    { year: 2023, count: 1495 },
+    { year: 2024, count: 1103 },
+    { year: 2025, count: 1126 },
+  ],
+  resourceTypeData: [
+    { type: "dataset", count: 60 },
+    { type: "journal article", count: 25 },
+    { type: "software", count: 15 },
+  ],
+};
 
 // Connections to People, Organizations, and Related Resources
 export const creators: Props = {

@@ -129,3 +129,11 @@
     cursor: pointer;
   }
 }
+
+@utility grid-cols-min-* {
+  grid-template-columns: repeat(--value(integer), min-content);
+}
+
+@utility grid-rows-min-* {
+  grid-template-rows: repeat(--value(integer), min-content);
+}

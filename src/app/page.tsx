@@ -1,4 +1,5 @@
 import ChartsCard from "@/components/ChartsCard";
+import OverviewCard from "@/components/OverviewCard";
 import * as CardProps from "@/exampleCardProps";
 
 export default function Home() {
@@ -7,6 +8,9 @@ export default function Home() {
       <h1>DataCite Metadata Analytics Dashboard</h1>
 
       <div className="grid grid-cols-4 gap-4">
+        <p className="col-span-full">Overview</p>
+        <OverviewCard {...CardProps.overview} className="col-span-full" />
+
         <p className="col-span-full">
           Connections to People, Organizations, and Related Resources
         </p>
