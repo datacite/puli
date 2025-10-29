@@ -1,3 +1,4 @@
+import Breadcrumbs from "@/components/Breadcrumbs";
 import ChartsCard from "@/components/ChartsCard";
 import ActionButtons from "@/components/ActionButtons";
 import OverviewCard from "@/components/OverviewCard";
@@ -5,8 +6,9 @@ import * as CardProps from "@/exampleCardProps";
 
 export default function Home() {
   return (
-    <div className="flex flex-col gap-8">
-      <h1>DataCite Metadata Analytics Dashboard</h1>
+    <div className="flex flex-col gap-8 py-4">
+      <Breadcrumbs />
+
       <h1 className="text-4xl w-full">Example University Library</h1>
       <ActionButtons />
 
