@@ -1,13 +1,16 @@
 import ChartsCard from "@/components/ChartsCard";
+import ActionButtons from "@/components/ActionButtons";
 import OverviewCard from "@/components/OverviewCard";
 import * as CardProps from "@/exampleCardProps";
 
 export default function Home() {
   return (
-    <main>
+    <div className="flex flex-col gap-8">
       <h1>DataCite Metadata Analytics Dashboard</h1>
+      <h1 className="text-4xl w-full">Example University Library</h1>
+      <ActionButtons />
 
-      <div className="grid grid-cols-4 gap-4">
+      <main className="grid grid-cols-4 gap-4">
         <p className="col-span-full">Overview</p>
         <OverviewCard {...CardProps.overview} className="col-span-full" />
 
@@ -38,7 +41,7 @@ export default function Home() {
         <ChartsCard {...CardProps.version} />
         <ChartsCard {...CardProps.geoLocation} />
         <ChartsCard {...CardProps.relatedItem} />
-      </div>
-    </main>
+      </main>
+    </div>
   );
 }
