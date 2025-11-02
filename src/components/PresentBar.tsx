@@ -11,7 +11,7 @@ import {
 import HighImpactBadge from "@/components/HighImpactBadge";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
-import { asPercent } from "@/util";
+import { asRoundedPercent } from "@/util";
 
 export interface Props {
   property: string;
@@ -63,7 +63,7 @@ export default function PresentBar(props: Props) {
             tickLine={false}
             includeHidden
             interval={0}
-            tickFormatter={asPercent}
+            tickFormatter={asRoundedPercent}
             tick={{ textAnchor: "end", dx: 30 }}
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />

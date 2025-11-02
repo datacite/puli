@@ -1,8 +1,15 @@
 import ChartsCard from "@/components/ChartsCard";
 import OverviewCard from "@/components/OverviewCard";
 import * as CardProps from "@/exampleCardProps";
+import { CreatorsCard } from "./Cards";
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ clientId: string }>;
+}) {
+  const { clientId } = await params;
+
   return (
     <main className="grid md:grid-cols-4 gap-4">
       <h3 className="col-span-full">Overview</h3>
@@ -11,7 +18,7 @@ export default function Home() {
       <h3 className="col-span-full">
         Connections to People, Organizations, and Related Resources
       </h3>
-      <ChartsCard {...CardProps.creators} className="md:col-span-full" />
+      <CreatorsCard clientId={clientId} />
       <ChartsCard {...CardProps.contributors} className="md:col-span-full" />
       <ChartsCard
         {...CardProps.relatedIdentifiers}

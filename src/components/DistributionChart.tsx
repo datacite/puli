@@ -5,7 +5,7 @@ import { Bar, BarChart, XAxis, YAxis } from "recharts";
 import { Button } from "@/components/ui/button";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
-import { asPercent } from "@/util";
+import { asRoundedPercent } from "@/util";
 
 interface Props {
   property: string;
@@ -65,7 +65,7 @@ export default function DistributionChart(props: Props) {
             orientation="right"
             axisLine={false}
             tickLine={false}
-            tickFormatter={asPercent}
+            tickFormatter={asRoundedPercent}
             yAxisId={1}
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
