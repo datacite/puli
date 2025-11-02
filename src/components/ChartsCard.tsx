@@ -32,7 +32,8 @@ export default function ChartsCard({
     return (
       // biome-ignore lint/suspicious/noArrayIndexKey: OK for static content
       <React.Fragment key={i}>
-        <Separator orientation="vertical" />
+        <Separator className="md:hidden" />
+        <Separator orientation="vertical" className="max-md:hidden" />
         {c}
       </React.Fragment>
     );
@@ -48,7 +49,7 @@ export default function ChartsCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="grid grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] grid-flow-col gap-8">
+      <CardContent className="grid md:grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] gap-8">
         <RadialChart present={present} />
         {content}
       </CardContent>

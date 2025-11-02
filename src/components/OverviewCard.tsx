@@ -24,7 +24,7 @@ export default function OverviewCard({
 }: Props) {
   return (
     <Card className={cn("w-full p-2", className)} {...cardProps}>
-      <CardContent className="grid grid-cols-min-3 grid-rows-[min-content_150px] gap-x-25 mx-auto items-center justify-items-center">
+      <CardContent className="grid md:grid-cols-min-3 grid-rows-[min-content_150px] max-md:gap-8 md:gap-x-25 mx-auto items-center justify-items-center">
         <TotalDois totalDois={totalDois} />
         <p>Doi Registrations</p>
         <p>Resource Types</p>

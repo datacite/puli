@@ -35,7 +35,10 @@ export default function RadialChart(props: Props) {
   const data = [{ property, present, absent: 100 - present }];
 
   return (
-    <ChartContainer config={chartConfig} className="aspect-square w-full">
+    <ChartContainer
+      config={chartConfig}
+      className="aspect-square w-full max-w-[200px]"
+    >
       <RadialBarChart
         data={data}
         barSize={BAR.size}
