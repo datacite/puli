@@ -1,51 +1,16 @@
-import type { ApiResponse } from "@/types";
-import { FIELDS, RELATED_IDENTIFIER_FIELDS } from "@/constants";
-import { useQuery } from "@tanstack/react-query";
-import { fetchApi, findBuilder, toDistributionProperty } from "@/util";
+import { RELATED_IDENTIFIER_FIELDS as FIELDS } from "@/constants";
+import { createFormat, createQuery, fetchFields } from "@/util";
 
-const PRESENT_FIELDS = RELATED_IDENTIFIER_FIELDS.present;
-const DISTRIBUTION_FIELDS = RELATED_IDENTIFIER_FIELDS.distribution;
+const format = createFormat((p, d) => ({
+  present: p[0].present,
+  relationType: d[0],
+  relatedIdentifierType: d[1],
+  resourceTypeGeneral: d[2],
+}));
 
-export async function fetchRelatedIdentifiers(clientId: string) {
-  const searchParams = new URLSearchParams({
-    client_id: clientId,
-    present: PRESENT_FIELDS.join(","),
-    distribution: DISTRIBUTION_FIELDS.join(","),
-  }).toString();
+export const fetchRelatedIdentifiers = async (clientId: string) =>
+  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
 
-  const res = await fetchApi(`?${searchParams}`);
-  const json = (await res.json()) as ApiResponse;
-
-  const findInPresent = findBuilder(
-    json.present,
-    (item, desired: string) => item.field === desired,
-  );
-  const findInDistribution = findBuilder(
-    json.distribution,
-    (item, desired: string) => item.field === desired,
-  );
-  const distribution = (fieldIndex: number) => ({
-    property: FIELDS[DISTRIBUTION_FIELDS[fieldIndex]].label,
-    data: findInDistribution(DISTRIBUTION_FIELDS[fieldIndex])!.values.map(
-      toDistributionProperty,
-    ),
-  });
-
-  const formatted = {
-    present: findInPresent(PRESENT_FIELDS[0])!.percent,
-    relationType: distribution(0),
-    relatedIdentifierType: distribution(1),
-    resourceTypeGeneral: distribution(2),
-  };
-
-  return formatted;
-}
-
-export default function useRelatedIdentifiers(clientId: string) {
-  const query = useQuery({
-    queryKey: [clientId, "relatedIdentifiers"],
-    queryFn: () => fetchRelatedIdentifiers(clientId),
-  });
-
-  return query;
-}
+const useRelatedIdentifiers = (clientId: string) =>
+  createQuery(clientId, "relatedIdentifiers", fetchRelatedIdentifiers);
+export default useRelatedIdentifiers;

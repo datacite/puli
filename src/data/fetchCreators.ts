@@ -1,47 +1,18 @@
-import type { ApiResponse } from "@/types";
-import { FIELDS, CREATOR_FIELDS } from "@/constants";
-import { useQuery } from "@tanstack/react-query";
-import { fetchApi, findBuilder, toDistributionProperty, toPresentProperty } from "@/util";
+import { CREATOR_FIELDS as FIELDS } from "@/constants";
+import { createFormat, createQuery, fetchFields } from "@/util";
 
-const PRESENT_FIELDS = CREATOR_FIELDS.present;
-const DISTRIBUTION_FIELDS = CREATOR_FIELDS.distribution;
+const format = createFormat((p, d) => ({
+  present: p[0].present,
+  properties: p.slice(1, 5),
+  nameIdentifier: p[5],
+  nameIdentifierScheme: d[0],
+  affiliation: p.slice(-2),
+  affiliationIdentifierScheme: d[1],
+}))
 
-export async function fetchCreators(clientId: string) {
-  const searchParams = new URLSearchParams({
-    client_id: clientId,
-    present: PRESENT_FIELDS.join(","),
-    distribution: DISTRIBUTION_FIELDS.join(","),
-  }).toString();
+export const fetchCreators = async (clientId: string) =>
+  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
 
-  const res = await fetchApi(`?${searchParams}`);
-  const json = (await res.json()) as ApiResponse;
-
-  const findInPresent = findBuilder(json.present, (item, desired: string) => item.field === desired);
-  const findInDistribution = findBuilder(json.distribution, (item, desired: string) => item.field === desired);
-  const presentSlice = (start?: number, end?: number) => PRESENT_FIELDS.slice(start, end).map(findInPresent).filter(item => !!item).map(toPresentProperty)
-  const distribution = (fieldIndex: number) => ({
-    property: FIELDS[DISTRIBUTION_FIELDS[fieldIndex]].label,
-    data: findInDistribution(DISTRIBUTION_FIELDS[fieldIndex])!.values.map(toDistributionProperty)
-  })
-
-  const formatted = {
-    present: findInPresent(PRESENT_FIELDS[0])!.percent,
-    properties: presentSlice(1, 5),
-    nameIdentifier: toPresentProperty(findInPresent(PRESENT_FIELDS[5])!),
-    nameIdentifierScheme: distribution(0),
-    affiliation: presentSlice(-2),
-    affiliationIdentifierScheme: distribution(1),
-  }
-
-  return formatted
-}
-
-
-export default function useCreators(clientId: string) {
-  const query = useQuery({
-    queryKey: [clientId, "creators"],
-    queryFn: () => fetchCreators(clientId),
-  });
-
-  return query;
-}
+const useCreators = (clientId: string) =>
+  createQuery(clientId, "creators", fetchCreators)
+export default useCreators;

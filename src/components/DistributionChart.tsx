@@ -7,7 +7,7 @@ import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
 import { asRoundedPercent } from "@/util";
 
-interface Props {
+export interface Props {
   property: string;
   data: { value: string; present: number }[];
 }
