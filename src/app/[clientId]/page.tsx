@@ -20,10 +20,8 @@ export default async function Home({
       </h3>
       <Cards.CreatorsCard clientId={clientId} />
       <Cards.ContributorsCard clientId={clientId} />
-      <ChartsCard
-        {...CardProps.relatedIdentifiers}
-        className="md:col-span-full"
-      />
+      <Cards.RelatedIdentifiersCard clientId={clientId} />
+
       <ChartsCard
         {...CardProps.fundingReferences}
         className="md:col-span-[2]"

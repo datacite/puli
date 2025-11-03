@@ -7,6 +7,7 @@ import PresentBar from "@/components/PresentBar";
 import PresentChart from "@/components/PresentChart";
 import useCreators from "@/data/fetchCreators";
 import useContributors from "@/data/fetchContributors";
+import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
 
 interface Props {
   clientId: string;
@@ -85,6 +86,38 @@ export function ContributorsCard({ clientId }: Props) {
     <ChartsCard
       title="Contributors"
       description={ContributorsDescription}
+      present={data.present}
+      columns={columns}
+      className="md:col-span-full"
+    />
+  );
+}
+
+// Related Identifiers
+const RelatedIdentifiersDescription = (
+  <>
+    The RelatedIdentifiers property connects resources to other resources.
+    RelatedIdentifiers with the DOI relatedIdentifierType have the highest
+    impact. <LearnMore href="" />
+  </>
+);
+
+export function RelatedIdentifiersCard({ clientId }: Props) {
+  const { isPending, isError, data, error } = useRelatedIdentifiers(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const relationType = <DistributionChart {...data.relationType} key="relationType" />
+  const relatedIdentifierType = <DistributionChart {...data.relatedIdentifierType} key="relatedIdentifierType" />
+  const resourceTypeGeneral = <DistributionChart {...data.resourceTypeGeneral} key="resourceTypeGeneral" />
+
+  const columns = [relationType, relatedIdentifierType, resourceTypeGeneral]
+
+  return (
+    <ChartsCard
+      title="RelatedIdentifiers"
+      description={RelatedIdentifiersDescription}
       present={data.present}
       columns={columns}
       className="md:col-span-full"

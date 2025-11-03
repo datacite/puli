@@ -40,6 +40,13 @@ const CONTRIBUTORS_AFFILIATION_ID =
 const CONTRIBUTORS_AFFILIATION_ID_SCHEME =
   "contributors.affiliation.affiliationIdentifierScheme";
 
+//// Related Identifiers
+const RELATED_IDENTIFIERS = "relatedIdentifiers";
+const RELATED_IDENTIFIERS_RELATION_TYPE = "relatedIdentifiers.relationType";
+const RELATED_IDENTIFIERS_TYPE = "relatedIdentifiers.relatedIdentifierType";
+const RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL =
+  "relatedIdentifiers.resourceTypeGeneral";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -73,6 +80,11 @@ export const FIELDS: {
   [CONTRIBUTORS_AFFILIATION_ID_SCHEME]: {
     label: "affiliationIdentifierScheme",
   },
+
+  // Related Identifiers
+  [RELATED_IDENTIFIERS_RELATION_TYPE]: { label: "relationType" },
+  [RELATED_IDENTIFIERS_TYPE]: { label: "relatedIdentifierType" },
+  [RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -104,5 +116,14 @@ export const CONTRIBUTOR_FIELDS = {
     CONTRIBUTORS_TYPE,
     CONTRIBUTORS_NAME_ID_SCHEME,
     CONTRIBUTORS_AFFILIATION_ID_SCHEME,
+  ],
+} as const;
+
+export const RELATED_IDENTIFIER_FIELDS = {
+  present: [RELATED_IDENTIFIERS],
+  distribution: [
+    RELATED_IDENTIFIERS_RELATION_TYPE,
+    RELATED_IDENTIFIERS_TYPE,
+    RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL,
   ],
 } as const;
