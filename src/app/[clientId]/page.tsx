@@ -1,7 +1,7 @@
 import ChartsCard from "@/components/ChartsCard";
 import OverviewCard from "@/components/OverviewCard";
 import * as CardProps from "@/exampleCardProps";
-import { CreatorsCard } from "./Cards";
+import * as Cards from "./Cards";
 
 export default async function Home({
   params,
@@ -18,8 +18,8 @@ export default async function Home({
       <h3 className="col-span-full">
         Connections to People, Organizations, and Related Resources
       </h3>
-      <CreatorsCard clientId={clientId} />
-      <ChartsCard {...CardProps.contributors} className="md:col-span-full" />
+      <Cards.CreatorsCard clientId={clientId} />
+      <Cards.ContributorsCard clientId={clientId} />
       <ChartsCard
         {...CardProps.relatedIdentifiers}
         className="md:col-span-full"
