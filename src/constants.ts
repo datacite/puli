@@ -47,6 +47,17 @@ const RELATED_IDENTIFIERS_TYPE = "relatedIdentifiers.relatedIdentifierType";
 const RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL =
   "relatedIdentifiers.resourceTypeGeneral";
 
+//// Funding References
+const FUNDING_REFERENCES = "fundingReferences";
+const FUNDING_REFERENCES_FUNDER_NAME = "fundingReferences.funderName";
+const FUNDING_REFERENCES_FUNDER_IDENTIFIER =
+  "fundingReferences.funderIdentifier";
+const FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE =
+  "fundingReferences.funderIdentifierType";
+const FUNDING_REFERENCES_AWARD_NUMBER = "fundingReferences.awardNumber";
+const FUNDING_REFERENCES_AWARD_URI = "fundingReferences.awardUri";
+const FUNDING_REFERENCES_AWARD_TITLE = "fundingReferences.awardTitle";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -85,6 +96,19 @@ export const FIELDS: {
   [RELATED_IDENTIFIERS_RELATION_TYPE]: { label: "relationType" },
   [RELATED_IDENTIFIERS_TYPE]: { label: "relatedIdentifierType" },
   [RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
+
+  // Funding References
+  [FUNDING_REFERENCES_FUNDER_NAME]: { label: "funderName" },
+  [FUNDING_REFERENCES_FUNDER_IDENTIFIER]: {
+    label: "funderIdentifier",
+    isHighImpact: true,
+  },
+  [FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE]: {
+    label: "funderIdentifierType",
+  },
+  [FUNDING_REFERENCES_AWARD_NUMBER]: { label: "awardNumber" },
+  [FUNDING_REFERENCES_AWARD_URI]: { label: "awardUri" },
+  [FUNDING_REFERENCES_AWARD_TITLE]: { label: "awardTitle" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -126,4 +150,15 @@ export const RELATED_IDENTIFIER_FIELDS = {
     RELATED_IDENTIFIERS_TYPE,
     RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL,
   ],
+} as const;
+
+export const FUNDING_REFERENCES_FIELDS = {
+  present: [
+    FUNDING_REFERENCES_FUNDER_NAME,
+    FUNDING_REFERENCES_FUNDER_IDENTIFIER,
+    FUNDING_REFERENCES_AWARD_NUMBER,
+    FUNDING_REFERENCES_AWARD_URI,
+    FUNDING_REFERENCES_AWARD_TITLE,
+  ],
+  distribution: [FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE],
 } as const;

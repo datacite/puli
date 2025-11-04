@@ -8,6 +8,7 @@ import PresentChart from "@/components/PresentChart";
 import useCreators from "@/data/fetchCreators";
 import useContributors from "@/data/fetchContributors";
 import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
+import useFundingReferences from "@/data/fetchFundingReferences";
 
 interface Props {
   clientId: string;
@@ -121,6 +122,41 @@ export function RelatedIdentifiersCard({ clientId }: Props) {
       present={data.present}
       columns={columns}
       className="md:col-span-full"
+      isHighImpact
+    />
+  );
+}
+
+// Funding References
+const FundingReferencesDescription = (
+  <>
+    The FundingReferences property connects resources to funding sources. Add
+    ROR funderIdentifiers for the highest impact. <LearnMore href="" />
+  </>
+);
+
+export function FundingReferencesCard({ clientId }: Props) {
+  const { isPending, isError, data, error } = useFundingReferences(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const funderProperties = <CardColumn key="funderProperties">
+    <PresentChart data={data.funderProperties} />
+    <DistributionChart {...data.funderIdentifierType} />
+    <PresentChart data={data.awardProperties} />
+  </CardColumn>
+
+  const columns = [funderProperties]
+
+  return (
+    <ChartsCard
+      title="FundingReferences"
+      description={FundingReferencesDescription}
+      present={data.present}
+      columns={columns}
+      className="md:col-span-[2]"
+      isHighImpact
     />
   );
 }
