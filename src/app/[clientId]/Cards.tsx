@@ -24,7 +24,7 @@ const CreatorsDescription = (
   </>
 );
 
-export function CreatorsCard({ clientId }: Props) {
+export function Creators({ clientId }: Props) {
   const { isPending, isError, data, error } = useCreators(clientId);
 
   if (isPending) return "Loading...";
@@ -62,7 +62,7 @@ const ContributorsDescription = (
   </>
 );
 
-export function ContributorsCard({ clientId }: Props) {
+export function Contributors({ clientId }: Props) {
   const { isPending, isError, data, error } = useContributors(clientId);
 
   if (isPending) return "Loading...";
@@ -103,7 +103,7 @@ const RelatedIdentifiersDescription = (
   </>
 );
 
-export function RelatedIdentifiersCard({ clientId }: Props) {
+export function RelatedIdentifiers({ clientId }: Props) {
   const { isPending, isError, data, error } = useRelatedIdentifiers(clientId);
 
   if (isPending) return "Loading...";
@@ -135,7 +135,7 @@ const FundingReferencesDescription = (
   </>
 );
 
-export function FundingReferencesCard({ clientId }: Props) {
+export function FundingReferences({ clientId }: Props) {
   const { isPending, isError, data, error } = useFundingReferences(clientId);
 
   if (isPending) return "Loading...";

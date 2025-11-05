@@ -18,10 +18,10 @@ export default async function Home({
       <h3 className="col-span-full">
         Connections to People, Organizations, and Related Resources
       </h3>
-      <Cards.CreatorsCard clientId={clientId} />
-      <Cards.ContributorsCard clientId={clientId} />
-      <Cards.RelatedIdentifiersCard clientId={clientId} />
-      <Cards.FundingReferencesCard clientId={clientId} />
+      <Cards.Creators clientId={clientId} />
+      <Cards.Contributors clientId={clientId} />
+      <Cards.RelatedIdentifiers clientId={clientId} />
+      <Cards.FundingReferences clientId={clientId} />
 
       <ChartsCard {...CardProps.publisher} className="md:col-span-[2]" />
 
