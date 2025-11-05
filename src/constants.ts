@@ -41,21 +41,21 @@ const CONTRIBUTORS_AFFILIATION_ID_SCHEME =
   "contributors.affiliation.affiliationIdentifierScheme";
 
 //// Related Identifiers
-const RELATED_IDS = "relatedIdentifiers";
-const RELATED_IDS_RELATION_TYPE = "relatedIdentifiers.relationType";
-const RELATED_IDS_TYPE = "relatedIdentifiers.relatedIdentifierType";
+const RELATED_IDS = "related_identifiers";
+const RELATED_IDS_RELATION_TYPE = "related_identifiers.relationType";
+const RELATED_IDS_TYPE = "related_identifiers.relatedIdentifierType";
 const RELATED_IDS_RESOURCE_TYPE_GENERAL =
-  "relatedIdentifiers.resourceTypeGeneral";
+  "related_identifiers.resourceTypeGeneral";
 
 //// Funding References
-const FUNDING_REFERENCES = "fundingReferences";
-const FUNDING_REFERENCES_FUNDER_NAME = "fundingReferences.funderName";
-const FUNDING_REFERENCES_FUNDER_ID = "fundingReferences.funderIdentifier";
+const FUNDING_REFERENCES = "funding_references";
+const FUNDING_REFERENCES_FUNDER_NAME = "funding_references.funderName";
+const FUNDING_REFERENCES_FUNDER_ID = "funding_references.funderIdentifier";
 const FUNDING_REFERENCES_FUNDER_ID_TYPE =
-  "fundingReferences.funderIdentifierType";
-const FUNDING_REFERENCES_AWARD_NUMBER = "fundingReferences.awardNumber";
-const FUNDING_REFERENCES_AWARD_URI = "fundingReferences.awardUri";
-const FUNDING_REFERENCES_AWARD_TITLE = "fundingReferences.awardTitle";
+  "funding_references.funderIdentifierType";
+const FUNDING_REFERENCES_AWARD_NUMBER = "funding_references.awardNumber";
+const FUNDING_REFERENCES_AWARD_URI = "funding_references.awardUri";
+const FUNDING_REFERENCES_AWARD_TITLE = "funding_references.awardTitle";
 
 //// Publisher
 const PUBLISHER = "publisher_obj";
