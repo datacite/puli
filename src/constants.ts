@@ -41,18 +41,17 @@ const CONTRIBUTORS_AFFILIATION_ID_SCHEME =
   "contributors.affiliation.affiliationIdentifierScheme";
 
 //// Related Identifiers
-const RELATED_IDENTIFIERS = "relatedIdentifiers";
-const RELATED_IDENTIFIERS_RELATION_TYPE = "relatedIdentifiers.relationType";
-const RELATED_IDENTIFIERS_TYPE = "relatedIdentifiers.relatedIdentifierType";
-const RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL =
+const RELATED_IDS = "relatedIdentifiers";
+const RELATED_IDS_RELATION_TYPE = "relatedIdentifiers.relationType";
+const RELATED_IDS_TYPE = "relatedIdentifiers.relatedIdentifierType";
+const RELATED_IDS_RESOURCE_TYPE_GENERAL =
   "relatedIdentifiers.resourceTypeGeneral";
 
 //// Funding References
 const FUNDING_REFERENCES = "fundingReferences";
 const FUNDING_REFERENCES_FUNDER_NAME = "fundingReferences.funderName";
-const FUNDING_REFERENCES_FUNDER_IDENTIFIER =
-  "fundingReferences.funderIdentifier";
-const FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE =
+const FUNDING_REFERENCES_FUNDER_ID = "fundingReferences.funderIdentifier";
+const FUNDING_REFERENCES_FUNDER_ID_TYPE =
   "fundingReferences.funderIdentifierType";
 const FUNDING_REFERENCES_AWARD_NUMBER = "fundingReferences.awardNumber";
 const FUNDING_REFERENCES_AWARD_URI = "fundingReferences.awardUri";
@@ -60,8 +59,8 @@ const FUNDING_REFERENCES_AWARD_TITLE = "fundingReferences.awardTitle";
 
 //// Publisher
 const PUBLISHER = "publisher_obj";
-const PUBLISHER_IDENTIFIER = "publisher_obj.publisherIdentifier";
-const PUBLISHER_IDENTIFIER_SCHEME = "publisher_obj.publisherIdentifierScheme";
+const PUBLISHER_ID = "publisher_obj.publisherIdentifier";
+const PUBLISHER_ID_SCHEME = "publisher_obj.publisherIdentifierScheme";
 
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
@@ -98,17 +97,17 @@ export const FIELDS: {
   },
 
   // Related Identifiers
-  [RELATED_IDENTIFIERS_RELATION_TYPE]: { label: "relationType" },
-  [RELATED_IDENTIFIERS_TYPE]: { label: "relatedIdentifierType" },
-  [RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
+  [RELATED_IDS_RELATION_TYPE]: { label: "relationType" },
+  [RELATED_IDS_TYPE]: { label: "relatedIdentifierType" },
+  [RELATED_IDS_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
 
   // Funding References
   [FUNDING_REFERENCES_FUNDER_NAME]: { label: "funderName" },
-  [FUNDING_REFERENCES_FUNDER_IDENTIFIER]: {
+  [FUNDING_REFERENCES_FUNDER_ID]: {
     label: "funderIdentifier",
     isHighImpact: true,
   },
-  [FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE]: {
+  [FUNDING_REFERENCES_FUNDER_ID_TYPE]: {
     label: "funderIdentifierType",
   },
   [FUNDING_REFERENCES_AWARD_NUMBER]: { label: "awardNumber" },
@@ -116,8 +115,8 @@ export const FIELDS: {
   [FUNDING_REFERENCES_AWARD_TITLE]: { label: "awardTitle" },
 
   // Publisher
-  [PUBLISHER_IDENTIFIER]: { label: "publisherIdentifier", isHighImpact: true },
-  [PUBLISHER_IDENTIFIER_SCHEME]: { label: "publisherIdentifierScheme" },
+  [PUBLISHER_ID]: { label: "publisherIdentifier", isHighImpact: true },
+  [PUBLISHER_ID_SCHEME]: { label: "publisherIdentifierScheme" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -153,11 +152,11 @@ export const CONTRIBUTOR_FIELDS = {
 } as const;
 
 export const RELATED_IDENTIFIER_FIELDS = {
-  present: [RELATED_IDENTIFIERS],
+  present: [RELATED_IDS],
   distribution: [
-    RELATED_IDENTIFIERS_RELATION_TYPE,
-    RELATED_IDENTIFIERS_TYPE,
-    RELATED_IDENTIFIERS_RESOURCE_TYPE_GENERAL,
+    RELATED_IDS_RELATION_TYPE,
+    RELATED_IDS_TYPE,
+    RELATED_IDS_RESOURCE_TYPE_GENERAL,
   ],
 } as const;
 
@@ -165,15 +164,15 @@ export const FUNDING_REFERENCES_FIELDS = {
   present: [
     FUNDING_REFERENCES,
     FUNDING_REFERENCES_FUNDER_NAME,
-    FUNDING_REFERENCES_FUNDER_IDENTIFIER,
+    FUNDING_REFERENCES_FUNDER_ID,
     FUNDING_REFERENCES_AWARD_NUMBER,
     FUNDING_REFERENCES_AWARD_URI,
     FUNDING_REFERENCES_AWARD_TITLE,
   ],
-  distribution: [FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE],
+  distribution: [FUNDING_REFERENCES_FUNDER_ID_TYPE],
 } as const;
 
 export const PUBLISHER_FIELDS = {
-  present: [PUBLISHER, PUBLISHER_IDENTIFIER],
-  distribution: [PUBLISHER_IDENTIFIER_SCHEME],
+  present: [PUBLISHER, PUBLISHER_ID],
+  distribution: [PUBLISHER_ID_SCHEME],
 } as const;
