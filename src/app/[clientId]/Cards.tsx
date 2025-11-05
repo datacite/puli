@@ -9,6 +9,7 @@ import useCreators from "@/data/fetchCreators";
 import useContributors from "@/data/fetchContributors";
 import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
 import useFundingReferences from "@/data/fetchFundingReferences";
+import usePublisher from "@/data/fetchPublisher";
 
 interface Props {
   clientId: string;
@@ -153,6 +154,39 @@ export function FundingReferences({ clientId }: Props) {
     <ChartsCard
       title="FundingReferences"
       description={FundingReferencesDescription}
+      present={data.present}
+      columns={columns}
+      className="md:col-span-[2]"
+      isHighImpact
+    />
+  );
+}
+
+// Publisher
+const PublisherDescription = (
+  <>
+    The FundingReferences property connects resources to funding sources. Add
+    ROR funderIdentifiers for the highest impact. <LearnMore href="" />
+  </>
+);
+
+export function Publisher({ clientId }: Props) {
+  const { isPending, isError, data, error } = usePublisher(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const funderProperties = <CardColumn key="funderProperties">
+    <PresentBar {...data.publisherIdentifier} />
+    <DistributionChart {...data.publisherIdentifierScheme} />
+  </CardColumn>
+
+  const columns = [funderProperties]
+
+  return (
+    <ChartsCard
+      title="Publisher"
+      description={PublisherDescription}
       present={data.present}
       columns={columns}
       className="md:col-span-[2]"

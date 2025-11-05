@@ -58,6 +58,11 @@ const FUNDING_REFERENCES_AWARD_NUMBER = "fundingReferences.awardNumber";
 const FUNDING_REFERENCES_AWARD_URI = "fundingReferences.awardUri";
 const FUNDING_REFERENCES_AWARD_TITLE = "fundingReferences.awardTitle";
 
+//// Publisher
+const PUBLISHER = "publisher_obj";
+const PUBLISHER_IDENTIFIER = "publisher_obj.publisherIdentifier";
+const PUBLISHER_IDENTIFIER_SCHEME = "publisher_obj.publisherIdentifierScheme";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -109,6 +114,10 @@ export const FIELDS: {
   [FUNDING_REFERENCES_AWARD_NUMBER]: { label: "awardNumber" },
   [FUNDING_REFERENCES_AWARD_URI]: { label: "awardUri" },
   [FUNDING_REFERENCES_AWARD_TITLE]: { label: "awardTitle" },
+
+  // Publisher
+  [PUBLISHER_IDENTIFIER]: { label: "publisherIdentifier", isHighImpact: true },
+  [PUBLISHER_IDENTIFIER_SCHEME]: { label: "publisherIdentifierScheme" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -162,4 +171,9 @@ export const FUNDING_REFERENCES_FIELDS = {
     FUNDING_REFERENCES_AWARD_TITLE,
   ],
   distribution: [FUNDING_REFERENCES_FUNDER_IDENTIFIER_TYPE],
+} as const;
+
+export const PUBLISHER_FIELDS = {
+  present: [PUBLISHER, PUBLISHER_IDENTIFIER],
+  distribution: [PUBLISHER_IDENTIFIER_SCHEME],
 } as const;

@@ -22,8 +22,7 @@ export default async function Home({
       <Cards.Contributors clientId={clientId} />
       <Cards.RelatedIdentifiers clientId={clientId} />
       <Cards.FundingReferences clientId={clientId} />
-
-      <ChartsCard {...CardProps.publisher} className="md:col-span-[2]" />
+      <Cards.Publisher clientId={clientId} />
 
       <h3 className="col-span-full">Descriptive Metadata</h3>
       <ChartsCard {...CardProps.resourceType} className="md:col-span-[2]" />
