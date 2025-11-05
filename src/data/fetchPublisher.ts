@@ -2,7 +2,7 @@ import { PUBLISHER_FIELDS as FIELDS } from "@/constants";
 import { createFormat, createQuery, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
-  present: p[0].present,
+  publisher: p[0],
   publisherIdentifier: p[1],
   publisherIdentifierScheme: d[0],
 }));

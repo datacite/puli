@@ -45,10 +45,11 @@ export function Creators({ clientId }: Props) {
 
   return (
     <ChartsCard
-      title="Creators"
+      title={data.creators.property}
       description={CreatorsDescription}
-      present={data.present}
+      present={data.creators.present}
       columns={columns}
+      isHighImpact={data.creators.isHighImpact}
       className="md:col-span-full"
     />
   );
@@ -86,10 +87,11 @@ export function Contributors({ clientId }: Props) {
 
   return (
     <ChartsCard
-      title="Contributors"
+      title={data.contributors.property}
       description={ContributorsDescription}
-      present={data.present}
+      present={data.contributors.present}
       columns={columns}
+      isHighImpact={data.contributors.isHighImpact}
       className="md:col-span-full"
     />
   );
@@ -118,12 +120,12 @@ export function RelatedIdentifiers({ clientId }: Props) {
 
   return (
     <ChartsCard
-      title="RelatedIdentifiers"
+      title={data.relatedIdentifiers.property}
       description={RelatedIdentifiersDescription}
-      present={data.present}
+      present={data.relatedIdentifiers.present}
       columns={columns}
+      isHighImpact={data.relatedIdentifiers.isHighImpact}
       className="md:col-span-full"
-      isHighImpact
     />
   );
 }
@@ -152,12 +154,12 @@ export function FundingReferences({ clientId }: Props) {
 
   return (
     <ChartsCard
-      title="FundingReferences"
+      title={data.fundingReferences.property}
       description={FundingReferencesDescription}
-      present={data.present}
+      present={data.fundingReferences.present}
       columns={columns}
+      isHighImpact={data.fundingReferences.isHighImpact}
       className="md:col-span-[2]"
-      isHighImpact
     />
   );
 }
@@ -185,12 +187,12 @@ export function Publisher({ clientId }: Props) {
 
   return (
     <ChartsCard
-      title="Publisher"
+      title={data.publisher.property}
       description={PublisherDescription}
-      present={data.present}
+      present={data.publisher.present}
       columns={columns}
+      isHighImpact={data.publisher.isHighImpact}
       className="md:col-span-[2]"
-      isHighImpact
     />
   );
 }

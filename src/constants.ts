@@ -66,6 +66,7 @@ export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
   // Creators
+  [CREATORS]: { label: "Creators" },
   [CREATORS_NAME]: { label: "creatorName" },
   [CREATORS_GIVEN_NAME]: { label: "givenName" },
   [CREATORS_FAMILY_NAME]: { label: "familyName" },
@@ -80,6 +81,7 @@ export const FIELDS: {
   [CREATORS_AFFILIATION_ID_SCHEME]: { label: "affiliationIdentifierScheme" },
 
   // Contributors
+  [CONTRIBUTORS]: { label: "Contributors" },
   [CONTRIBUTORS_NAME]: { label: "contributorName" },
   [CONTRIBUTORS_GIVEN_NAME]: { label: "givenName" },
   [CONTRIBUTORS_FAMILY_NAME]: { label: "familyName" },
@@ -97,11 +99,13 @@ export const FIELDS: {
   },
 
   // Related Identifiers
+  [RELATED_IDS]: { label: "RelatedIdentifiers", isHighImpact: true },
   [RELATED_IDS_RELATION_TYPE]: { label: "relationType" },
   [RELATED_IDS_TYPE]: { label: "relatedIdentifierType" },
   [RELATED_IDS_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
 
   // Funding References
+  [FUNDING_REFERENCES]: { label: "FundingReferences", isHighImpact: true },
   [FUNDING_REFERENCES_FUNDER_NAME]: { label: "funderName" },
   [FUNDING_REFERENCES_FUNDER_ID]: {
     label: "funderIdentifier",
@@ -115,6 +119,7 @@ export const FIELDS: {
   [FUNDING_REFERENCES_AWARD_TITLE]: { label: "awardTitle" },
 
   // Publisher
+  [PUBLISHER]: { label: "Publisher" },
   [PUBLISHER_ID]: { label: "publisherIdentifier", isHighImpact: true },
   [PUBLISHER_ID_SCHEME]: { label: "publisherIdentifierScheme" },
 } as const;

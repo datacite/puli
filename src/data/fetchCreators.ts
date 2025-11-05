@@ -2,7 +2,7 @@ import { CREATOR_FIELDS as FIELDS } from "@/constants";
 import { createFormat, createQuery, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
-  present: p[0].present,
+  creators: p[0],
   properties: p.slice(1, 5),
   nameIdentifier: p[5],
   nameIdentifierScheme: d[0],

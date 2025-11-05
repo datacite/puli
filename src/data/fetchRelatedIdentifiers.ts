@@ -2,7 +2,7 @@ import { RELATED_IDENTIFIER_FIELDS as FIELDS } from "@/constants";
 import { createFormat, createQuery, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
-  present: p[0].present,
+  relatedIdentifiers: p[0],
   relationType: d[0],
   relatedIdentifierType: d[1],
   resourceTypeGeneral: d[2],
