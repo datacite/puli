@@ -10,6 +10,7 @@ import useContributors from "@/data/fetchContributors";
 import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
 import useFundingReferences from "@/data/fetchFundingReferences";
 import usePublisher from "@/data/fetchPublisher";
+import useResourceType from "@/data/fetchResourceType";
 
 interface Props {
   clientId: string;
@@ -178,12 +179,12 @@ export function Publisher({ clientId }: Props) {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const funderProperties = <CardColumn key="funderProperties">
+  const publisherProperties = <CardColumn key="publisherProperties">
     <PresentBar {...data.publisherIdentifier} />
     <DistributionChart {...data.publisherIdentifierScheme} />
   </CardColumn>
 
-  const columns = [funderProperties]
+  const columns = [publisherProperties]
 
   return (
     <ChartsCard
@@ -192,6 +193,34 @@ export function Publisher({ clientId }: Props) {
       present={data.publisher.present}
       columns={columns}
       isHighImpact={data.publisher.isHighImpact}
+      className="md:col-span-[2]"
+    />
+  );
+}
+
+// Resource Type
+const ResourceTypeDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+
+export function ResourceType({ clientId }: Props) {
+  const { isPending, isError, data, error } = useResourceType(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const resourceTypeProperties = <CardColumn key="resourceTypeProperties">
+    <PresentChart data={data.properties} />
+    <DistributionChart {...data.resourceTypeGeneral} />
+  </CardColumn>
+
+  const columns = [resourceTypeProperties]
+
+  return (
+    <ChartsCard
+      title={data.resourceType.property}
+      description={ResourceTypeDescription}
+      present={data.resourceType.present}
+      columns={columns}
+      isHighImpact={data.resourceType.isHighImpact}
       className="md:col-span-[2]"
     />
   );

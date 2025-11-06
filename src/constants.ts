@@ -62,6 +62,11 @@ const PUBLISHER = "publisher_obj";
 const PUBLISHER_ID = "publisher_obj.publisherIdentifier";
 const PUBLISHER_ID_SCHEME = "publisher_obj.publisherIdentifierScheme";
 
+//// Resource Type
+const TYPES = "types";
+const TYPES_RESOURCE_TYPE = "types.resourceType";
+const TYPES_RESOURCE_TYPE_GENERAL = "types.resourceTypeGeneral";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -122,6 +127,11 @@ export const FIELDS: {
   [PUBLISHER]: { label: "Publisher" },
   [PUBLISHER_ID]: { label: "publisherIdentifier", isHighImpact: true },
   [PUBLISHER_ID_SCHEME]: { label: "publisherIdentifierScheme" },
+
+  // Resource Type
+  [TYPES]: { label: "ResourceType" },
+  [TYPES_RESOURCE_TYPE]: { label: "resourceType" },
+  [TYPES_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -180,4 +190,9 @@ export const FUNDING_REFERENCES_FIELDS = {
 export const PUBLISHER_FIELDS = {
   present: [PUBLISHER, PUBLISHER_ID],
   distribution: [PUBLISHER_ID_SCHEME],
+} as const;
+
+export const RESOURCE_TYPE_FIELDS = {
+  present: [TYPES, TYPES_RESOURCE_TYPE, TYPES_RESOURCE_TYPE_GENERAL],
+  distribution: [TYPES_RESOURCE_TYPE_GENERAL],
 } as const;
