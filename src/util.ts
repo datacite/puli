@@ -1,6 +1,6 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
-import { API_URL, FIELDS } from "@/constants";
+import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
 import type { ApiResponse, Distribution, Format, Present } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,15 +21,37 @@ export function asNumber(value: number) {
   return value.toLocaleString();
 }
 
-export function fetchApi(...args: Parameters<typeof fetch>) {
+export function fetchApiBase(
+  baseUrl: string,
+  ...args: Parameters<typeof fetch>
+) {
   const [input, init] = args;
 
   const url =
     typeof input === "string"
-      ? `${API_URL.replace(/\/$/, "")}/${input.replace(/^\//, "")}`
+      ? `${baseUrl.replace(/\/$/, "")}/${input.replace(/^\//, "")}`
       : input;
 
   return fetch(url, init);
+}
+
+export function fetchApi(...args: Parameters<typeof fetch>) {
+  return fetchApiBase(API_URL_COMPLETENESS, ...args);
+}
+
+export function fetchApiDatacite(...args: Parameters<typeof fetch>) {
+  const [input, init] = args;
+
+  const options: RequestInit = {
+    method: "GET",
+    headers: {
+      accept: "application/vnd.api+json",
+      ...(init?.headers ?? {}),
+    },
+    ...init,
+  };
+
+  return fetchApiBase(API_URL_DATACITE, input, options);
 }
 
 export function createFormat<R>(fn: Format<R>): Format<R> {

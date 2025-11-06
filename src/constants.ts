@@ -1,6 +1,7 @@
-const apiStageUrl = "https://api.stage.datacite.org/completeness";
+export const API_URL_DATACITE =
+  process.env.NEXT_PUBLIC_API_URL || "https://api.stage.datacite.org";
 
-export const API_URL = process.env.NEXT_PUBLIC_API_URL || apiStageUrl;
+export const API_URL_COMPLETENESS = `${API_URL_DATACITE}/completeness`;
 
 export const CHART = {
   bar: {
