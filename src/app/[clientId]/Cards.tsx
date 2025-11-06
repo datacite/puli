@@ -11,6 +11,7 @@ import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
 import useFundingReferences from "@/data/fetchFundingReferences";
 import usePublisher from "@/data/fetchPublisher";
 import useResourceType from "@/data/fetchResourceType";
+import useSubjects from "@/data/fetchSubjects";
 
 interface Props {
   clientId: string;
@@ -221,6 +222,35 @@ export function ResourceType({ clientId }: Props) {
       present={data.resourceType.present}
       columns={columns}
       isHighImpact={data.resourceType.isHighImpact}
+      className="md:col-span-[2]"
+    />
+  );
+}
+
+// Subjects
+const SubjectsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+
+export function Subjects({ clientId }: Props) {
+  const { isPending, isError, data, error } = useSubjects(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const subjectsProperties = <CardColumn key="subjectsProperties">
+    <PresentBar {...data.subjectScheme} />
+    <DistributionChart {...data.subjectsSchemeDistribution} />
+    <PresentBar {...data.valueURI} />
+  </CardColumn>
+
+  const columns = [subjectsProperties]
+
+  return (
+    <ChartsCard
+      title={data.subjects.property}
+      description={SubjectsDescription}
+      present={data.subjects.present}
+      columns={columns}
+      isHighImpact={data.subjects.isHighImpact}
       className="md:col-span-[2]"
     />
   );

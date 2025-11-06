@@ -26,8 +26,8 @@ export default async function Home({
 
       <h3 className="col-span-full">Descriptive Metadata</h3>
       <Cards.ResourceType clientId={clientId} />
+      <Cards.Subjects clientId={clientId} />
 
-      <ChartsCard {...CardProps.subjects} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.descriptions} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.titles} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.rights} className="md:col-span-[2]" />

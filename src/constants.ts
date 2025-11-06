@@ -67,6 +67,11 @@ const TYPES = "types";
 const TYPES_RESOURCE_TYPE = "types.resourceType";
 const TYPES_RESOURCE_TYPE_GENERAL = "types.resourceTypeGeneral";
 
+//// Subjects
+const SUBJECTS = "subjects";
+const SUBJECTS_SUBJECT_SCHEME = "subjects.subjectScheme";
+const SUBJECTS_VALUE_URI = "subjects.valueUri";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -132,6 +137,11 @@ export const FIELDS: {
   [TYPES]: { label: "ResourceType" },
   [TYPES_RESOURCE_TYPE]: { label: "resourceType" },
   [TYPES_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
+
+  // Subjects
+  [SUBJECTS]: { label: "Subjects" },
+  [SUBJECTS_SUBJECT_SCHEME]: { label: "subjectScheme" },
+  [SUBJECTS_VALUE_URI]: { label: "valueURI" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -195,4 +205,9 @@ export const PUBLISHER_FIELDS = {
 export const RESOURCE_TYPE_FIELDS = {
   present: [TYPES, TYPES_RESOURCE_TYPE, TYPES_RESOURCE_TYPE_GENERAL],
   distribution: [TYPES_RESOURCE_TYPE_GENERAL],
+} as const;
+
+export const SUBJECTS_FIELDS = {
+  present: [SUBJECTS, SUBJECTS_SUBJECT_SCHEME, SUBJECTS_VALUE_URI],
+  distribution: [SUBJECTS_SUBJECT_SCHEME],
 } as const;
