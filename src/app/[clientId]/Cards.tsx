@@ -16,6 +16,7 @@ import useDescriptions from "@/data/fetchDescriptions";
 import useTitles from "@/data/fetchTitles";
 import useRights from "@/data/fetchRights";
 import useDates from "@/data/fetchDates";
+import useOther from "@/data/fetchOther";
 
 interface Props {
   clientId: string;
@@ -362,6 +363,158 @@ export function Dates({ clientId }: Props) {
       columns={columns}
       isHighImpact={data.dates.isHighImpact}
       className="md:col-span-[2]"
+    />
+  );
+}
+
+// Publication Year
+const PublicationYearDescription = <>Lorum Ipsum.</>
+
+export function PublicationYear({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.publicationYear.property}
+      description={PublicationYearDescription}
+      present={data.publicationYear.present}
+      isHighImpact={data.publicationYear.isHighImpact}
+    />
+  );
+}
+
+// Alternate Identifiers
+const AlternateIdentifiersDescription = <>Lorum Ipsum.</>
+
+export function AlternateIdentifiers({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.alternateIdentifiers.property}
+      description={AlternateIdentifiersDescription}
+      present={data.alternateIdentifiers.present}
+      isHighImpact={data.alternateIdentifiers.isHighImpact}
+    />
+  );
+}
+
+// Language
+const LanguageDescription = <>Lorum Ipsum.</>
+
+export function Language({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.language.property}
+      description={LanguageDescription}
+      present={data.language.present}
+      isHighImpact={data.language.isHighImpact}
+    />
+  );
+}
+
+// Sizes
+const SizesDescription = <>Lorum Ipsum.</>
+
+export function Sizes({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.sizes.property}
+      description={SizesDescription}
+      present={data.sizes.present}
+      isHighImpact={data.sizes.isHighImpact}
+    />
+  );
+}
+
+// Formats
+const FormatsDescription = <>Lorum Ipsum.</>
+
+export function Formats({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.formats.property}
+      description={FormatsDescription}
+      present={data.formats.present}
+      isHighImpact={data.formats.isHighImpact}
+    />
+  );
+}
+
+// Version
+const VersionDescription = <>Lorum Ipsum.</>
+
+export function Version({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.version.property}
+      description={VersionDescription}
+      present={data.version.present}
+      isHighImpact={data.version.isHighImpact}
+    />
+  );
+}
+
+// Geo Location
+const GeoLocationDescription = <>Lorum Ipsum.</>
+
+export function GeoLocation({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.geoLocation.property}
+      description={GeoLocationDescription}
+      present={data.geoLocation.present}
+      isHighImpact={data.geoLocation.isHighImpact}
+    />
+  );
+}
+
+// Related Item
+const RelatedItemDescription = <>Lorum Ipsum.</>
+
+export function RelatedItem({ clientId }: Props) {
+  const { isPending, isError, data, error } = useOther(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  return (
+    <ChartsCard
+      title={data.relatedItem.property}
+      description={RelatedItemDescription}
+      present={data.relatedItem.present}
+      isHighImpact={data.relatedItem.isHighImpact}
     />
   );
 }

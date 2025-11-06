@@ -91,6 +91,16 @@ const DATES = "dates";
 const DATES_TYPE = "dates.dateType";
 const DATES_INFORMATION = "dates.dateInformation";
 
+//// Other
+const PUBLICATION_YEAR = "publicationYear";
+const ALTERNATE_IDS = "identifiers";
+const LANGUAGE = "language";
+const SIZES = "sizes";
+const FORMATS = "formats";
+const VERSION = "version";
+const GEO_LOCATION = "geo_locations";
+const RELATED_ITEM = "related_items";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -180,6 +190,16 @@ export const FIELDS: {
   [DATES]: { label: "Dates", isHighImpact: true },
   [DATES_TYPE]: { label: "dateType" },
   [DATES_INFORMATION]: { label: "dateInformation" },
+
+  // Other
+  [PUBLICATION_YEAR]: { label: "PublicationYear" },
+  [ALTERNATE_IDS]: { label: "AlternateIdentifiers" },
+  [LANGUAGE]: { label: "Language" },
+  [SIZES]: { label: "Sizes" },
+  [FORMATS]: { label: "Formats" },
+  [VERSION]: { label: "Version" },
+  [GEO_LOCATION]: { label: "GeoLocation" },
+  [RELATED_ITEM]: { label: "RelatedItem" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -268,4 +288,17 @@ export const RIGHTS_FIELDS = {
 export const DATES_FIELDS = {
   present: [DATES, DATES_INFORMATION],
   distribution: [DATES_TYPE],
+} as const;
+
+export const OTHER_FIELDS = {
+  present: [
+    PUBLICATION_YEAR,
+    ALTERNATE_IDS,
+    LANGUAGE,
+    SIZES,
+    FORMATS,
+    VERSION,
+    GEO_LOCATION,
+    RELATED_ITEM,
+  ],
 } as const;

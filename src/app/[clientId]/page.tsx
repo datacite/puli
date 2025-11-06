@@ -31,15 +31,14 @@ export default async function Home({
       <Cards.Titles clientId={clientId} />
       <Cards.Rights clientId={clientId} />
       <Cards.Dates clientId={clientId} />
-
-      <ChartsCard {...CardProps.publicationYear} />
-      <ChartsCard {...CardProps.alternateIdentifiers} />
-      <ChartsCard {...CardProps.language} />
-      <ChartsCard {...CardProps.sizes} />
-      <ChartsCard {...CardProps.formats} />
-      <ChartsCard {...CardProps.version} />
-      <ChartsCard {...CardProps.geoLocation} />
-      <ChartsCard {...CardProps.relatedItem} />
+      <Cards.PublicationYear clientId={clientId} />
+      <Cards.AlternateIdentifiers clientId={clientId} />
+      <Cards.Language clientId={clientId} />
+      <Cards.Sizes clientId={clientId} />
+      <Cards.Formats clientId={clientId} />
+      <Cards.Version clientId={clientId} />
+      <Cards.GeoLocation clientId={clientId} />
+      <Cards.RelatedItem clientId={clientId} />
     </main>
   );
 }
