@@ -86,6 +86,11 @@ const RIGHTS_URI = "rights_list.rightsUri";
 const RIGHTS_ID_SCHEME = "rights_list.rightsIdentifierScheme";
 const RIGHTS_ID = "rights_list.rightsIdentifier";
 
+//// Dates
+const DATES = "dates";
+const DATES_TYPE = "dates.dateType";
+const DATES_INFORMATION = "dates.dateInformation";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -170,6 +175,11 @@ export const FIELDS: {
   [RIGHTS_URI]: { label: "rightsURI" },
   [RIGHTS_ID_SCHEME]: { label: "rightsIdentifierScheme" },
   [RIGHTS_ID]: { label: "rightsIdentifier" },
+
+  // Dates
+  [DATES]: { label: "Dates", isHighImpact: true },
+  [DATES_TYPE]: { label: "dateType" },
+  [DATES_INFORMATION]: { label: "dateInformation" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -253,4 +263,9 @@ export const TITLES_FIELDS = {
 export const RIGHTS_FIELDS = {
   present: [RIGHTS, RIGHTS_URI, RIGHTS_ID_SCHEME, RIGHTS_ID],
   distribution: [RIGHTS_ID],
+} as const;
+
+export const DATES_FIELDS = {
+  present: [DATES, DATES_INFORMATION],
+  distribution: [DATES_TYPE],
 } as const;

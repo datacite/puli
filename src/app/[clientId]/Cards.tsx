@@ -15,6 +15,7 @@ import useSubjects from "@/data/fetchSubjects";
 import useDescriptions from "@/data/fetchDescriptions";
 import useTitles from "@/data/fetchTitles";
 import useRights from "@/data/fetchRights";
+import useDates from "@/data/fetchDates";
 
 interface Props {
   clientId: string;
@@ -332,6 +333,34 @@ export function Rights({ clientId }: Props) {
       present={data.rights.present}
       columns={columns}
       isHighImpact={data.rights.isHighImpact}
+      className="md:col-span-[2]"
+    />
+  );
+}
+
+// Dates
+const DatesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+
+export function Dates({ clientId }: Props) {
+  const { isPending, isError, data, error } = useDates(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const properties = <CardColumn key="properties">
+    <DistributionChart {...data.dateType} />
+    <PresentBar {...data.dateInformation} />
+  </CardColumn>
+
+  const columns = [properties]
+
+  return (
+    <ChartsCard
+      title={data.dates.property}
+      description={DatesDescription}
+      present={data.dates.present}
+      columns={columns}
+      isHighImpact={data.dates.isHighImpact}
       className="md:col-span-[2]"
     />
   );

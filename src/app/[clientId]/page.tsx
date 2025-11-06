@@ -30,8 +30,8 @@ export default async function Home({
       <Cards.Descriptions clientId={clientId} />
       <Cards.Titles clientId={clientId} />
       <Cards.Rights clientId={clientId} />
+      <Cards.Dates clientId={clientId} />
 
-      <ChartsCard {...CardProps.dates} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.publicationYear} />
       <ChartsCard {...CardProps.alternateIdentifiers} />
       <ChartsCard {...CardProps.language} />
