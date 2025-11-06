@@ -28,8 +28,8 @@ export default async function Home({
       <Cards.ResourceType clientId={clientId} />
       <Cards.Subjects clientId={clientId} />
       <Cards.Descriptions clientId={clientId} />
+      <Cards.Titles clientId={clientId} />
 
-      <ChartsCard {...CardProps.titles} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.rights} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.dates} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.publicationYear} />

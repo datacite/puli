@@ -13,6 +13,7 @@ import usePublisher from "@/data/fetchPublisher";
 import useResourceType from "@/data/fetchResourceType";
 import useSubjects from "@/data/fetchSubjects";
 import useDescriptions from "@/data/fetchDescriptions";
+import useTitles from "@/data/fetchTitles";
 
 interface Props {
   clientId: string;
@@ -277,6 +278,31 @@ export function Descriptions({ clientId }: Props) {
       present={data.descriptions.present}
       columns={columns}
       isHighImpact={data.descriptions.isHighImpact}
+      className="md:col-span-[2]"
+    />
+  );
+}
+
+// Titles
+const TitlesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+
+export function Titles({ clientId }: Props) {
+  const { isPending, isError, data, error } = useTitles(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const titleType = <DistributionChart {...data.titleType} key="titleType" />
+
+  const columns = [titleType]
+
+  return (
+    <ChartsCard
+      title={data.titles.property}
+      description={TitlesDescription}
+      present={data.titles.present}
+      columns={columns}
+      isHighImpact={data.titles.isHighImpact}
       className="md:col-span-[2]"
     />
   );
