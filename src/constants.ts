@@ -80,6 +80,12 @@ const DESCRIPTIONS_TYPE = "descriptions.descriptionType";
 const TITLES = "titles";
 const TITLES_TYPE = "titles.titleType";
 
+//// Rights
+const RIGHTS = "rights_list";
+const RIGHTS_URI = "rights_list.rightsUri";
+const RIGHTS_ID_SCHEME = "rights_list.rightsIdentifierScheme";
+const RIGHTS_ID = "rights_list.rightsIdentifier";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -158,6 +164,12 @@ export const FIELDS: {
   // Titles
   [TITLES]: { label: "Titles" },
   [TITLES_TYPE]: { label: "titleType" },
+
+  // Rights
+  [RIGHTS]: { label: "Rights", isHighImpact: true },
+  [RIGHTS_URI]: { label: "rightsURI" },
+  [RIGHTS_ID_SCHEME]: { label: "rightsIdentifierScheme" },
+  [RIGHTS_ID]: { label: "rightsIdentifier" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -236,4 +248,9 @@ export const DESCRIPTIONS_FIELDS = {
 export const TITLES_FIELDS = {
   present: [TITLES],
   distribution: [TITLES_TYPE],
+} as const;
+
+export const RIGHTS_FIELDS = {
+  present: [RIGHTS, RIGHTS_URI, RIGHTS_ID_SCHEME, RIGHTS_ID],
+  distribution: [RIGHTS_ID],
 } as const;

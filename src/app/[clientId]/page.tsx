@@ -29,8 +29,8 @@ export default async function Home({
       <Cards.Subjects clientId={clientId} />
       <Cards.Descriptions clientId={clientId} />
       <Cards.Titles clientId={clientId} />
+      <Cards.Rights clientId={clientId} />
 
-      <ChartsCard {...CardProps.rights} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.dates} className="md:col-span-[2]" />
       <ChartsCard {...CardProps.publicationYear} />
       <ChartsCard {...CardProps.alternateIdentifiers} />

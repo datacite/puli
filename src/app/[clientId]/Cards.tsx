@@ -14,6 +14,7 @@ import useResourceType from "@/data/fetchResourceType";
 import useSubjects from "@/data/fetchSubjects";
 import useDescriptions from "@/data/fetchDescriptions";
 import useTitles from "@/data/fetchTitles";
+import useRights from "@/data/fetchRights";
 
 interface Props {
   clientId: string;
@@ -303,6 +304,34 @@ export function Titles({ clientId }: Props) {
       present={data.titles.present}
       columns={columns}
       isHighImpact={data.titles.isHighImpact}
+      className="md:col-span-[2]"
+    />
+  );
+}
+
+// Rights
+const RightsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+
+export function Rights({ clientId }: Props) {
+  const { isPending, isError, data, error } = useRights(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const properties = <CardColumn key="properties">
+    <PresentChart data={data.properties} />
+    <DistributionChart {...data.rightsIdentifier} />
+  </CardColumn>
+
+  const columns = [properties]
+
+  return (
+    <ChartsCard
+      title={data.rights.property}
+      description={RightsDescription}
+      present={data.rights.present}
+      columns={columns}
+      isHighImpact={data.rights.isHighImpact}
       className="md:col-span-[2]"
     />
   );
