@@ -72,6 +72,10 @@ const SUBJECTS = "subjects";
 const SUBJECTS_SUBJECT_SCHEME = "subjects.subjectScheme";
 const SUBJECTS_VALUE_URI = "subjects.valueUri";
 
+//// Descriptions
+const DESCRIPTIONS = "descriptions";
+const DESCRIPTIONS_TYPE = "descriptions.descriptionType";
+
 export const FIELDS: {
   [field: string]: { label: string; isHighImpact?: boolean };
 } = {
@@ -142,6 +146,10 @@ export const FIELDS: {
   [SUBJECTS]: { label: "Subjects" },
   [SUBJECTS_SUBJECT_SCHEME]: { label: "subjectScheme" },
   [SUBJECTS_VALUE_URI]: { label: "valueURI" },
+
+  // Descriptions
+  [DESCRIPTIONS]: { label: "Descriptions", isHighImpact: true },
+  [DESCRIPTIONS_TYPE]: { label: "descriptionType" },
 } as const;
 
 export const CREATOR_FIELDS = {
@@ -210,4 +218,9 @@ export const RESOURCE_TYPE_FIELDS = {
 export const SUBJECTS_FIELDS = {
   present: [SUBJECTS, SUBJECTS_SUBJECT_SCHEME, SUBJECTS_VALUE_URI],
   distribution: [SUBJECTS_SUBJECT_SCHEME],
+} as const;
+
+export const DESCRIPTIONS_FIELDS = {
+  present: [DESCRIPTIONS],
+  distribution: [DESCRIPTIONS_TYPE],
 } as const;
