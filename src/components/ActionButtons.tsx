@@ -19,7 +19,7 @@ function Button(props: React.ComponentProps<typeof Btn>) {
     <Btn
       {...props}
       variant="outline"
-      className={cn("text-xs py-[0] px-6 py-2 md:w-min h-min", props.className)}
+      className={cn("text-xs px-6 py-2 md:w-min h-min", props.className)}
     />
   );
 }
