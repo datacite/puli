@@ -7,6 +7,7 @@ import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useClientId } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { SEARCH_PARAMETERS } from "@/constants";
 
 export default function ActionButtons() {
   return (
@@ -44,11 +45,13 @@ function FilterByQuery() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const clientId = useClientId();
-  const [query, setQuery] = useState(searchParams.get("query") || "");
+  const [query, setQuery] = useState(
+    searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
+  );
 
   const params = new URLSearchParams(searchParams.toString());
-  params.set("query", query);
-  if (!query.trim()) params.delete("query");
+  params.set(SEARCH_PARAMETERS.QUERY, query);
+  if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
   const href = `/${clientId}?${params.toString()}`;
 
   const disabled = !query.trim();

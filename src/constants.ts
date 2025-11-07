@@ -11,6 +11,13 @@ export const CHART = {
   },
 };
 
+// URL Search Parameters
+export const SEARCH_PARAMETERS = {
+  QUERY: "query",
+  REGISTRATION_YEAR: "registrationYear",
+  RESOURCE_TYPE: "resourceType",
+} as const;
+
 // Field Names
 //// Creators
 const CREATORS = "creators";
