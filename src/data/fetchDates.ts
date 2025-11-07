@@ -1,5 +1,6 @@
 import { DATES_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   dates: p[0],
@@ -7,9 +8,15 @@ const format = createFormat((p, d) => ({
   dateInformation: p[1],
 }));
 
-export const fetchDates = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchDates = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useDates = (clientId: string) =>
-  createQuery(clientId, "dates", fetchDates);
-export default useDates;
+export default function useDates() {
+  return useCreateQuery("dates", fetchDates);
+}

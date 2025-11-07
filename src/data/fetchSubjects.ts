@@ -1,5 +1,6 @@
 import { SUBJECTS_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   subjects: p[0],
@@ -8,9 +9,15 @@ const format = createFormat((p, d) => ({
   valueURI: p[2],
 }));
 
-export const fetchSubjects = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchSubjects = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useSubjects = (clientId: string) =>
-  createQuery(clientId, "subjects", fetchSubjects);
-export default useSubjects;
+export default function useSubjects() {
+  return useCreateQuery("subjects", fetchSubjects);
+}

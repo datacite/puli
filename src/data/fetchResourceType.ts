@@ -1,5 +1,6 @@
 import { RESOURCE_TYPE_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   resourceType: p[0],
@@ -7,9 +8,15 @@ const format = createFormat((p, d) => ({
   resourceTypeGeneral: d[0],
 }));
 
-export const fetchResourceType = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchResourceType = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useResourceType = (clientId: string) =>
-  createQuery(clientId, "resourceType", fetchResourceType);
-export default useResourceType;
+export default function useResourceType() {
+  return useCreateQuery("resourceType", fetchResourceType);
+}

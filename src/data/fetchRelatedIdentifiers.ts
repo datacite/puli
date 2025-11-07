@@ -1,5 +1,6 @@
 import { RELATED_IDENTIFIER_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   relatedIdentifiers: p[0],
@@ -8,9 +9,18 @@ const format = createFormat((p, d) => ({
   resourceTypeGeneral: d[2],
 }));
 
-export const fetchRelatedIdentifiers = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchRelatedIdentifiers = async (
+  clientId: string,
+  query: string,
+) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useRelatedIdentifiers = (clientId: string) =>
-  createQuery(clientId, "relatedIdentifiers", fetchRelatedIdentifiers);
-export default useRelatedIdentifiers;
+export default function useRelatedIdentifiers() {
+  return useCreateQuery("relatedIdentifiers", fetchRelatedIdentifiers);
+}

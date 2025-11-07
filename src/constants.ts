@@ -302,4 +302,5 @@ export const OTHER_FIELDS = {
     GEO_LOCATION,
     RELATED_ITEM,
   ],
+  distribution: [],
 } as const;

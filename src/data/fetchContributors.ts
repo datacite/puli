@@ -1,5 +1,6 @@
 import { CONTRIBUTOR_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   contributors: p[0],
@@ -11,9 +12,15 @@ const format = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[2],
 }));
 
-export const fetchContributors = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchContributors = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useContributors = (clientId: string) =>
-  createQuery(clientId, "contributors", fetchContributors);
-export default useContributors;
+export default function useContributors() {
+  return useCreateQuery("contributors", fetchContributors);
+}

@@ -1,14 +1,21 @@
 import { TITLES_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   titles: p[0],
   titleType: d[0],
 }));
 
-export const fetchTitles = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchTitles = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useTitles = (clientId: string) =>
-  createQuery(clientId, "titles", fetchTitles);
-export default useTitles;
+export default function useTitles() {
+  return useCreateQuery("titles", fetchTitles);
+}

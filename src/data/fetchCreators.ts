@@ -1,5 +1,6 @@
 import { CREATOR_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   creators: p[0],
@@ -8,11 +9,17 @@ const format = createFormat((p, d) => ({
   nameIdentifierScheme: d[0],
   affiliation: p.slice(-2),
   affiliationIdentifierScheme: d[1],
-}))
+}));
 
-export const fetchCreators = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchCreators = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useCreators = (clientId: string) =>
-  createQuery(clientId, "creators", fetchCreators)
-export default useCreators;
+export default function useCreators() {
+  return useCreateQuery("creators", fetchCreators);
+}

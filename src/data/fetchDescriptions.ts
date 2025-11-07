@@ -1,14 +1,21 @@
 import { DESCRIPTIONS_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   descriptions: p[0],
   descriptionType: d[0],
 }));
 
-export const fetchDescriptions = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchDescriptions = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useDescriptions = (clientId: string) =>
-  createQuery(clientId, "descriptions", fetchDescriptions);
-export default useDescriptions;
+export default function useDescriptions() {
+  return useCreateQuery("descriptions", fetchDescriptions);
+}

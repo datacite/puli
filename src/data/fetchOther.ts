@@ -1,5 +1,6 @@
 import { OTHER_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p) => ({
   publicationYear: p[0],
@@ -12,9 +13,15 @@ const format = createFormat((p) => ({
   relatedItem: p[7],
 }));
 
-export const fetchOther = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, [], format);
+export const fetchOther = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useOther = (clientId: string) =>
-  createQuery(clientId, "other", fetchOther);
-export default useOther;
+export default function useOther() {
+  return useCreateQuery("other", fetchOther);
+}

@@ -1,5 +1,6 @@
 import { RIGHTS_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   rights: p[0],
@@ -7,9 +8,15 @@ const format = createFormat((p, d) => ({
   rightsIdentifier: d[0],
 }));
 
-export const fetchRights = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchRights = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const useRights = (clientId: string) =>
-  createQuery(clientId, "rights", fetchRights);
-export default useRights;
+export default function useRights() {
+  return useCreateQuery("rights", fetchRights);
+}

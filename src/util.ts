@@ -2,7 +2,6 @@ import type { Props as DistributionProps } from "@/components/DistributionChart"
 import type { Props as PresentProps } from "@/components/PresentBar";
 import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
 import type { ApiResponse, Distribution, Format, Present } from "@/types";
-import { useQuery } from "@tanstack/react-query";
 
 export function round(num: number, places = 1) {
   const factor = 10 ** places;
@@ -90,12 +89,14 @@ export async function fetchFields<R>(
   clientId: string,
   presentFields: readonly string[],
   distributionFields: readonly string[],
+  query: string,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
     client_id: clientId,
     present: presentFields.join(","),
     distribution: distributionFields.join(","),
+    query,
   }).toString();
 
   const res = await fetchApi(`?${searchParams}`);
@@ -116,17 +117,6 @@ export async function fetchFields<R>(
     .map(toDistributionProps);
 
   return format(present, distribution);
-}
-
-export function createQuery<R>(
-  clientId: string,
-  key: string,
-  fetch: (clientId: string) => Promise<R>,
-) {
-  return useQuery({
-    queryKey: [clientId, key],
-    queryFn: () => fetch(clientId),
-  });
 }
 
 export function findBuilder<T, U>(

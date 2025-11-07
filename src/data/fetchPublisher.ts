@@ -1,5 +1,6 @@
 import { PUBLISHER_FIELDS as FIELDS } from "@/constants";
-import { createFormat, createQuery, fetchFields } from "@/util";
+import { useCreateQuery } from "@/hooks";
+import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
   publisher: p[0],
@@ -7,9 +8,15 @@ const format = createFormat((p, d) => ({
   publisherIdentifierScheme: d[0],
 }));
 
-export const fetchPublisher = async (clientId: string) =>
-  await fetchFields(clientId, FIELDS.present, FIELDS.distribution, format);
+export const fetchPublisher = async (clientId: string, query: string) =>
+  await fetchFields(
+    clientId,
+    FIELDS.present,
+    FIELDS.distribution,
+    query,
+    format,
+  );
 
-const usePublisher = (clientId: string) =>
-  createQuery(clientId, "publisher", fetchPublisher);
-export default usePublisher;
+export default function usePublisher() {
+  return useCreateQuery("publisher", fetchPublisher);
+}

@@ -1,10 +1,11 @@
+import { useCreateQuery } from "@/hooks";
 import type { Facet } from "@/types";
-import { createQuery, fetchApiDatacite } from "@/util";
+import { fetchApiDatacite } from "@/util";
 
-export async function fetchOverview(clientId: string) {
+export async function fetchOverview(clientId: string, query: string) {
   const [client, dois, registrations] = await Promise.all([
     fetchClient(clientId),
-    fetchDois(clientId),
+    fetchDois(clientId, query),
     fetchRegistrations(clientId),
   ]);
 
@@ -15,9 +16,9 @@ export async function fetchOverview(clientId: string) {
   };
 }
 
-const useOverview = (clientId: string) =>
-  createQuery(clientId, "overview", fetchOverview);
-export default useOverview;
+export default function useOverview() {
+  return useCreateQuery("overview", fetchOverview);
+}
 
 async function fetchClient(clientId: string) {
   const res = await fetchApiDatacite(`clients/${clientId}`);
@@ -28,9 +29,10 @@ async function fetchClient(clientId: string) {
   };
 }
 
-async function fetchDois(clientId: string) {
+async function fetchDois(clientId: string, query: string) {
   const doisSearchParam = new URLSearchParams({
     "client-id": clientId,
+    query,
     facets: ["resourceTypes"].join(","),
     state: "findable",
     "page[size]": "0",
@@ -39,12 +41,15 @@ async function fetchDois(clientId: string) {
   const res = await fetchApiDatacite(`dois?${doisSearchParam}`);
   const json = (await res.json()) as ApiDoisResponse;
 
-  return {
-    totalDois: json.meta.total,
-    resourceTypeData: json.meta.resourceTypes.map((f) => ({
+  const resourceTypeData =
+    json.meta.resourceTypes?.map((f) => ({
       type: f.title,
       count: f.count,
-    })),
+    })) || [];
+
+  return {
+    totalDois: json.meta.total,
+    resourceTypeData,
   };
 }
 

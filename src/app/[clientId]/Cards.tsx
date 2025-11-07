@@ -5,19 +5,18 @@ import DistributionChart from "@/components/DistributionChart";
 import LearnMore from "@/components/LearnMore";
 import PresentBar from "@/components/PresentBar";
 import PresentChart from "@/components/PresentChart";
-import useCreators from "@/data/fetchCreators";
 import useContributors from "@/data/fetchContributors";
-import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
-import useFundingReferences from "@/data/fetchFundingReferences";
-import usePublisher from "@/data/fetchPublisher";
-import useResourceType from "@/data/fetchResourceType";
-import useSubjects from "@/data/fetchSubjects";
-import useDescriptions from "@/data/fetchDescriptions";
-import useTitles from "@/data/fetchTitles";
-import useRights from "@/data/fetchRights";
+import useCreators from "@/data/fetchCreators";
 import useDates from "@/data/fetchDates";
+import useDescriptions from "@/data/fetchDescriptions";
+import useFundingReferences from "@/data/fetchFundingReferences";
 import useOther from "@/data/fetchOther";
-import { useClientId } from "@/hooks";
+import usePublisher from "@/data/fetchPublisher";
+import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
+import useResourceType from "@/data/fetchResourceType";
+import useRights from "@/data/fetchRights";
+import useSubjects from "@/data/fetchSubjects";
+import useTitles from "@/data/fetchTitles";
 
 // Creators
 const CreatorsDescription = (
@@ -30,23 +29,26 @@ const CreatorsDescription = (
 );
 
 export function Creators() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useCreators(clientId);
+  const { isPending, isError, data, error } = useCreators();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = <PresentChart data={data.properties} key="properties" />
-  const nameIdentifier = <CardColumn key="nameIdentifier">
-    <PresentBar {...data.nameIdentifier} />
-    <DistributionChart {...data.nameIdentifierScheme} />
-  </CardColumn>
-  const affiliation = <CardColumn key="affiliation">
-    <PresentChart data={data.affiliation} />
-    <DistributionChart {...data.affiliationIdentifierScheme} />
-  </CardColumn>
+  const properties = <PresentChart data={data.properties} key="properties" />;
+  const nameIdentifier = (
+    <CardColumn key="nameIdentifier">
+      <PresentBar {...data.nameIdentifier} />
+      <DistributionChart {...data.nameIdentifierScheme} />
+    </CardColumn>
+  );
+  const affiliation = (
+    <CardColumn key="affiliation">
+      <PresentChart data={data.affiliation} />
+      <DistributionChart {...data.affiliationIdentifierScheme} />
+    </CardColumn>
+  );
 
-  const columns = [properties, nameIdentifier, affiliation]
+  const columns = [properties, nameIdentifier, affiliation];
 
   return (
     <ChartsCard
@@ -70,26 +72,31 @@ const ContributorsDescription = (
 );
 
 export function Contributors() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useContributors(clientId);
+  const { isPending, isError, data, error } = useContributors();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = <CardColumn key="properties">
-    <PresentChart data={data.properties} key="present" />
-    <DistributionChart {...data.contributorType} />
-  </CardColumn>
-  const nameIdentifier = <CardColumn key="nameIdentifier">
-    <PresentBar {...data.nameIdentifier} />
-    <DistributionChart {...data.nameIdentifierScheme} />
-  </CardColumn>
-  const affiliation = <CardColumn key="affiliation">
-    <PresentChart data={data.affiliation} />
-    <DistributionChart {...data.affiliationIdentifierScheme} />
-  </CardColumn>
+  const properties = (
+    <CardColumn key="properties">
+      <PresentChart data={data.properties} key="present" />
+      <DistributionChart {...data.contributorType} />
+    </CardColumn>
+  );
+  const nameIdentifier = (
+    <CardColumn key="nameIdentifier">
+      <PresentBar {...data.nameIdentifier} />
+      <DistributionChart {...data.nameIdentifierScheme} />
+    </CardColumn>
+  );
+  const affiliation = (
+    <CardColumn key="affiliation">
+      <PresentChart data={data.affiliation} />
+      <DistributionChart {...data.affiliationIdentifierScheme} />
+    </CardColumn>
+  );
 
-  const columns = [properties, nameIdentifier, affiliation]
+  const columns = [properties, nameIdentifier, affiliation];
 
   return (
     <ChartsCard
@@ -113,17 +120,28 @@ const RelatedIdentifiersDescription = (
 );
 
 export function RelatedIdentifiers() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useRelatedIdentifiers(clientId);
+  const { isPending, isError, data, error } = useRelatedIdentifiers();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const relationType = <DistributionChart {...data.relationType} key="relationType" />
-  const relatedIdentifierType = <DistributionChart {...data.relatedIdentifierType} key="relatedIdentifierType" />
-  const resourceTypeGeneral = <DistributionChart {...data.resourceTypeGeneral} key="resourceTypeGeneral" />
+  const relationType = (
+    <DistributionChart {...data.relationType} key="relationType" />
+  );
+  const relatedIdentifierType = (
+    <DistributionChart
+      {...data.relatedIdentifierType}
+      key="relatedIdentifierType"
+    />
+  );
+  const resourceTypeGeneral = (
+    <DistributionChart
+      {...data.resourceTypeGeneral}
+      key="resourceTypeGeneral"
+    />
+  );
 
-  const columns = [relationType, relatedIdentifierType, resourceTypeGeneral]
+  const columns = [relationType, relatedIdentifierType, resourceTypeGeneral];
 
   return (
     <ChartsCard
@@ -146,19 +164,20 @@ const FundingReferencesDescription = (
 );
 
 export function FundingReferences() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useFundingReferences(clientId);
+  const { isPending, isError, data, error } = useFundingReferences();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const funderProperties = <CardColumn key="funderProperties">
-    <PresentChart data={data.funderProperties} />
-    <DistributionChart {...data.funderIdentifierType} />
-    <PresentChart data={data.awardProperties} />
-  </CardColumn>
+  const funderProperties = (
+    <CardColumn key="funderProperties">
+      <PresentChart data={data.funderProperties} />
+      <DistributionChart {...data.funderIdentifierType} />
+      <PresentChart data={data.awardProperties} />
+    </CardColumn>
+  );
 
-  const columns = [funderProperties]
+  const columns = [funderProperties];
 
   return (
     <ChartsCard
@@ -181,18 +200,19 @@ const PublisherDescription = (
 );
 
 export function Publisher() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = usePublisher(clientId);
+  const { isPending, isError, data, error } = usePublisher();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const publisherProperties = <CardColumn key="publisherProperties">
-    <PresentBar {...data.publisherIdentifier} />
-    <DistributionChart {...data.publisherIdentifierScheme} />
-  </CardColumn>
+  const publisherProperties = (
+    <CardColumn key="publisherProperties">
+      <PresentBar {...data.publisherIdentifier} />
+      <DistributionChart {...data.publisherIdentifierScheme} />
+    </CardColumn>
+  );
 
-  const columns = [publisherProperties]
+  const columns = [publisherProperties];
 
   return (
     <ChartsCard
@@ -207,21 +227,26 @@ export function Publisher() {
 }
 
 // Resource Type
-const ResourceTypeDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const ResourceTypeDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function ResourceType() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useResourceType(clientId);
+  const { isPending, isError, data, error } = useResourceType();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const resourceTypeProperties = <CardColumn key="resourceTypeProperties">
-    <PresentChart data={data.properties} />
-    <DistributionChart {...data.resourceTypeGeneral} />
-  </CardColumn>
+  const resourceTypeProperties = (
+    <CardColumn key="resourceTypeProperties">
+      <PresentChart data={data.properties} />
+      <DistributionChart {...data.resourceTypeGeneral} />
+    </CardColumn>
+  );
 
-  const columns = [resourceTypeProperties]
+  const columns = [resourceTypeProperties];
 
   return (
     <ChartsCard
@@ -236,22 +261,27 @@ export function ResourceType() {
 }
 
 // Subjects
-const SubjectsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const SubjectsDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function Subjects() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useSubjects(clientId);
+  const { isPending, isError, data, error } = useSubjects();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const subjectsProperties = <CardColumn key="subjectsProperties">
-    <PresentBar {...data.subjectScheme} />
-    <DistributionChart {...data.subjectsSchemeDistribution} />
-    <PresentBar {...data.valueURI} />
-  </CardColumn>
+  const subjectsProperties = (
+    <CardColumn key="subjectsProperties">
+      <PresentBar {...data.subjectScheme} />
+      <DistributionChart {...data.subjectsSchemeDistribution} />
+      <PresentBar {...data.valueURI} />
+    </CardColumn>
+  );
 
-  const columns = [subjectsProperties]
+  const columns = [subjectsProperties];
 
   return (
     <ChartsCard
@@ -266,18 +296,23 @@ export function Subjects() {
 }
 
 // Descriptions
-const DescriptionsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const DescriptionsDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function Descriptions() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useDescriptions(clientId);
+  const { isPending, isError, data, error } = useDescriptions();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const descriptionType = <DistributionChart {...data.descriptionType} key="descriptionType" />
+  const descriptionType = (
+    <DistributionChart {...data.descriptionType} key="descriptionType" />
+  );
 
-  const columns = [descriptionType]
+  const columns = [descriptionType];
 
   return (
     <ChartsCard
@@ -292,18 +327,21 @@ export function Descriptions() {
 }
 
 // Titles
-const TitlesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const TitlesDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function Titles() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useTitles(clientId);
+  const { isPending, isError, data, error } = useTitles();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const titleType = <DistributionChart {...data.titleType} key="titleType" />
+  const titleType = <DistributionChart {...data.titleType} key="titleType" />;
 
-  const columns = [titleType]
+  const columns = [titleType];
 
   return (
     <ChartsCard
@@ -318,21 +356,26 @@ export function Titles() {
 }
 
 // Rights
-const RightsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const RightsDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function Rights() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useRights(clientId);
+  const { isPending, isError, data, error } = useRights();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = <CardColumn key="properties">
-    <PresentChart data={data.properties} />
-    <DistributionChart {...data.rightsIdentifier} />
-  </CardColumn>
+  const properties = (
+    <CardColumn key="properties">
+      <PresentChart data={data.properties} />
+      <DistributionChart {...data.rightsIdentifier} />
+    </CardColumn>
+  );
 
-  const columns = [properties]
+  const columns = [properties];
 
   return (
     <ChartsCard
@@ -347,21 +390,26 @@ export function Rights() {
 }
 
 // Dates
-const DatesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
+const DatesDescription = (
+  <>
+    Lorum Ipsum. <LearnMore href="" />
+  </>
+);
 
 export function Dates() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useDates(clientId);
+  const { isPending, isError, data, error } = useDates();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = <CardColumn key="properties">
-    <DistributionChart {...data.dateType} />
-    <PresentBar {...data.dateInformation} />
-  </CardColumn>
+  const properties = (
+    <CardColumn key="properties">
+      <DistributionChart {...data.dateType} />
+      <PresentBar {...data.dateInformation} />
+    </CardColumn>
+  );
 
-  const columns = [properties]
+  const columns = [properties];
 
   return (
     <ChartsCard
@@ -376,11 +424,10 @@ export function Dates() {
 }
 
 // Publication Year
-const PublicationYearDescription = <>Lorum Ipsum.</>
+const PublicationYearDescription = <>Lorum Ipsum.</>;
 
 export function PublicationYear() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -396,11 +443,10 @@ export function PublicationYear() {
 }
 
 // Alternate Identifiers
-const AlternateIdentifiersDescription = <>Lorum Ipsum.</>
+const AlternateIdentifiersDescription = <>Lorum Ipsum.</>;
 
 export function AlternateIdentifiers() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -416,11 +462,10 @@ export function AlternateIdentifiers() {
 }
 
 // Language
-const LanguageDescription = <>Lorum Ipsum.</>
+const LanguageDescription = <>Lorum Ipsum.</>;
 
 export function Language() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -436,11 +481,10 @@ export function Language() {
 }
 
 // Sizes
-const SizesDescription = <>Lorum Ipsum.</>
+const SizesDescription = <>Lorum Ipsum.</>;
 
 export function Sizes() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -456,11 +500,10 @@ export function Sizes() {
 }
 
 // Formats
-const FormatsDescription = <>Lorum Ipsum.</>
+const FormatsDescription = <>Lorum Ipsum.</>;
 
 export function Formats() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -476,11 +519,10 @@ export function Formats() {
 }
 
 // Version
-const VersionDescription = <>Lorum Ipsum.</>
+const VersionDescription = <>Lorum Ipsum.</>;
 
 export function Version() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -496,11 +538,10 @@ export function Version() {
 }
 
 // Geo Location
-const GeoLocationDescription = <>Lorum Ipsum.</>
+const GeoLocationDescription = <>Lorum Ipsum.</>;
 
 export function GeoLocation() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
@@ -516,11 +557,10 @@ export function GeoLocation() {
 }
 
 // Related Item
-const RelatedItemDescription = <>Lorum Ipsum.</>
+const RelatedItemDescription = <>Lorum Ipsum.</>;
 
 export function RelatedItem() {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOther(clientId);
+  const { isPending, isError, data, error } = useOther();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
