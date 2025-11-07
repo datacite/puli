@@ -1,4 +1,4 @@
-import React, { ComponentProps, type ReactNode } from "react";
+import React, { type ComponentProps, type ReactNode } from "react";
 import {
   Card,
   CardContent,
@@ -49,7 +49,7 @@ export default function ChartsCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
 
-      <CardContent className="grid md:grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] gap-8">
+      <CardContent className="grid md:grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] justify-center gap-8">
         <RadialChart present={present} />
         {content}
       </CardContent>
