@@ -6,7 +6,7 @@ import { CHART } from "@/constants";
 import { asNumber } from "@/util";
 
 export type DoiRegistration = {
-  year: number;
+  year: number | string;
   count: number;
 };
 

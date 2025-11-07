@@ -1,35 +1,30 @@
+"use client";
+
 import type { ComponentProps } from "react";
+import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
+import ResourceTypesChart from "@/components/ResourceTypesChart";
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import DOIRegistrationsChart, {
-  type DoiRegistration,
-} from "@/components/DoiRegistrationsChart";
+import useOverview from "@/data/fetchOverview";
 import { asNumber } from "@/util";
-import ResourceTypesChart, {
-  type ResourceTypeData,
-} from "@/components/ResourceTypesChart";
 
 export interface Props extends ComponentProps<"div"> {
-  totalDois: number;
-  doiRegistrationsData: DoiRegistration[];
-  resourceTypeData: ResourceTypeData[];
+  clientId: string;
 }
 
-export default function OverviewCard({
-  totalDois,
-  doiRegistrationsData,
-  resourceTypeData,
-  className,
-  ...cardProps
-}: Props) {
+export default function OverviewCard({ clientId, ...cardProps }: Props) {
+  const { isPending, isError, data, error } = useOverview(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
   return (
-    <Card className={cn("w-full p-2", className)} {...cardProps}>
-      <CardContent className="grid md:grid-cols-min-3 grid-rows-[min-content_150px] max-md:gap-8 md:gap-x-25 mx-auto items-center justify-items-center">
-        <TotalDois totalDois={totalDois} />
+    <Card className={"md:col-span-full w-full p-2"} {...cardProps}>
+      <CardContent className="grid md:grid-cols-max-3 grid-rows-[min-content_150px] max-md:gap-8 md:gap-x-25 mx-auto items-center justify-items-center">
+        <TotalDois totalDois={data.totalDois} />
         <p>Doi Registrations</p>
         <p>Resource Types</p>
-        <DOIRegistrationsChart data={doiRegistrationsData} />
-        <ResourceTypesChart data={resourceTypeData} />
+        <DOIRegistrationsChart data={data.doiRegistrationsData} />
+        <ResourceTypesChart data={data.resourceTypeData} />
       </CardContent>
     </Card>
   );

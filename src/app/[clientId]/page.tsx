@@ -13,7 +13,7 @@ export default async function Home({
   return (
     <main className="grid md:grid-cols-4 gap-4">
       <h3 className="col-span-full">Overview</h3>
-      <OverviewCard {...CardProps.overview} className="md:col-span-full" />
+      <OverviewCard clientId={clientId} />
 
       <h3 className="col-span-full">
         Connections to People, Organizations, and Related Resources

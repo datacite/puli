@@ -1,12 +1,26 @@
 import ActionButtons from "@/components/ActionButtons";
-import Breadcrumbs from "@/components/Breadcrumbs";
+import Breadcrumbs, { BreadcrumbData } from "@/components/Breadcrumbs";
+import Header from "./Header";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default async function Layout({
+  params,
+  children,
+}: {
+  params: Promise<{ clientId: string }>;
+  children: React.ReactNode;
+}) {
+  const { clientId } = await params;
+
+  const pages: BreadcrumbData[] = [
+    { title: "Home", href: "/" },
+    { title: "Example", href: "/" },
+  ];
+
   return (
     <>
-      <Breadcrumbs />
+      <Breadcrumbs clientId={clientId} pages={pages} />
 
-      <h2 className="text-4xl w-full">Example University Library</h2>
+      <Header clientId={clientId} />
       <ActionButtons />
 
       {children}

@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,22 +9,38 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import useOverview from "@/data/fetchOverview";
 
-export default function Breadcrumbs() {
+export type BreadcrumbData = { title: string; href?: string };
+
+export default function Breadcrumbs({
+  clientId,
+  pages = [],
+}: {
+  clientId: string;
+  pages: BreadcrumbData[];
+}) {
+  const { isPending, isError, data, error } = useOverview(clientId);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  pages = [...pages, { title: data.name }];
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/components">Example University</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
-        <BreadcrumbItem>
-          <BreadcrumbPage>Example University Library</BreadcrumbPage>
-        </BreadcrumbItem>
+        {pages.map((page, index) => (
+          <React.Fragment key={page.title + page.href}>
+            {index > 0 && <BreadcrumbSeparator />}
+            <BreadcrumbItem>
+              {page.href && (
+                <BreadcrumbLink href={page.href}>{page.title}</BreadcrumbLink>
+              )}
+              {!page.href && <BreadcrumbPage>{page.title}</BreadcrumbPage>}
+            </BreadcrumbItem>
+          </React.Fragment>
+        ))}
       </BreadcrumbList>
     </Breadcrumb>
   );
