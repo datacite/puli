@@ -5,12 +5,10 @@ import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
 import ResourceTypesChart from "@/components/ResourceTypesChart";
 import { Card, CardContent } from "@/components/ui/card";
 import useOverview from "@/data/fetchOverview";
-import { useClientId } from "@/hooks";
 import { asNumber } from "@/util";
 
 export default function OverviewCard(cardProps: ComponentProps<"div">) {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOverview(clientId);
+  const { isPending, isError, data, error } = useOverview();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
