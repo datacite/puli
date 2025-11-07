@@ -5,15 +5,17 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SEARCH_PARAMETERS } from "@/constants";
+import useOverview from "@/data/fetchOverview";
 import { useClientId } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { SEARCH_PARAMETERS } from "@/constants";
+import { Combobox } from "./ui/combobox";
 
 export default function ActionButtons() {
   return (
     <ButtonsGrid>
       <Button>Filter by Registration Year</Button>
-      <Button>Filter by Resource Type</Button>
+      <FilterByResourceType />
       <FilterByQuery />
 
       <Button className="max-md:col-span-2">View Records in Commons</Button>
@@ -27,7 +29,7 @@ function Button(props: React.ComponentProps<typeof Btn>) {
     <Btn
       {...props}
       variant="outline"
-      className={cn("text-xs px-6 py-2 md:w-min h-full", props.className)}
+      className={cn("text-xs px-6 py-2 w-full h-full", props.className)}
     />
   );
 }
@@ -36,7 +38,48 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,min-content)_1fr_repeat(2,min-content)] gap-x-2 gap-y-4"
+      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr_repeat(2,min-content)] gap-x-2 gap-y-4"
+    />
+  );
+}
+
+function FilterByResourceType() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const clientId = useClientId();
+
+  const { isPending, isError, data, error } = useOverview();
+  const [open, setOpen] = useState(false);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const resourceTypes = data.resourceTypeData.map((rt) => ({
+    value: rt.type,
+    label: rt.type,
+  }));
+
+  const value = searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) || "";
+
+  function onValueChange(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(SEARCH_PARAMETERS.RESOURCE_TYPE, value);
+    if (!value.trim()) params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
+
+    const href = `/${clientId}?${params.toString()}`;
+    router.push(href);
+  }
+
+  return (
+    <Combobox
+      placeholderButton="Filter by Resource Type"
+      placeholderSearch="Search resource types..."
+      options={resourceTypes}
+      open={open}
+      setOpen={setOpen}
+      value={value}
+      setValue={onValueChange}
+      className="text-xs px-6 py-2 w-full h-full"
     />
   );
 }
@@ -75,7 +118,7 @@ function FilterByQuery() {
       <Button
         type="submit"
         variant="outline"
-        className="rounded-l-none border-l-0"
+        className="rounded-l-none border-l-0 w-min"
         disabled={disabled}
         asChild={!disabled}
       >

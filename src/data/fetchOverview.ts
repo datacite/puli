@@ -43,6 +43,7 @@ async function fetchDois(clientId: string, query: string) {
 
   const resourceTypeData =
     json.meta.resourceTypes?.map((f) => ({
+      id: f.id,
       type: f.title,
       count: f.count,
     })) || [];
