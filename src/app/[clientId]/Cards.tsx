@@ -17,10 +17,7 @@ import useTitles from "@/data/fetchTitles";
 import useRights from "@/data/fetchRights";
 import useDates from "@/data/fetchDates";
 import useOther from "@/data/fetchOther";
-
-interface Props {
-  clientId: string;
-}
+import { useClientId } from "@/hooks";
 
 // Creators
 const CreatorsDescription = (
@@ -32,7 +29,8 @@ const CreatorsDescription = (
   </>
 );
 
-export function Creators({ clientId }: Props) {
+export function Creators() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useCreators(clientId);
 
   if (isPending) return "Loading...";
@@ -71,7 +69,8 @@ const ContributorsDescription = (
   </>
 );
 
-export function Contributors({ clientId }: Props) {
+export function Contributors() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useContributors(clientId);
 
   if (isPending) return "Loading...";
@@ -113,7 +112,8 @@ const RelatedIdentifiersDescription = (
   </>
 );
 
-export function RelatedIdentifiers({ clientId }: Props) {
+export function RelatedIdentifiers() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useRelatedIdentifiers(clientId);
 
   if (isPending) return "Loading...";
@@ -145,7 +145,8 @@ const FundingReferencesDescription = (
   </>
 );
 
-export function FundingReferences({ clientId }: Props) {
+export function FundingReferences() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useFundingReferences(clientId);
 
   if (isPending) return "Loading...";
@@ -179,7 +180,8 @@ const PublisherDescription = (
   </>
 );
 
-export function Publisher({ clientId }: Props) {
+export function Publisher() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = usePublisher(clientId);
 
   if (isPending) return "Loading...";
@@ -207,7 +209,8 @@ export function Publisher({ clientId }: Props) {
 // Resource Type
 const ResourceTypeDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function ResourceType({ clientId }: Props) {
+export function ResourceType() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useResourceType(clientId);
 
   if (isPending) return "Loading...";
@@ -235,7 +238,8 @@ export function ResourceType({ clientId }: Props) {
 // Subjects
 const SubjectsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function Subjects({ clientId }: Props) {
+export function Subjects() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useSubjects(clientId);
 
   if (isPending) return "Loading...";
@@ -264,7 +268,8 @@ export function Subjects({ clientId }: Props) {
 // Descriptions
 const DescriptionsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function Descriptions({ clientId }: Props) {
+export function Descriptions() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useDescriptions(clientId);
 
   if (isPending) return "Loading...";
@@ -289,7 +294,8 @@ export function Descriptions({ clientId }: Props) {
 // Titles
 const TitlesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function Titles({ clientId }: Props) {
+export function Titles() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useTitles(clientId);
 
   if (isPending) return "Loading...";
@@ -314,7 +320,8 @@ export function Titles({ clientId }: Props) {
 // Rights
 const RightsDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function Rights({ clientId }: Props) {
+export function Rights() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useRights(clientId);
 
   if (isPending) return "Loading...";
@@ -342,7 +349,8 @@ export function Rights({ clientId }: Props) {
 // Dates
 const DatesDescription = <>Lorum Ipsum. <LearnMore href="" /></>
 
-export function Dates({ clientId }: Props) {
+export function Dates() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useDates(clientId);
 
   if (isPending) return "Loading...";
@@ -370,7 +378,8 @@ export function Dates({ clientId }: Props) {
 // Publication Year
 const PublicationYearDescription = <>Lorum Ipsum.</>
 
-export function PublicationYear({ clientId }: Props) {
+export function PublicationYear() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -389,7 +398,8 @@ export function PublicationYear({ clientId }: Props) {
 // Alternate Identifiers
 const AlternateIdentifiersDescription = <>Lorum Ipsum.</>
 
-export function AlternateIdentifiers({ clientId }: Props) {
+export function AlternateIdentifiers() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -408,7 +418,8 @@ export function AlternateIdentifiers({ clientId }: Props) {
 // Language
 const LanguageDescription = <>Lorum Ipsum.</>
 
-export function Language({ clientId }: Props) {
+export function Language() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -427,7 +438,8 @@ export function Language({ clientId }: Props) {
 // Sizes
 const SizesDescription = <>Lorum Ipsum.</>
 
-export function Sizes({ clientId }: Props) {
+export function Sizes() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -446,7 +458,8 @@ export function Sizes({ clientId }: Props) {
 // Formats
 const FormatsDescription = <>Lorum Ipsum.</>
 
-export function Formats({ clientId }: Props) {
+export function Formats() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -465,7 +478,8 @@ export function Formats({ clientId }: Props) {
 // Version
 const VersionDescription = <>Lorum Ipsum.</>
 
-export function Version({ clientId }: Props) {
+export function Version() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -484,7 +498,8 @@ export function Version({ clientId }: Props) {
 // Geo Location
 const GeoLocationDescription = <>Lorum Ipsum.</>
 
-export function GeoLocation({ clientId }: Props) {
+export function GeoLocation() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";
@@ -503,7 +518,8 @@ export function GeoLocation({ clientId }: Props) {
 // Related Item
 const RelatedItemDescription = <>Lorum Ipsum.</>
 
-export function RelatedItem({ clientId }: Props) {
+export function RelatedItem() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOther(clientId);
 
   if (isPending) return "Loading...";

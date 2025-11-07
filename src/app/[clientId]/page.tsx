@@ -1,44 +1,36 @@
-import ChartsCard from "@/components/ChartsCard";
 import OverviewCard from "@/components/OverviewCard";
-import * as CardProps from "@/exampleCardProps";
 import * as Cards from "./Cards";
 
-export default async function Home({
-  params,
-}: {
-  params: Promise<{ clientId: string }>;
-}) {
-  const { clientId } = await params;
-
+export default async function Home() {
   return (
     <main className="grid md:grid-cols-4 gap-4">
       <h3 className="col-span-full">Overview</h3>
-      <OverviewCard clientId={clientId} />
+      <OverviewCard />
 
       <h3 className="col-span-full">
         Connections to People, Organizations, and Related Resources
       </h3>
-      <Cards.Creators clientId={clientId} />
-      <Cards.Contributors clientId={clientId} />
-      <Cards.RelatedIdentifiers clientId={clientId} />
-      <Cards.FundingReferences clientId={clientId} />
-      <Cards.Publisher clientId={clientId} />
+      <Cards.Creators />
+      <Cards.Contributors />
+      <Cards.RelatedIdentifiers />
+      <Cards.FundingReferences />
+      <Cards.Publisher />
 
       <h3 className="col-span-full">Descriptive Metadata</h3>
-      <Cards.ResourceType clientId={clientId} />
-      <Cards.Subjects clientId={clientId} />
-      <Cards.Descriptions clientId={clientId} />
-      <Cards.Titles clientId={clientId} />
-      <Cards.Rights clientId={clientId} />
-      <Cards.Dates clientId={clientId} />
-      <Cards.PublicationYear clientId={clientId} />
-      <Cards.AlternateIdentifiers clientId={clientId} />
-      <Cards.Language clientId={clientId} />
-      <Cards.Sizes clientId={clientId} />
-      <Cards.Formats clientId={clientId} />
-      <Cards.Version clientId={clientId} />
-      <Cards.GeoLocation clientId={clientId} />
-      <Cards.RelatedItem clientId={clientId} />
+      <Cards.ResourceType />
+      <Cards.Subjects />
+      <Cards.Descriptions />
+      <Cards.Titles />
+      <Cards.Rights />
+      <Cards.Dates />
+      <Cards.PublicationYear />
+      <Cards.AlternateIdentifiers />
+      <Cards.Language />
+      <Cards.Sizes />
+      <Cards.Formats />
+      <Cards.Version />
+      <Cards.GeoLocation />
+      <Cards.RelatedItem />
     </main>
   );
 }

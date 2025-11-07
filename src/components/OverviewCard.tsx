@@ -5,13 +5,11 @@ import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
 import ResourceTypesChart from "@/components/ResourceTypesChart";
 import { Card, CardContent } from "@/components/ui/card";
 import useOverview from "@/data/fetchOverview";
+import { useClientId } from "@/hooks";
 import { asNumber } from "@/util";
 
-export interface Props extends ComponentProps<"div"> {
-  clientId: string;
-}
-
-export default function OverviewCard({ clientId, ...cardProps }: Props) {
+export default function OverviewCard(cardProps: ComponentProps<"div">) {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOverview(clientId);
 
   if (isPending) return "Loading...";

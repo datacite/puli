@@ -1,8 +1,10 @@
 "use client";
 
 import useOverview from "@/data/fetchOverview";
+import { useClientId } from "@/hooks";
 
-export default function Header({ clientId }: { clientId: string }) {
+export default function Header() {
+  const clientId = useClientId();
   const { isPending, isError, data, error } = useOverview(clientId);
 
   if (isPending) return "Loading...";
