@@ -34,31 +34,24 @@ export function Creators() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = <PresentChart data={data.properties} key="properties" />;
-  const nameIdentifier = (
-    <CardColumn key="nameIdentifier">
-      <PresentBar {...data.nameIdentifier} />
-      <DistributionChart {...data.nameIdentifierScheme} />
-    </CardColumn>
-  );
-  const affiliation = (
-    <CardColumn key="affiliation">
-      <PresentChart data={data.affiliation} />
-      <DistributionChart {...data.affiliationIdentifierScheme} />
-    </CardColumn>
-  );
-
-  const columns = [properties, nameIdentifier, affiliation];
-
   return (
     <ChartsCard
       title={data.creators.property}
       description={CreatorsDescription}
       present={data.creators.present}
-      columns={columns}
       isHighImpact={data.creators.isHighImpact}
       className="md:col-span-full"
-    />
+    >
+      <PresentChart data={data.properties} />
+      <CardColumn>
+        <PresentBar {...data.nameIdentifier} />
+        <DistributionChart {...data.nameIdentifierScheme} />
+      </CardColumn>
+      <CardColumn>
+        <PresentChart data={data.affiliation} />
+        <DistributionChart {...data.affiliationIdentifierScheme} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -76,37 +69,27 @@ export function Contributors() {
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
-
-  const properties = (
-    <CardColumn key="properties">
-      <PresentChart data={data.properties} key="present" />
-      <DistributionChart {...data.contributorType} />
-    </CardColumn>
-  );
-  const nameIdentifier = (
-    <CardColumn key="nameIdentifier">
-      <PresentBar {...data.nameIdentifier} />
-      <DistributionChart {...data.nameIdentifierScheme} />
-    </CardColumn>
-  );
-  const affiliation = (
-    <CardColumn key="affiliation">
-      <PresentChart data={data.affiliation} />
-      <DistributionChart {...data.affiliationIdentifierScheme} />
-    </CardColumn>
-  );
-
-  const columns = [properties, nameIdentifier, affiliation];
-
   return (
     <ChartsCard
       title={data.contributors.property}
       description={ContributorsDescription}
       present={data.contributors.present}
-      columns={columns}
       isHighImpact={data.contributors.isHighImpact}
       className="md:col-span-full"
-    />
+    >
+      <CardColumn>
+        <PresentChart data={data.properties} />
+        <DistributionChart {...data.contributorType} />
+      </CardColumn>
+      <CardColumn>
+        <PresentBar {...data.nameIdentifier} />
+        <DistributionChart {...data.nameIdentifierScheme} />
+      </CardColumn>
+      <CardColumn>
+        <PresentChart data={data.affiliation} />
+        <DistributionChart {...data.affiliationIdentifierScheme} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -125,33 +108,18 @@ export function RelatedIdentifiers() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const relationType = (
-    <DistributionChart {...data.relationType} key="relationType" />
-  );
-  const relatedIdentifierType = (
-    <DistributionChart
-      {...data.relatedIdentifierType}
-      key="relatedIdentifierType"
-    />
-  );
-  const resourceTypeGeneral = (
-    <DistributionChart
-      {...data.resourceTypeGeneral}
-      key="resourceTypeGeneral"
-    />
-  );
-
-  const columns = [relationType, relatedIdentifierType, resourceTypeGeneral];
-
   return (
     <ChartsCard
       title={data.relatedIdentifiers.property}
       description={RelatedIdentifiersDescription}
       present={data.relatedIdentifiers.present}
-      columns={columns}
       isHighImpact={data.relatedIdentifiers.isHighImpact}
       className="md:col-span-full"
-    />
+    >
+      <DistributionChart {...data.relationType} />
+      <DistributionChart {...data.relatedIdentifierType} />
+      <DistributionChart {...data.resourceTypeGeneral} />
+    </ChartsCard>
   );
 }
 
@@ -169,25 +137,20 @@ export function FundingReferences() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const funderProperties = (
-    <CardColumn key="funderProperties">
-      <PresentChart data={data.funderProperties} />
-      <DistributionChart {...data.funderIdentifierType} />
-      <PresentChart data={data.awardProperties} />
-    </CardColumn>
-  );
-
-  const columns = [funderProperties];
-
   return (
     <ChartsCard
       title={data.fundingReferences.property}
       description={FundingReferencesDescription}
       present={data.fundingReferences.present}
-      columns={columns}
       isHighImpact={data.fundingReferences.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <PresentChart data={data.funderProperties} />
+        <DistributionChart {...data.funderIdentifierType} />
+        <PresentChart data={data.awardProperties} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -205,24 +168,19 @@ export function Publisher() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const publisherProperties = (
-    <CardColumn key="publisherProperties">
-      <PresentBar {...data.publisherIdentifier} />
-      <DistributionChart {...data.publisherIdentifierScheme} />
-    </CardColumn>
-  );
-
-  const columns = [publisherProperties];
-
   return (
     <ChartsCard
       title={data.publisher.property}
       description={PublisherDescription}
       present={data.publisher.present}
-      columns={columns}
       isHighImpact={data.publisher.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <PresentBar {...data.publisherIdentifier} />
+        <DistributionChart {...data.publisherIdentifierScheme} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -239,24 +197,19 @@ export function ResourceType() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const resourceTypeProperties = (
-    <CardColumn key="resourceTypeProperties">
-      <PresentChart data={data.properties} />
-      <DistributionChart {...data.resourceTypeGeneral} />
-    </CardColumn>
-  );
-
-  const columns = [resourceTypeProperties];
-
   return (
     <ChartsCard
       title={data.resourceType.property}
       description={ResourceTypeDescription}
       present={data.resourceType.present}
-      columns={columns}
       isHighImpact={data.resourceType.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <PresentChart data={data.properties} />
+        <DistributionChart {...data.resourceTypeGeneral} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -273,25 +226,20 @@ export function Subjects() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const subjectsProperties = (
-    <CardColumn key="subjectsProperties">
-      <PresentBar {...data.subjectScheme} />
-      <DistributionChart {...data.subjectsSchemeDistribution} />
-      <PresentBar {...data.valueURI} />
-    </CardColumn>
-  );
-
-  const columns = [subjectsProperties];
-
   return (
     <ChartsCard
       title={data.subjects.property}
       description={SubjectsDescription}
       present={data.subjects.present}
-      columns={columns}
       isHighImpact={data.subjects.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <PresentBar {...data.subjectScheme} />
+        <DistributionChart {...data.subjectsSchemeDistribution} />
+        <PresentBar {...data.valueURI} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -308,21 +256,16 @@ export function Descriptions() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const descriptionType = (
-    <DistributionChart {...data.descriptionType} key="descriptionType" />
-  );
-
-  const columns = [descriptionType];
-
   return (
     <ChartsCard
       title={data.descriptions.property}
       description={DescriptionsDescription}
       present={data.descriptions.present}
-      columns={columns}
       isHighImpact={data.descriptions.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <DistributionChart {...data.descriptionType} />
+    </ChartsCard>
   );
 }
 
@@ -339,19 +282,16 @@ export function Titles() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const titleType = <DistributionChart {...data.titleType} key="titleType" />;
-
-  const columns = [titleType];
-
   return (
     <ChartsCard
       title={data.titles.property}
       description={TitlesDescription}
       present={data.titles.present}
-      columns={columns}
       isHighImpact={data.titles.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <DistributionChart {...data.titleType} />
+    </ChartsCard>
   );
 }
 
@@ -368,24 +308,19 @@ export function Rights() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = (
-    <CardColumn key="properties">
-      <PresentChart data={data.properties} />
-      <DistributionChart {...data.rightsIdentifier} />
-    </CardColumn>
-  );
-
-  const columns = [properties];
-
   return (
     <ChartsCard
       title={data.rights.property}
       description={RightsDescription}
       present={data.rights.present}
-      columns={columns}
       isHighImpact={data.rights.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <PresentChart data={data.properties} />
+        <DistributionChart {...data.rightsIdentifier} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 
@@ -402,24 +337,19 @@ export function Dates() {
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const properties = (
-    <CardColumn key="properties">
-      <DistributionChart {...data.dateType} />
-      <PresentBar {...data.dateInformation} />
-    </CardColumn>
-  );
-
-  const columns = [properties];
-
   return (
     <ChartsCard
       title={data.dates.property}
       description={DatesDescription}
       present={data.dates.present}
-      columns={columns}
       isHighImpact={data.dates.isHighImpact}
       className="md:col-span-[2]"
-    />
+    >
+      <CardColumn>
+        <DistributionChart {...data.dateType} />
+        <PresentBar {...data.dateInformation} />
+      </CardColumn>
+    </ChartsCard>
   );
 }
 

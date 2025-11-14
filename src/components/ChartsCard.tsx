@@ -1,4 +1,6 @@
 import React, { type ComponentProps, type ReactNode } from "react";
+import HighImpactBadge from "@/components/HighImpactBadge";
+import RadialChart from "@/components/RadialChart";
 import {
   Card,
   CardContent,
@@ -7,15 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import HighImpactBadge from "@/components/HighImpactBadge";
-import RadialChart from "@/components/RadialChart";
 import { cn } from "@/lib/utils";
 
 export interface Props extends ComponentProps<"div"> {
   title: string;
   description: string | ReactNode;
   present: number;
-  columns?: ReactNode[];
   isHighImpact?: boolean;
 }
 
@@ -23,12 +22,12 @@ export default function ChartsCard({
   title,
   description,
   present,
-  columns = [],
   isHighImpact = false,
   className,
+  children,
   ...cardProps
 }: Props) {
-  const content = columns.map((c, i) => {
+  const content = React.Children.toArray(children).map((c, i) => {
     return (
       // biome-ignore lint/suspicious/noArrayIndexKey: OK for static content
       <React.Fragment key={i}>
