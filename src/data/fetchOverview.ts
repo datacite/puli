@@ -33,7 +33,7 @@ async function fetchDois(clientId: string, query: string) {
   const doisSearchParam = new URLSearchParams({
     "client-id": clientId,
     query,
-    facets: ["resourceTypes"].join(","),
+    facets: ["resourceTypes", "registered"].join(","),
     state: "findable",
     "page[size]": "0",
   }).toString();
@@ -51,6 +51,7 @@ async function fetchDois(clientId: string, query: string) {
   return {
     totalDois: json.meta.total,
     resourceTypeData,
+    registrationYears: json.meta.registered || [],
   };
 }
 
@@ -91,6 +92,7 @@ type ApiDoisResponse = {
     totalPages: number;
     page: number;
     resourceTypes: Facet[];
+    registered: Facet[];
   };
 };
 

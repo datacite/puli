@@ -20,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 interface Props {
   placeholderButton: string;
-  placeholderSearch: string;
+  placeholderSearch?: string;
   placeholderNoResults?: string;
   options: { value: string; label: string }[];
   open: boolean;
@@ -32,7 +32,7 @@ interface Props {
 
 export function Combobox({
   placeholderButton,
-  placeholderSearch,
+  placeholderSearch = "Search...",
   placeholderNoResults = "No results found.",
   options,
   open,

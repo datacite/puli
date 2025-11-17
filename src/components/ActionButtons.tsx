@@ -14,7 +14,7 @@ import { Combobox } from "./ui/combobox";
 export default function ActionButtons() {
   return (
     <ButtonsGrid>
-      <Button>Filter by Registration Year</Button>
+      <FilterByRegistrationYear />
       <FilterByResourceType />
       <FilterByQuery />
 
@@ -39,6 +39,46 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
     <div
       {...props}
       className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr_repeat(2,min-content)] gap-x-2 gap-y-4"
+    />
+  );
+}
+
+function FilterByRegistrationYear() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const clientId = useClientId();
+
+  const { isPending, isError, data, error } = useOverview();
+  const [open, setOpen] = useState(false);
+
+  if (isPending) return "Loading...";
+  if (isError) return `Error: ${error}`;
+
+  const registrationYears = data.registrationYears.map((ry) => ({
+    value: ry.id,
+    label: ry.title,
+  }));
+
+  const value = searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR) || "";
+
+  function onValueChange(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set(SEARCH_PARAMETERS.REGISTRATION_YEAR, value);
+    if (!value.trim()) params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
+
+    const href = `/${clientId}?${params.toString()}`;
+    router.push(href);
+  }
+
+  return (
+    <Combobox
+      placeholderButton="Filter by Registration Year"
+      options={registrationYears}
+      open={open}
+      setOpen={setOpen}
+      value={value}
+      setValue={onValueChange}
+      className="text-xs px-6 py-2 w-full h-full"
     />
   );
 }
