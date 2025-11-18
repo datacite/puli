@@ -10,7 +10,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import useOverview from "@/data/fetchOverview";
-import { useClientId } from "@/hooks";
 
 export type BreadcrumbData = { title: string; href?: string };
 
@@ -19,8 +18,7 @@ export default function Breadcrumbs({
 }: {
   pages: BreadcrumbData[];
 }) {
-  const clientId = useClientId();
-  const { isPending, isError, data, error } = useOverview(clientId);
+  const { isPending, isError, data, error } = useOverview();
 
   if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
