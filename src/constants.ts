@@ -1,7 +1,11 @@
-export const API_URL_DATACITE =
-  process.env.NEXT_PUBLIC_API_URL || "https://api.stage.datacite.org";
+const API_DATACITE_STAGE_BASE = "https://api.stage.datacite.org";
 
-export const API_URL_COMPLETENESS = `${API_URL_DATACITE}/completeness`;
+export const API_URL_DATACITE =
+  process.env.NEXT_PUBLIC_API_URL || API_DATACITE_STAGE_BASE;
+
+export const API_URL_COMPLETENESS =
+  process.env.NEXT_PUBLIC_API_URL_COMPLETENESS ||
+  `${API_DATACITE_STAGE_BASE}/completeness`;
 
 export const CHART = {
   bar: {
