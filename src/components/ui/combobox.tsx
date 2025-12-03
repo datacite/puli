@@ -40,6 +40,10 @@ export function Combobox({
   setValue,
   className,
 }: Props) {
+  // Append current value to options if not present so the user can deselect it
+  const selectedOption = options.find((option) => option.value === value)
+  if (!selectedOption && value) options = [...options, { value, label: value }];
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -50,7 +54,7 @@ export function Combobox({
           className={cn("w-[200px] justify-between", className)}
         >
           {value
-            ? options.find((option) => option.value === value)?.label
+            ? options.find((option) => option.value === value)?.label || value
             : placeholderButton}
           <ChevronsUpDown className="opacity-50" />
         </Button>
