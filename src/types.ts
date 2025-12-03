@@ -1,11 +1,11 @@
-import type { Props as PresentProps } from "@/components/PresentBar";
 import type { Props as DistributionProps } from "@/components/DistributionChart";
+import type { Props as PresentProps } from "@/components/PresentBar";
 
 export type Facet = {
-  id: string
-  title: string
-  count: number
-}
+  id: string;
+  title: string;
+  count: number;
+};
 
 export type Present = {
   field: string;
@@ -28,4 +28,13 @@ export type ApiResponse = {
   distribution: Distribution[];
 };
 
-export type Format<R> = (present: PresentProps[], distribution: DistributionProps[]) => R;
+export type Filters = {
+  query: string | null;
+  resourceType: string | null;
+  registered: string | null;
+  openSearchQuery: string | null;
+};
+export type Format<R> = (
+  present: PresentProps[],
+  distribution: DistributionProps[],
+) => R;

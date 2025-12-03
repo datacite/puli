@@ -1,5 +1,6 @@
 import { CONTRIBUTOR_FIELDS as FIELDS } from "@/constants";
 import { useCreateQuery } from "@/hooks";
+import type { Filters } from "@/types";
 import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
@@ -12,12 +13,12 @@ const format = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[2],
 }));
 
-export const fetchContributors = async (clientId: string, query: string) =>
+export const fetchContributors = async (clientId: string, filters: Filters) =>
   await fetchFields(
     clientId,
     FIELDS.present,
     FIELDS.distribution,
-    query,
+    filters,
     format,
   );
 

@@ -1,5 +1,6 @@
 import { RELATED_IDENTIFIER_FIELDS as FIELDS } from "@/constants";
 import { useCreateQuery } from "@/hooks";
+import type { Filters } from "@/types";
 import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
@@ -11,13 +12,13 @@ const format = createFormat((p, d) => ({
 
 export const fetchRelatedIdentifiers = async (
   clientId: string,
-  query: string,
+  filters: Filters,
 ) =>
   await fetchFields(
     clientId,
     FIELDS.present,
     FIELDS.distribution,
-    query,
+    filters,
     format,
   );
 

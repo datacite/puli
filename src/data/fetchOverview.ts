@@ -1,11 +1,11 @@
 import { useCreateQuery } from "@/hooks";
-import type { Facet } from "@/types";
-import { fetchApiDatacite } from "@/util";
+import type { Facet, Filters } from "@/types";
+import { fetchDatacite } from "@/util";
 
-export async function fetchOverview(clientId: string, query: string) {
+export async function fetchOverview(clientId: string, filters: Filters) {
   const [client, dois] = await Promise.all([
     fetchClient(clientId),
-    fetchDois(clientId, query),
+    fetchDois(clientId, filters),
   ]);
 
   return {
@@ -19,7 +19,7 @@ export default function useOverview() {
 }
 
 async function fetchClient(clientId: string) {
-  const res = await fetchApiDatacite(`clients/${clientId}`);
+  const res = await fetchDatacite(`clients/${clientId}`);
   const json = (await res.json()) as ApiClientResponse;
 
   return {
@@ -27,16 +27,18 @@ async function fetchClient(clientId: string) {
   };
 }
 
-async function fetchDois(clientId: string, query: string) {
+async function fetchDois(clientId: string, filters: Filters) {
   const doisSearchParam = new URLSearchParams({
     "client-id": clientId,
-    query,
+    query: filters.query || "",
+    registered: filters.registered || "",
+    "resource-type-id": filters.resourceType || "",
     facets: ["resourceTypes", "registered"].join(","),
     state: "findable",
     "page[size]": "0",
   }).toString();
 
-  const res = await fetchApiDatacite(`dois?${doisSearchParam}`);
+  const res = await fetchDatacite(`dois?${doisSearchParam}`);
   const json = (await res.json()) as ApiDoisResponse;
 
   const resourceTypeData =
@@ -50,15 +52,15 @@ async function fetchDois(clientId: string, query: string) {
   const registrationYears = json.meta.registered || [];
   const find = (yearNum: number) => {
     const year = yearNum.toString();
-    const reg = registrationYears.find((r) => r.id === year)
+    const reg = registrationYears.find((r) => r.id === year);
     return { year, count: reg?.count || 0 };
-  }
+  };
   const currentYear = new Date().getFullYear();
   const doiRegistrationsData = [
     find(currentYear - 2),
     find(currentYear - 1),
     find(currentYear),
-  ]
+  ];
 
   return {
     totalDois: json.meta.total,

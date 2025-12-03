@@ -1,5 +1,6 @@
 import { FUNDING_REFERENCES_FIELDS as FIELDS } from "@/constants";
 import { useCreateQuery } from "@/hooks";
+import type { Filters } from "@/types";
 import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
@@ -9,12 +10,15 @@ const format = createFormat((p, d) => ({
   awardProperties: p.slice(-3),
 }));
 
-export const fetchFundingReferences = async (clientId: string, query: string) =>
+export const fetchFundingReferences = async (
+  clientId: string,
+  filters: Filters,
+) =>
   await fetchFields(
     clientId,
     FIELDS.present,
     FIELDS.distribution,
-    query,
+    filters,
     format,
   );
 
