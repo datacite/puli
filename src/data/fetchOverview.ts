@@ -3,16 +3,14 @@ import type { Facet } from "@/types";
 import { fetchApiDatacite } from "@/util";
 
 export async function fetchOverview(clientId: string, query: string) {
-  const [client, dois, registrations] = await Promise.all([
+  const [client, dois] = await Promise.all([
     fetchClient(clientId),
     fetchDois(clientId, query),
-    fetchRegistrations(clientId),
   ]);
 
   return {
     ...client,
     ...dois,
-    ...registrations,
   };
 }
 
@@ -48,33 +46,26 @@ async function fetchDois(clientId: string, query: string) {
       count: f.count,
     })) || [];
 
+  // Extract registration counts for the last 3 years
+  const registrationYears = json.meta.registered || [];
+  const find = (yearNum: number) => {
+    const year = yearNum.toString();
+    const reg = registrationYears.find((r) => r.id === year)
+    return { year, count: reg?.count || 0 };
+  }
+  const currentYear = new Date().getFullYear();
+  const doiRegistrationsData = [
+    find(currentYear - 2),
+    find(currentYear - 1),
+    find(currentYear),
+  ]
+
   return {
     totalDois: json.meta.total,
     resourceTypeData,
-    registrationYears: json.meta.registered || [],
+    registrationYears,
+    doiRegistrationsData,
   };
-}
-
-async function fetchRegistrations(clientId: string) {
-  const clientsSearchParam = new URLSearchParams({
-    "provider-id": clientId.split(".")[0],
-    state: "findable",
-  }).toString();
-
-  const res = await fetchApiDatacite(`clients/totals?${clientsSearchParam}`);
-  const json = (await res.json()) as ApiClientTotalsResponse;
-
-  const client = json.find((item) => item.id === clientId);
-  if (!client)
-    throw new Error(`Client with ID ${clientId} not found in overview data.`);
-
-  const doiRegistrationsData = [
-    client.temporal.two_years_ago,
-    client.temporal.last_year,
-    client.temporal.this_year,
-  ].map((year) => ({ year: year[0]?.title || "", count: year[0]?.count || 0 }));
-
-  return { doiRegistrationsData };
 }
 
 type ApiClientResponse = {
@@ -95,16 +86,3 @@ type ApiDoisResponse = {
     registered: Facet[];
   };
 };
-
-type ApiClientTotalsResponse = {
-  id: string;
-  title: string;
-  count: number;
-  temporal: {
-    this_month: Facet[];
-    this_year: Facet[];
-    last_year: Facet[];
-    two_years_ago: Facet[];
-  };
-  states: Facet[];
-}[];
