@@ -58,6 +58,7 @@ export default function DistributionChart(props: Props) {
             tickLine={false}
             yAxisId={0}
             tick={{ textAnchor: "start", dx: -52 }}
+            interval={0}
           />
           <YAxis
             dataKey="present"
