@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { SEARCH_PARAMETERS } from "@/constants";
 import type { Filters } from "@/types";
+import { pascal } from "@/util";
 
 const { QUERY, REGISTRATION_YEAR, RESOURCE_TYPE } = SEARCH_PARAMETERS;
 
@@ -11,7 +12,7 @@ const PARAMETERS = [QUERY, REGISTRATION_YEAR, RESOURCE_TYPE] as const;
 const FILTERS: Record<string, (str: string) => string> = {
   [QUERY]: (query) => query,
   [REGISTRATION_YEAR]: (year) => `registered:[${year}-01-01 TO ${year}-12-31]`,
-  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${rt}"`,
+  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${pascal(rt)}"`,
 } as const;
 
 export function useClientId() {

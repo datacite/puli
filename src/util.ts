@@ -9,6 +9,12 @@ import type {
   Present,
 } from "@/types";
 
+export function pascal(str: string) {
+  return str
+    .replace(/(^\w|-\w)/g, (match) => match.replace("-", "").toUpperCase())
+    .replace(/\s+/g, "");
+}
+
 export function round(num: number, places = 1) {
   const factor = 10 ** places;
   return Math.round(num * factor) / factor;
