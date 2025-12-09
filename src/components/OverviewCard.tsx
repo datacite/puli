@@ -17,7 +17,7 @@ export default function OverviewCard(cardProps: ComponentProps<"div">) {
     <Card className={"md:col-span-full w-full p-2"} {...cardProps}>
       <CardContent className="grid md:grid-cols-max-3 grid-rows-[min-content_150px] max-md:gap-8 md:gap-x-25 mx-auto items-center justify-items-center">
         <TotalDois totalDois={data.totalDois} />
-        <p>Doi Registrations</p>
+        <p>DOI Registrations by Year</p>
         <p>Resource Types</p>
         <DOIRegistrationsChart data={data.doiRegistrationsData} />
         <ResourceTypesChart data={data.resourceTypeData} />

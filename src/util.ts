@@ -1,7 +1,19 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
 import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
-import type { ApiResponse, Distribution, Format, Present } from "@/types";
+import type {
+  ApiResponse,
+  Distribution,
+  Filters,
+  Format,
+  Present,
+} from "@/types";
+
+export function pascal(str: string) {
+  return str
+    .replace(/(^\w|-\w)/g, (match) => match.replace("-", "").toUpperCase())
+    .replace(/\s+/g, "");
+}
 
 export function round(num: number, places = 1) {
   const factor = 10 ** places;
@@ -34,11 +46,11 @@ export function fetchApiBase(
   return fetch(url, init);
 }
 
-export function fetchApi(...args: Parameters<typeof fetch>) {
+export function fetchCompleteness(...args: Parameters<typeof fetch>) {
   return fetchApiBase(API_URL_COMPLETENESS, ...args);
 }
 
-export function fetchApiDatacite(...args: Parameters<typeof fetch>) {
+export function fetchDatacite(...args: Parameters<typeof fetch>) {
   const [input, init] = args;
 
   const options: RequestInit = {
@@ -89,17 +101,17 @@ export async function fetchFields<R>(
   clientId: string,
   presentFields: readonly string[],
   distributionFields: readonly string[],
-  query: string,
+  filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
     client_id: clientId,
     present: presentFields.join(","),
     distribution: distributionFields.join(","),
-    query,
+    query: filters.openSearchQuery || "",
   }).toString();
 
-  const res = await fetchApi(`?${searchParams}`);
+  const res = await fetchCompleteness(`?${searchParams}`);
   const json = (await res.json()) as ApiResponse;
 
   const findInPresent = findBuilder(

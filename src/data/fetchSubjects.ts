@@ -1,5 +1,6 @@
 import { SUBJECTS_FIELDS as FIELDS } from "@/constants";
 import { useCreateQuery } from "@/hooks";
+import type { Filters } from "@/types";
 import { createFormat, fetchFields } from "@/util";
 
 const format = createFormat((p, d) => ({
@@ -9,12 +10,12 @@ const format = createFormat((p, d) => ({
   valueURI: p[2],
 }));
 
-export const fetchSubjects = async (clientId: string, query: string) =>
+export const fetchSubjects = async (clientId: string, filters: Filters) =>
   await fetchFields(
     clientId,
     FIELDS.present,
     FIELDS.distribution,
-    query,
+    filters,
     format,
   );
 

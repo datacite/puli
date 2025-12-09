@@ -95,7 +95,7 @@ function FilterByResourceType() {
   if (isError) return `Error: ${error}`;
 
   const resourceTypes = data.resourceTypeData.map((rt) => ({
-    value: rt.type,
+    value: rt.id,
     label: rt.type,
   }));
 

@@ -58,6 +58,7 @@ export default function DistributionChart(props: Props) {
             tickLine={false}
             yAxisId={0}
             tick={{ textAnchor: "start", dx: -52 }}
+            interval={0}
           />
           <YAxis
             dataKey="present"
@@ -65,8 +66,9 @@ export default function DistributionChart(props: Props) {
             orientation="right"
             axisLine={false}
             tickLine={false}
-            tickFormatter={asRoundedPercent}
+            tickFormatter={(value) => asRoundedPercent(value)}
             yAxisId={1}
+            interval={0}
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
           <Bar
