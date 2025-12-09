@@ -63,7 +63,7 @@ export default function PresentBar(props: Props) {
             tickLine={false}
             includeHidden
             interval={0}
-            tickFormatter={asRoundedPercent}
+            tickFormatter={(value) => asRoundedPercent(value)}
             tick={{ textAnchor: "end", dx: 30 }}
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />

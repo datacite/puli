@@ -66,7 +66,7 @@ export default function DistributionChart(props: Props) {
             orientation="right"
             axisLine={false}
             tickLine={false}
-            tickFormatter={asRoundedPercent}
+            tickFormatter={(value) => asRoundedPercent(value)}
             yAxisId={1}
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
