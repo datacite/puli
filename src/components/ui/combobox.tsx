@@ -41,7 +41,7 @@ export function Combobox({
   className,
 }: Props) {
   // Append current value to options if not present so the user can deselect it
-  const selectedOption = options.find((option) => option.value === value)
+  const selectedOption = options.find((option) => option.value === value);
   if (!selectedOption && value) options = [...options, { value, label: value }];
 
   return (
