@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { API_URL_DATACITE, SEARCH_PARAMETERS } from "@/constants";
+import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import useOverview from "@/data/fetchOverview";
 import { useClientId, useFilters } from "@/hooks";
 import { cn } from "@/lib/utils";
@@ -18,7 +18,7 @@ export default function ActionButtons() {
       <FilterByResourceType />
       <FilterByQuery />
 
-      <Button className="max-md:col-span-2">View Records in Commons</Button>
+      <ViewInCommons />
       <ViewInApi />
     </ButtonsGrid>
   );
@@ -165,6 +165,26 @@ function FilterByQuery() {
         <Link href={href}>Filter by Query</Link>
       </Button>
     </div>
+  );
+}
+
+function ViewInCommons() {
+  const clientId = useClientId();
+  const filters = useFilters();
+
+  const doisSearchParam = new URLSearchParams({
+    clientId: clientId,
+    query: filters.query || "*",
+    published: filters.registered || "",
+    "resource-type": filters.resourceType || "",
+  }).toString();
+
+  const href = `${COMMONS_URL}/doi.org?${doisSearchParam}`;
+
+  return (
+    <Button className="max-md:col-span-2" asChild>
+      <Link href={href}>View Records in Commons</Link>
+    </Button>
   );
 }
 
