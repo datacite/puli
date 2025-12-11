@@ -1,5 +1,6 @@
 "use client";
 
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
@@ -184,7 +185,8 @@ function ViewInCommons() {
   return (
     <Button className="max-md:col-span-2" asChild>
       <a href={href} target="_blank">
-        View Records in Commons
+        View Records in Commons{" "}
+        <ExternalLink className="stroke-muted-foreground" />
       </a>
     </Button>
   );
@@ -207,7 +209,8 @@ function ViewInApi() {
   return (
     <Button className="max-md:col-span-2" asChild>
       <a href={href} target="_blank">
-        View Records in REST API
+        View Records in REST API{" "}
+        <ExternalLink className="stroke-muted-foreground" />
       </a>
     </Button>
   );
