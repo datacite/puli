@@ -1,13 +1,14 @@
 "use client";
 
+import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SEARCH_PARAMETERS } from "@/constants";
+import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import useOverview from "@/data/fetchOverview";
-import { useClientId } from "@/hooks";
+import { useClientId, useFilters } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Combobox } from "./ui/combobox";
 
@@ -18,8 +19,8 @@ export default function ActionButtons() {
       <FilterByResourceType />
       <FilterByQuery />
 
-      <Button className="max-md:col-span-2">View Records in Commons</Button>
-      <Button className="max-md:col-span-2">View Records in REST API</Button>
+      <ViewInCommons />
+      <ViewInApi />
     </ButtonsGrid>
   );
 }
@@ -165,5 +166,52 @@ function FilterByQuery() {
         <Link href={href}>Filter by Query</Link>
       </Button>
     </div>
+  );
+}
+
+function ViewInCommons() {
+  const clientId = useClientId();
+  const filters = useFilters();
+
+  const doisSearchParam = new URLSearchParams({
+    clientId: clientId,
+    query: filters.query || "*",
+    published: filters.registered || "",
+    "resource-type": filters.resourceType || "",
+  }).toString();
+
+  const href = `${COMMONS_URL}/doi.org?${doisSearchParam}`;
+
+  return (
+    <Button className="max-md:col-span-2" asChild>
+      <a href={href} target="_blank">
+        View Records in Commons{" "}
+        <ExternalLink className="stroke-muted-foreground" />
+      </a>
+    </Button>
+  );
+}
+
+function ViewInApi() {
+  const clientId = useClientId();
+  const filters = useFilters();
+
+  const doisSearchParam = new URLSearchParams({
+    "client-id": clientId,
+    query: filters.query || "",
+    registered: filters.registered || "",
+    "resource-type-id": filters.resourceType || "",
+    state: "findable",
+  }).toString();
+
+  const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
+
+  return (
+    <Button className="max-md:col-span-2" asChild>
+      <a href={href} target="_blank">
+        View Records in REST API{" "}
+        <ExternalLink className="stroke-muted-foreground" />
+      </a>
+    </Button>
   );
 }
