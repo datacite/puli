@@ -183,7 +183,9 @@ function ViewInCommons() {
 
   return (
     <Button className="max-md:col-span-2" asChild>
-      <Link href={href}>View Records in Commons</Link>
+      <a href={href} target="_blank">
+        View Records in Commons
+      </a>
     </Button>
   );
 }
@@ -204,7 +206,9 @@ function ViewInApi() {
 
   return (
     <Button className="max-md:col-span-2" asChild>
-      <Link href={href}>View Records in REST API</Link>
+      <a href={href} target="_blank">
+        View Records in REST API
+      </a>
     </Button>
   );
 }
