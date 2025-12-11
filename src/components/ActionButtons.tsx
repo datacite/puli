@@ -174,13 +174,12 @@ function ViewInCommons() {
   const filters = useFilters();
 
   const doisSearchParam = new URLSearchParams({
-    clientId: clientId,
-    query: filters.query || "*",
+    filterQuery: filters.query || "",
     published: filters.registered || "",
     "resource-type": filters.resourceType || "",
   }).toString();
 
-  const href = `${COMMONS_URL}/doi.org?${doisSearchParam}`;
+  const href = `${COMMONS_URL}/repositories/${clientId}?${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
