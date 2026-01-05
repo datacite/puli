@@ -52,13 +52,14 @@ function FilterByRegistrationYear() {
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
 
-  if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const registrationYears = data.registrationYears.map((ry) => ({
-    value: ry.id,
-    label: ry.title,
-  }));
+  const registrationYears = isPending
+    ? []
+    : data.registrationYears.map((ry) => ({
+      value: ry.id,
+      label: ry.title,
+    }));
 
   const value = searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR) || "";
 
@@ -80,6 +81,7 @@ function FilterByRegistrationYear() {
       value={value}
       setValue={onValueChange}
       className="text-xs px-6 py-2 w-full h-full"
+      disabled={isPending}
     />
   );
 }
@@ -92,13 +94,14 @@ function FilterByResourceType() {
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
 
-  if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  const resourceTypes = data.resourceTypeData.map((rt) => ({
-    value: rt.id,
-    label: rt.type,
-  }));
+  const resourceTypes = isPending
+    ? []
+    : data.resourceTypeData.map((rt) => ({
+      value: rt.id,
+      label: rt.type,
+    }));
 
   const value = searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) || "";
 
@@ -121,6 +124,7 @@ function FilterByResourceType() {
       value={value}
       setValue={onValueChange}
       className="text-xs px-6 py-2 w-full h-full"
+      disabled={isPending}
     />
   );
 }
