@@ -20,10 +20,11 @@ export default function Breadcrumbs({
 }) {
   const { isPending, isError, data, error } = useOverview();
 
-  if (isPending) return "Loading...";
   if (isError) return `Error: ${error}`;
 
-  pages = [...pages, { title: data.name }];
+  pages = isPending
+    ? [{ title: "Home", href: "/" }]
+    : [...pages, { title: data.name }];
 
   return (
     <Breadcrumb>
