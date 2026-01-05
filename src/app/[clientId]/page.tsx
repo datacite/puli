@@ -1,5 +1,5 @@
-import OverviewCard from "@/components/OverviewCard";
-import * as Cards from "./Cards";
+import * as Cards from "@/components/cards/Cards";
+import OverviewCard from "@/components/cards/OverviewCard";
 
 export default async function Home() {
   return (

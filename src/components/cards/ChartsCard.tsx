@@ -11,10 +11,10 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 
-export interface Props extends ComponentProps<"div"> {
-  title: string;
+export interface Props extends Omit<ComponentProps<"div">, "title"> {
+  title: string | ReactNode;
   description: string | ReactNode;
-  present: number;
+  present: number | ReactNode;
   isHighImpact?: boolean;
 }
 
@@ -49,7 +49,11 @@ export default function ChartsCard({
       </CardHeader>
 
       <CardContent className="grid md:grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] justify-center gap-8">
-        <RadialChart present={present} />
+        {typeof present === "number" ? (
+          <RadialChart present={present} />
+        ) : (
+          present
+        )}
         {content}
       </CardContent>
     </Card>

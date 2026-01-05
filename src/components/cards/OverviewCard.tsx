@@ -3,6 +3,7 @@
 import type { ComponentProps } from "react";
 import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
 import ResourceTypesChart from "@/components/ResourceTypesChart";
+import { OverviewCardSkeleton } from "@/components/Skeleton";
 import { Card, CardContent } from "@/components/ui/card";
 import useOverview from "@/data/fetchOverview";
 import { asNumber } from "@/util";
@@ -10,7 +11,7 @@ import { asNumber } from "@/util";
 export default function OverviewCard(cardProps: ComponentProps<"div">) {
   const { isPending, isError, data, error } = useOverview();
 
-  if (isPending) return "Loading...";
+  if (isPending) return <OverviewCardSkeleton />;
   if (isError) return `Error: ${error}`;
 
   return (

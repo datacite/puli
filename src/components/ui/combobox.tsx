@@ -24,6 +24,7 @@ interface Props {
   options: { value: string; label: string }[];
   open: boolean;
   value: string;
+  disabled?: boolean;
   setOpen: (open: boolean) => void;
   setValue: (value: string) => void;
   className?: string;
@@ -37,6 +38,7 @@ export function Combobox({
   open,
   setOpen,
   value,
+  disabled = false,
   setValue,
   className,
 }: Props) {
@@ -52,6 +54,7 @@ export function Combobox({
           role="combobox"
           aria-expanded={open}
           className={cn("w-[200px] justify-between", className)}
+          disabled={disabled}
         >
           {value
             ? options.find((option) => option.value === value)?.label || value
