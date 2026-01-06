@@ -2,18 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
-import { SEARCH_PARAMETERS } from "@/constants";
+import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
 import type { Filters } from "@/types";
-import { pascal } from "@/util";
-
-const { QUERY, REGISTRATION_YEAR, RESOURCE_TYPE } = SEARCH_PARAMETERS;
-
-const PARAMETERS = [QUERY, REGISTRATION_YEAR, RESOURCE_TYPE] as const;
-const FILTERS: Record<string, (str: string) => string> = {
-  [QUERY]: (query) => query,
-  [REGISTRATION_YEAR]: (year) => `registered:[${year}-01-01 TO ${year}-12-31]`,
-  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${pascal(rt)}"`,
-} as const;
 
 export function useClientId() {
   const { clientId } = useParams<{ clientId: string }>();
@@ -23,14 +13,15 @@ export function useClientId() {
 export function useFilters() {
   const searchParams = useSearchParams();
 
-  const openSearchQuery = PARAMETERS.filter((f) => searchParams.has(f))
+  const openSearchQuery = Object.values(SEARCH_PARAMETERS)
+    .filter((f) => searchParams.has(f))
     .map((f) => FILTERS[f](searchParams.get(f) as string))
     .join(" AND ");
 
   return {
-    query: searchParams.get(QUERY),
-    registered: searchParams.get(REGISTRATION_YEAR),
-    resourceType: searchParams.get(RESOURCE_TYPE),
+    query: searchParams.get(SEARCH_PARAMETERS.QUERY),
+    registered: searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR),
+    resourceType: searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE),
     openSearchQuery,
   } satisfies Filters;
 }

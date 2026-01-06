@@ -1,3 +1,5 @@
+import { pascal } from "@/util";
+
 const API_URL_DATACITE_STAGE = "https://api.stage.datacite.org";
 const COMMONS_URL_STAGE = "https://commons.stage.datacite.org";
 
@@ -20,10 +22,20 @@ export const CHART = {
 };
 
 // URL Search Parameters
+const QUERY = "query";
+const REGISTRATION_YEAR = "registrationYear";
+const RESOURCE_TYPE = "resourceType";
+
 export const SEARCH_PARAMETERS = {
-  QUERY: "query",
-  REGISTRATION_YEAR: "registrationYear",
-  RESOURCE_TYPE: "resourceType",
+  QUERY,
+  REGISTRATION_YEAR,
+  RESOURCE_TYPE,
+} as const;
+
+export const FILTERS: Record<string, (str: string) => string> = {
+  [QUERY]: (query) => query,
+  [REGISTRATION_YEAR]: (year) => `registered:[${year}-01-01 TO ${year}-12-31]`,
+  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${pascal(rt)}"`,
 } as const;
 
 // Field Names
