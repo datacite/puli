@@ -1,22 +1,21 @@
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
+import { H3 } from "@/components/datacite/Headings";
 
 export default async function Home() {
   return (
     <main className="grid md:grid-cols-4 gap-4">
-      <h3 className="col-span-full">Overview</h3>
+      <SectionHeader title="Overview" />
       <OverviewCard />
 
-      <h3 className="col-span-full">
-        Connections to People, Organizations, and Related Resources
-      </h3>
+      <SectionHeader title="Connections to People, Organizations, and Related Resources" />
       <Cards.Creators />
       <Cards.Contributors />
       <Cards.RelatedIdentifiers />
       <Cards.FundingReferences />
       <Cards.Publisher />
 
-      <h3 className="col-span-full">Descriptive Metadata</h3>
+      <SectionHeader title="Descriptive Metadata" />
       <Cards.ResourceType />
       <Cards.Subjects />
       <Cards.Descriptions />
@@ -33,4 +32,8 @@ export default async function Home() {
       <Cards.RelatedItem />
     </main>
   );
+}
+
+function SectionHeader({ title }: { title: string }) {
+  return <H3 className="mt-12 col-span-full font-light">{title}</H3>;
 }

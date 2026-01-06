@@ -1,5 +1,6 @@
 "use client";
 
+import { H2 } from "@/components/datacite/Headings";
 import useOverview from "@/data/fetchOverview";
 import { useClientId } from "@/hooks";
 
@@ -11,5 +12,5 @@ export default function Header() {
 
   const name = isPending ? clientId : data.name;
 
-  return <h2 className="text-4xl w-full">{name}</h2>;
+  return <H2 className="text-4xl w-full">{name}</H2>;
 }
