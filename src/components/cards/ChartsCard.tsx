@@ -1,4 +1,5 @@
 import React, { type ComponentProps, type ReactNode } from "react";
+import { H4 } from "@/components/datacite/Headings";
 import HighImpactBadge from "@/components/HighImpactBadge";
 import RadialChart from "@/components/RadialChart";
 import {
@@ -42,8 +43,10 @@ export default function ChartsCard({
     <Card className={cn("w-full", className)} {...cardProps}>
       <CardHeader>
         <CardTitle>
-          {title}
-          <HighImpactBadge show={isHighImpact} />
+          <H4>
+            {title}
+            <HighImpactBadge show={isHighImpact} />
+          </H4>
         </CardTitle>
         <CardDescription>{description}</CardDescription>
       </CardHeader>
