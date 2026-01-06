@@ -1,19 +1,6 @@
-import { Barlow, DM_Sans } from "next/font/google";
 import type * as React from "react";
-
+import { barlow, dmSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  display: "swap",
-});
-
-const barlow = Barlow({
-  subsets: ["latin"],
-  weight: ["100", "200", "400", "600", "700"],
-  display: "swap",
-});
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
