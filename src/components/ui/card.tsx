@@ -1,13 +1,26 @@
+import { Barlow, DM_Sans } from "next/font/google";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
+
+const barlow = Barlow({
+  subsets: ["latin"],
+  weight: ["100", "200", "400", "600", "700"],
+  display: "swap",
+});
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 border py-6 shadow-sm",
         className,
       )}
       {...props}
@@ -32,7 +45,12 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-title"
-      className={cn("leading-none font-semibold", className)}
+      className={cn(
+        "leading-none font-semibold",
+        "text-card-title text-xl",
+        dmSans.className,
+        className,
+      )}
       {...props}
     />
   );
@@ -42,7 +60,12 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn(
+        "text-muted-foreground text-sm",
+        "font-normal text-md",
+        barlow.className,
+        className,
+      )}
       {...props}
     />
   );
