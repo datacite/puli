@@ -1,7 +1,15 @@
+import Image from "next/image";
+import Link from "next/link";
+import logo from "./datacite-logo.png";
+
 export default function Header() {
   return (
-    <header className="h-[75px] bg-gray-200">
-      <h1>DataCite Metadata Analytics Dashboard</h1>
+    <header className="py-4 px-6">
+      <h1>
+        <Link href="/">
+          <Image src={logo} alt="DataCite logo" height={75} className="" />
+        </Link>
+      </h1>
     </header>
   );
 }
