@@ -18,6 +18,8 @@ export const CHART = {
     gap: 20,
     size: 12,
     radius: 0,
+    color: "var(--color-datacite-blue-light)",
+    background: "var(--color-datacite-gray)",
   },
 };
 

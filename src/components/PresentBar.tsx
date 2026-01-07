@@ -22,14 +22,7 @@ export interface Props {
 const BAR = CHART.bar;
 
 const chartConfig = {
-  present: {
-    label: "Present",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  present: { label: "Present" },
 } satisfies ChartConfig;
 
 export default function PresentBar(props: Props) {
@@ -72,8 +65,11 @@ export default function PresentBar(props: Props) {
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
           <Bar
             dataKey="present"
-            fill="var(--color-present)"
-            background={{ fill: "var(--color-absent)", radius: BAR.radius }}
+            fill={BAR.color}
+            background={{
+              fill: BAR.background,
+              radius: BAR.radius,
+            }}
             radius={BAR.radius}
           >
             <LabelList dataKey="category" content={CategoryLabel} />

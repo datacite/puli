@@ -22,14 +22,7 @@ interface Props {
 const BAR = { ...CHART.bar, size: 20 };
 
 const chartConfig = {
-  count: {
-    label: "Count",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  count: { label: "Count" },
 } satisfies ChartConfig;
 
 export default function ResourceTypesChart(props: Props) {

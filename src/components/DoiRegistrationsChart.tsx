@@ -17,14 +17,7 @@ interface Props {
 const BAR = { ...CHART.bar };
 
 const chartConfig = {
-  count: {
-    label: "Count",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  count: { label: "Count" },
 } satisfies ChartConfig;
 
 export default function DoiRegistrationsChart(props: Props) {
@@ -37,7 +30,7 @@ export default function DoiRegistrationsChart(props: Props) {
         <YAxis dataKey="count" type="number" hide />
         <Bar
           dataKey="count"
-          fill="var(--color-count)"
+          fill={BAR.color}
           radius={[BAR.radius, BAR.radius, 0, 0]}
           label={{ position: "top", formatter: asNumber }}
         />
