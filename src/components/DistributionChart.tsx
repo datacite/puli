@@ -16,6 +16,8 @@ export default function DistributionChart(props: Props) {
   const [displayAll, setDisplayAll] = useState(false);
   const toggleDisplayAll = () => setDisplayAll(!displayAll);
 
+  if (data.length === 0) return null;
+
   const displayedData = displayAll ? data : data.slice(0, 3);
 
   return (
