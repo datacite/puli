@@ -39,13 +39,15 @@ export default function PresentBar(props: Props) {
   const data = [{ property, present }];
 
   return (
-    <div className="w-full flex flex-col h-min">
-      <span className="text-xs mb-[-4px]">
-        {property}
-        <HighImpactBadge show={isHighImpact} />
+    <div className="w-full grid grid-cols-[max-content_1fr_max-content] h-min">
+      <span className="text-xs mb-[-4px]">{property}</span>
+      <HighImpactBadge show={isHighImpact} />
+      <span className="text-xs mb-[-4px] col-start-3 text-muted-foreground">
+        {asRoundedPercent(present)}
       </span>
       <ChartContainer
         config={chartConfig}
+        className="col-span-full w-full"
         style={{ height: `${containerHeight}px` }}
       >
         <BarChart
@@ -65,6 +67,7 @@ export default function PresentBar(props: Props) {
             interval={0}
             tickFormatter={(value) => asRoundedPercent(value)}
             tick={{ textAnchor: "end", dx: 30 }}
+            hide
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
           <Bar

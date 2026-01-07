@@ -10,7 +10,7 @@ export default function PresentChart(props: Props) {
   const { data } = props;
 
   return (
-    <div className="w-full flex flex-col h-min gap-3">
+    <div className="w-full flex flex-col h-min gap-2">
       {data.map((p) => (
         <PresentBar {...p} key={p.property} />
       ))}
