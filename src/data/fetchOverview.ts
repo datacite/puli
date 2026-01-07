@@ -48,25 +48,13 @@ async function fetchDois(clientId: string, filters: Filters) {
       count: f.count,
     })) || [];
 
-  // Extract registration counts for the last 3 years
   const registrationYears = json.meta.registered || [];
-  const find = (yearNum: number) => {
-    const year = yearNum.toString();
-    const reg = registrationYears.find((r) => r.id === year);
-    return { year, count: reg?.count || 0 };
-  };
-  const currentYear = new Date().getFullYear();
-  const doiRegistrationsData = [
-    find(currentYear - 2),
-    find(currentYear - 1),
-    find(currentYear),
-  ];
 
   return {
     totalDois: json.meta.total,
     resourceTypeData,
     registrationYears,
-    doiRegistrationsData,
+    doiRegistrationsData: registrationYears.reverse(),
   };
 }
 
