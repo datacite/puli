@@ -25,7 +25,7 @@ export default function DoiRegistrationsChart(props: Props) {
 
   return (
     <ChartContainer config={chartConfig} className="h-full">
-      <BarChart data={data} margin={{ top: 10 }} accessibilityLayer>
+      <BarChart data={data} margin={{ top: 20 }} accessibilityLayer>
         <XAxis dataKey="year" type="category" tickLine={false} />
         <YAxis dataKey="count" type="number" hide />
         <Bar
