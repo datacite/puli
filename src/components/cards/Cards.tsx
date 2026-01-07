@@ -47,11 +47,14 @@ export function Creators() {
       <PresentChart data={data.properties} />
       <CardColumn>
         <PresentBar {...data.nameIdentifier} />
-        <DistributionChart {...data.nameIdentifierScheme} />
+        <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
         <PresentChart data={data.affiliation} />
-        <DistributionChart {...data.affiliationIdentifierScheme} />
+        <DistributionChart
+          {...data.affiliationIdentifierScheme}
+          className="mt-4"
+        />
       </CardColumn>
     </ChartsCard>
   );
@@ -82,15 +85,18 @@ export function Contributors() {
     >
       <CardColumn>
         <PresentChart data={data.properties} />
-        <DistributionChart {...data.contributorType} />
+        <DistributionChart {...data.contributorType} className="mt-4" />
       </CardColumn>
       <CardColumn>
         <PresentBar {...data.nameIdentifier} />
-        <DistributionChart {...data.nameIdentifierScheme} />
+        <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
         <PresentChart data={data.affiliation} />
-        <DistributionChart {...data.affiliationIdentifierScheme} />
+        <DistributionChart
+          {...data.affiliationIdentifierScheme}
+          className="mt-4"
+        />
       </CardColumn>
     </ChartsCard>
   );
@@ -152,7 +158,10 @@ export function FundingReferences() {
     >
       <CardColumn>
         <PresentChart data={data.funderProperties} />
-        <DistributionChart {...data.funderIdentifierType} />
+        <DistributionChart
+          {...data.funderIdentifierType}
+          className="mt-4 mb-6"
+        />
         <PresentChart data={data.awardProperties} />
       </CardColumn>
     </ChartsCard>
@@ -184,7 +193,10 @@ export function Publisher() {
     >
       <CardColumn>
         <PresentBar {...data.publisherIdentifier} />
-        <DistributionChart {...data.publisherIdentifierScheme} />
+        <DistributionChart
+          {...data.publisherIdentifierScheme}
+          className="mt-4"
+        />
       </CardColumn>
     </ChartsCard>
   );
@@ -214,7 +226,7 @@ export function ResourceType() {
     >
       <CardColumn>
         <PresentChart data={data.properties} />
-        <DistributionChart {...data.resourceTypeGeneral} />
+        <DistributionChart {...data.resourceTypeGeneral} className="mt-4" />
       </CardColumn>
     </ChartsCard>
   );
@@ -244,7 +256,10 @@ export function Subjects() {
     >
       <CardColumn>
         <PresentBar {...data.subjectScheme} />
-        <DistributionChart {...data.subjectsSchemeDistribution} />
+        <DistributionChart
+          {...data.subjectsSchemeDistribution}
+          className="my-4"
+        />
         <PresentBar {...data.valueURI} />
       </CardColumn>
     </ChartsCard>
@@ -329,7 +344,7 @@ export function Rights() {
     >
       <CardColumn>
         <PresentChart data={data.properties} />
-        <DistributionChart {...data.rightsIdentifier} />
+        <DistributionChart {...data.rightsIdentifier} className="mt-4" />
       </CardColumn>
     </ChartsCard>
   );
@@ -358,7 +373,7 @@ export function Dates() {
       className="md:col-span-[2]"
     >
       <CardColumn>
-        <DistributionChart {...data.dateType} />
+        <DistributionChart {...data.dateType} className="mb-6" />
         <PresentBar {...data.dateInformation} />
       </CardColumn>
     </ChartsCard>
@@ -520,4 +535,3 @@ export function RelatedItem() {
 function CardColumn({ children }: { children: React.ReactNode }) {
   return <div className="flex flex-col gap-2">{children}</div>;
 }
-
