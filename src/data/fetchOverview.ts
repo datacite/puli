@@ -54,7 +54,10 @@ async function fetchDois(clientId: string, filters: Filters) {
     totalDois: json.meta.total,
     resourceTypeData,
     registrationYears,
-    doiRegistrationsData: registrationYears.reverse(),
+    doiRegistrationsData: registrationYears.reverse().map((f) => ({
+      year: f.id,
+      count: f.count,
+    })),
   };
 }
 
