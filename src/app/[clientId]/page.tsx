@@ -5,7 +5,6 @@ import { H3 } from "@/components/datacite/Headings";
 export default async function Home() {
   return (
     <main className="grid md:grid-cols-4 gap-4">
-      <SectionHeader title="Overview" />
       <OverviewCard />
 
       <SectionHeader title="Connections to People, Organizations, and Related Resources" />
