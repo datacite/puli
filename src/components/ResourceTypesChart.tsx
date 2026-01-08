@@ -1,10 +1,10 @@
 "use client";
 
-import { Pie, PieChart } from "recharts";
-
+import { type LegendProps, Pie, PieChart } from "recharts";
 import {
   type ChartConfig,
   ChartContainer,
+  ChartLegend,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -34,11 +34,17 @@ export default function ResourceTypesChart(props: Props) {
   }));
 
   return (
-    <ChartContainer config={chartConfig} className="aspect-square h-full">
+    <ChartContainer config={chartConfig} className="h-full">
       <PieChart margin={{ top: -10, right: -10, left: -10, bottom: -10 }}>
         <ChartTooltip
           cursor={false}
           content={<ChartTooltipContent hideLabel />}
+        />
+        <ChartLegend
+          layout="vertical"
+          align="right"
+          verticalAlign="middle"
+          content={<ChartLegendContent limit={5} />}
         />
         <Pie
           data={data}
@@ -50,5 +56,28 @@ export default function ResourceTypesChart(props: Props) {
         />
       </PieChart>
     </ChartContainer>
+  );
+}
+
+function ChartLegendContent(props: LegendProps & { limit?: number }) {
+  if (!props.payload?.length) return null;
+
+  return (
+    <ul className="grid grid-cols-[min-content_max-content] items-baseline gap-1.5">
+      {props.payload
+        .filter((item) => item.type !== "none")
+        .slice(0, props.limit)
+        .map((item) => {
+          return (
+            <li key={item.value} className="contents">
+              <div
+                className="h-2 w-2"
+                style={{ backgroundColor: item.color }}
+              />
+              {item.value}
+            </li>
+          );
+        })}
+    </ul>
   );
 }
