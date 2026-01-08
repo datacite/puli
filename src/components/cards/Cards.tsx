@@ -22,10 +22,13 @@ import useTitles from "@/data/fetchTitles";
 // Creators
 const CreatorsDescription = (
   <>
-    The Creators property supports citation and connects resources to people and
-    organizations. Add nameIdentifiers with ORCIDs and RORs and
-    affiliationIdentifiers with RORs for the highest impact.{" "}
-    <LearnMore href="" />
+    The Creator property supports citation and connects resources to people and
+    organizations. Add nameIdentifiers with ORCID iDs and ROR IDs and
+    affiliationIdentifiers with ROR IDs for the highest impact.{" "}
+    <LearnMore
+      text="Creator documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/creator/"
+    />
   </>
 );
 
@@ -63,9 +66,13 @@ export function Creators() {
 // Contributors
 const ContributorsDescription = (
   <>
-    The Contributors property connects resources to people and organizations.
-    Add nameIdentifiers with ORCIDs and RORs and affiliationIdentifiers with
-    RORs for the highest impact. <LearnMore href="" />
+    The Contributor property connects resources to people and organizations. Add
+    nameIdentifiers with ORCID iDs and ROR IDs and affiliationIdentifiers with
+    ROR IDs for the highest impact.{" "}
+    <LearnMore
+      text="Contributor documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/contributor/"
+    />
   </>
 );
 
@@ -105,9 +112,13 @@ export function Contributors() {
 // Related Identifiers
 const RelatedIdentifiersDescription = (
   <>
-    The RelatedIdentifiers property connects resources to other resources.
+    The RelatedIdentifier property connects resources to other resources.
     RelatedIdentifiers with the DOI relatedIdentifierType have the highest
-    impact. <LearnMore href="" />
+    impact.{" "}
+    <LearnMore
+      text="RelatedIdentifier documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/relatedidentifier/"
+    />
   </>
 );
 
@@ -136,8 +147,12 @@ export function RelatedIdentifiers() {
 // Funding References
 const FundingReferencesDescription = (
   <>
-    The FundingReferences property connects resources to funding sources. Add
-    ROR funderIdentifiers for the highest impact. <LearnMore href="" />
+    The FundingReference property connects resources to funding sources. Add
+    funderIdentifiers with ROR IDs for the highest impact.{" "}
+    <LearnMore
+      text="FundingReference documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/fundingreference/"
+    />
   </>
 );
 
@@ -171,8 +186,12 @@ export function FundingReferences() {
 // Publisher
 const PublisherDescription = (
   <>
-    The FundingReferences property connects resources to funding sources. Add
-    ROR funderIdentifiers for the highest impact. <LearnMore href="" />
+    The Publisher property connects resources to funding sources. Add
+    publisherIdentifiers with ROR IDs for the highest impact.{" "}
+    <LearnMore
+      text="Publisher documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/publisher/"
+    />
   </>
 );
 
@@ -205,7 +224,13 @@ export function Publisher() {
 // Resource Type
 const ResourceTypeDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The ResourceType property describes the type of resource. Select the most
+    specific applicable resourceTypeGeneral value to improve discoverability.
+    Avoid using “Text” and “Other” where possible.{" "}
+    <LearnMore
+      text="ResourceType documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/resourcetype/"
+    />
   </>
 );
 
@@ -235,7 +260,12 @@ export function ResourceType() {
 // Subjects
 const SubjectsDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The Subject property contains subject terms or keywords describing the
+    resource. Use controlled vocabulary terms to improve discoverability.{" "}
+    <LearnMore
+      text="Subject documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/subject/"
+    />
   </>
 );
 
@@ -269,7 +299,12 @@ export function Subjects() {
 // Descriptions
 const DescriptionsDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The Description property is recommended for a general description of a
+    resource. Include an abstract to improve discoverability.{" "}
+    <LearnMore
+      text="Description documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/description/"
+    />
   </>
 );
 
@@ -296,7 +331,13 @@ export function Descriptions() {
 // Titles
 const TitlesDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The Title property contains the name of the resource and is used in the
+    citation. Include additional titles where applicable to improve
+    discoverability.{" "}
+    <LearnMore
+      text="Title documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/title/"
+    />
   </>
 );
 
@@ -323,7 +364,13 @@ export function Titles() {
 // Rights
 const RightsDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The Rights property contains information about how the resource can be
+    reused, such as a license. Use standardized rights identifiers to improve
+    discoverability.{" "}
+    <LearnMore
+      text="Rights documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/rights/"
+    />
   </>
 );
 
@@ -353,7 +400,13 @@ export function Rights() {
 // Dates
 const DatesDescription = (
   <>
-    Lorum Ipsum. <LearnMore href="" />
+    The Date property contains dates relevant to the resource. Include all
+    relevant dates with their corresponding dateTypes to improve
+    discoverability.{" "}
+    <LearnMore
+      text="Date documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/date/"
+    />
   </>
 );
 
@@ -381,7 +434,16 @@ export function Dates() {
 }
 
 // Publication Year
-const PublicationYearDescription = <>Lorum Ipsum.</>;
+const PublicationYearDescription = (
+  <>
+    The PublicationYear property is for the year when the resource was or will
+    be made publicly available.{" "}
+    <LearnMore
+      text="PublicationYear documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/publicationyear/"
+    />
+  </>
+);
 
 export function PublicationYear() {
   const { isPending, isError, data, error } = useOther();
@@ -400,7 +462,16 @@ export function PublicationYear() {
 }
 
 // Alternate Identifiers
-const AlternateIdentifiersDescription = <>Lorum Ipsum.</>;
+const AlternateIdentifiersDescription = (
+  <>
+    The AlternateIdentifier property contains alternate identifiers for the
+    resource, such as local identifiers.{" "}
+    <LearnMore
+      text="AlternateIdentifier documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/alternateidentifier/"
+    />
+  </>
+);
 
 export function AlternateIdentifiers() {
   const { isPending, isError, data, error } = useOther();
@@ -419,7 +490,15 @@ export function AlternateIdentifiers() {
 }
 
 // Language
-const LanguageDescription = <>Lorum Ipsum.</>;
+const LanguageDescription = (
+  <>
+    The Language property is for the primary language of the resource.{" "}
+    <LearnMore
+      text="Language documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/language/"
+    />
+  </>
+);
 
 export function Language() {
   const { isPending, isError, data, error } = useOther();
@@ -438,7 +517,15 @@ export function Language() {
 }
 
 // Sizes
-const SizesDescription = <>Lorum Ipsum.</>;
+const SizesDescription = (
+  <>
+    The Size property indicates the size or duration of the resource.{" "}
+    <LearnMore
+      text="Size documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/size/"
+    />
+  </>
+);
 
 export function Sizes() {
   const { isPending, isError, data, error } = useOther();
@@ -457,7 +544,15 @@ export function Sizes() {
 }
 
 // Formats
-const FormatsDescription = <>Lorum Ipsum.</>;
+const FormatsDescription = (
+  <>
+    The Format property is for the technical format of the resource.{" "}
+    <LearnMore
+      text="Fomat documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/format/"
+    />
+  </>
+);
 
 export function Formats() {
   const { isPending, isError, data, error } = useOther();
@@ -476,7 +571,15 @@ export function Formats() {
 }
 
 // Version
-const VersionDescription = <>Lorum Ipsum.</>;
+const VersionDescription = (
+  <>
+    The Version property is for the version number of the resource.{" "}
+    <LearnMore
+      text="Version documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/version/"
+    />
+  </>
+);
 
 export function Version() {
   const { isPending, isError, data, error } = useOther();
@@ -495,7 +598,16 @@ export function Version() {
 }
 
 // Geo Location
-const GeoLocationDescription = <>Lorum Ipsum.</>;
+const GeoLocationDescription = (
+  <>
+    The GeoLocation property is for the spatial region or named place related to
+    the resource.{" "}
+    <LearnMore
+      text="GeoLocation documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/geolocation/"
+    />
+  </>
+);
 
 export function GeoLocation() {
   const { isPending, isError, data, error } = useOther();
@@ -514,7 +626,16 @@ export function GeoLocation() {
 }
 
 // Related Item
-const RelatedItemDescription = <>Lorum Ipsum.</>;
+const RelatedItemDescription = (
+  <>
+    The RelatedItem property connects resources to other resources, with or
+    without identifiers.{" "}
+    <LearnMore
+      text="RelatedItem documentation"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/relateditem/"
+    />
+  </>
+);
 
 export function RelatedItem() {
   const { isPending, isError, data, error } = useOther();
