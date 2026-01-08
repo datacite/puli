@@ -1,7 +1,13 @@
-export default function LearnMore({ href }: { href: string }) {
+export default function LearnMore({
+  href,
+  text,
+}: {
+  href: string;
+  text?: string;
+}) {
   return (
     <a href={href} className="underline">
-      Learn more
+      {text || "Learn more"}
     </a>
   );
 }
