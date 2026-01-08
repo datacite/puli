@@ -8,7 +8,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { CHART } from "@/constants";
+import { CHART, PALETTE_RESOURCE_TYPE } from "@/constants";
 
 export type ResourceTypeData = {
   type: string;
@@ -26,7 +26,12 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function ResourceTypesChart(props: Props) {
-  const { data } = props;
+  const data = props.data.map((d) => ({
+    fill:
+      PALETTE_RESOURCE_TYPE[d.type as keyof typeof PALETTE_RESOURCE_TYPE] ||
+      PALETTE_RESOURCE_TYPE.Unknown,
+    ...d,
+  }));
 
   return (
     <ChartContainer config={chartConfig} className="aspect-square h-full">
