@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { H1 } from "@/components/datacite/Headings";
-import logo from "./datacite-logo.png";
+import logo from "./DataCite-Logo.svg";
 
 export default function Header() {
   return (
