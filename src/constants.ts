@@ -122,7 +122,7 @@ const DATES_TYPE = "dates.dateType";
 const DATES_INFORMATION = "dates.dateInformation";
 
 //// Other
-const PUBLICATION_YEAR = "publicationYear";
+const PUBLICATION_YEAR = "publication_year";
 const ALTERNATE_IDS = "identifiers";
 const LANGUAGE = "language";
 const SIZES = "sizes";
