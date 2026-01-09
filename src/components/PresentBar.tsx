@@ -32,7 +32,7 @@ export default function PresentBar(props: Props) {
   const data = [{ property, present }];
 
   return (
-    <div className="w-full text-xs grid grid-cols-[max-content_1fr_max-content] h-min items-center">
+    <div className="w-full text-sm grid grid-cols-[max-content_1fr_max-content] h-min items-center">
       <span className="mb-[-4px]">{property}</span>
       <HighImpactBadge show={isHighImpact} />
       <span className="mb-[-4px] col-start-3 text-muted-foreground">
