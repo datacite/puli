@@ -82,7 +82,7 @@ export default function RadialChart(props: Props) {
 
     return (
       <text x={cx} y={cy} textAnchor="middle">
-        <tspan x={cx} y={cy - 6} className="fill-foreground text-3xl">
+        <tspan x={cx} y={cy - 6} className="fill-foreground text-2xl">
           {asRoundedPercent(present)}
         </tspan>
       </text>
