@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { CHART } from "@/constants";
+import { asNumber } from "@/util";
 
 export type DoiRegistration = {
   year: number | string;
@@ -21,7 +22,7 @@ interface Props {
 const BAR = { ...CHART.bar };
 
 const chartConfig = {
-  count: { label: "Count" },
+  count: { label: "DOIs" },
 } satisfies ChartConfig;
 
 export default function DoiRegistrationsChart(props: Props) {
@@ -39,7 +40,14 @@ export default function DoiRegistrationsChart(props: Props) {
         />
         <ChartTooltip
           cursor={false}
-          content={<ChartTooltipContent hideLabel />}
+          content={
+            <ChartTooltipContent
+              hideIndicator
+              formatter={(v) => (
+                <span className="font-semibold">{asNumber(v as number)}</span>
+              )}
+            />
+          }
         />
       </BarChart>
     </ChartContainer>
