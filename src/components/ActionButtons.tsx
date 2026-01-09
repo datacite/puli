@@ -154,6 +154,7 @@ function FilterByQuery() {
   return (
     <div className="max-md:col-span-2 flex md:mr-10 h-full">
       <Input
+        title="filter by text input"
         placeholder="Enter query..."
         className="text-xs px-6 py-2 h-full rounded-r-none border-r-0"
         value={query}
