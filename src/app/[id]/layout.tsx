@@ -8,14 +8,15 @@ export default async function Layout({
   params,
   children,
 }: {
-  params: Promise<{ clientId: string }>;
+  params: Promise<{ id: string }>;
   children: React.ReactNode;
 }) {
-  // Check if client exists
-  const { clientId } = await params;
-  const res = await fetchDatacite(`clients/${clientId}`, {
-    cache: "force-cache",
-  });
+  // Check if resource exists
+  const { id } = await params;
+  const res = await fetchDatacite(
+    `${id.includes(".") ? "clients" : "providers"}/${id}`,
+    { cache: "force-cache" },
+  );
   const json = await res.json();
   if (!json.data) notFound();
 

@@ -9,14 +9,8 @@ const format = createFormat((p, d) => ({
   dateInformation: p[1],
 }));
 
-export const fetchDates = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchDates = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useDates() {
   return useCreateQuery("dates", fetchDates);

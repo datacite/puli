@@ -8,14 +8,8 @@ const format = createFormat((p, d) => ({
   descriptionType: d[0],
 }));
 
-export const fetchDescriptions = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchDescriptions = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useDescriptions() {
   return useCreateQuery("descriptions", fetchDescriptions);

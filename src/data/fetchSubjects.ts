@@ -10,14 +10,8 @@ const format = createFormat((p, d) => ({
   valueURI: p[2],
 }));
 
-export const fetchSubjects = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchSubjects = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useSubjects() {
   return useCreateQuery("subjects", fetchSubjects);

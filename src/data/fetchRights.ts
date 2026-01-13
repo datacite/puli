@@ -9,14 +9,8 @@ const format = createFormat((p, d) => ({
   rightsIdentifier: d[0],
 }));
 
-export const fetchRights = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchRights = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useRights() {
   return useCreateQuery("rights", fetchRights);

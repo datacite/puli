@@ -98,14 +98,14 @@ function toDistributionProps(item?: Distribution): DistributionProps {
 }
 
 export async function fetchFields<R>(
-  clientId: string,
+  id: string,
   presentFields: readonly string[],
   distributionFields: readonly string[],
   filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    client_id: clientId,
+    client_id: id,
     present: presentFields.join(","),
     distribution: distributionFields.join(","),
     query: filters.openSearchQuery || "",

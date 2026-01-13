@@ -13,14 +13,8 @@ const format = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[2],
 }));
 
-export const fetchContributors = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchContributors = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useContributors() {
   return useCreateQuery("contributors", fetchContributors);

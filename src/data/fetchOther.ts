@@ -14,14 +14,8 @@ const format = createFormat((p) => ({
   relatedItem: p[7],
 }));
 
-export const fetchOther = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchOther = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useOther() {
   return useCreateQuery("other", fetchOther);

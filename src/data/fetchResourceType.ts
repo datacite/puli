@@ -9,14 +9,8 @@ const format = createFormat((p, d) => ({
   resourceTypeGeneral: d[0],
 }));
 
-export const fetchResourceType = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchResourceType = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useResourceType() {
   return useCreateQuery("resourceType", fetchResourceType);

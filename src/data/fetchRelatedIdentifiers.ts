@@ -10,17 +10,8 @@ const format = createFormat((p, d) => ({
   resourceTypeGeneral: d[2],
 }));
 
-export const fetchRelatedIdentifiers = async (
-  clientId: string,
-  filters: Filters,
-) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchRelatedIdentifiers = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useRelatedIdentifiers() {
   return useCreateQuery("relatedIdentifiers", fetchRelatedIdentifiers);

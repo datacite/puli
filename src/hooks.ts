@@ -5,9 +5,9 @@ import { useParams, useSearchParams } from "next/navigation";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
 import type { Filters } from "@/types";
 
-export function useClientId() {
-  const { clientId } = useParams<{ clientId: string }>();
-  return clientId;
+export function useId() {
+  const { id } = useParams<{ id: string }>();
+  return { id, type: id.includes(".") ? "client" : "provider" } as const;
 }
 
 export function useFilters() {
@@ -28,13 +28,13 @@ export function useFilters() {
 
 export function useCreateQuery<R>(
   key: string,
-  fetch: (clientId: string, filters: Filters) => Promise<R>,
+  fetch: (id: string, filters: Filters) => Promise<R>,
 ) {
-  const clientId = useClientId();
+  const { id } = useId();
   const filters = useFilters();
 
   return useQuery({
-    queryKey: [clientId, filters, key],
-    queryFn: () => fetch(clientId, filters),
+    queryKey: [id, filters, key],
+    queryFn: () => fetch(id, filters),
   });
 }

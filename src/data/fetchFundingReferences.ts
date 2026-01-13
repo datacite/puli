@@ -10,17 +10,8 @@ const format = createFormat((p, d) => ({
   awardProperties: p.slice(-3),
 }));
 
-export const fetchFundingReferences = async (
-  clientId: string,
-  filters: Filters,
-) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchFundingReferences = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useFundingReferences() {
   return useCreateQuery("fundingReferences", fetchFundingReferences);

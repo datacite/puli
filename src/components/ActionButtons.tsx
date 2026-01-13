@@ -8,7 +8,7 @@ import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import useOverview from "@/data/fetchOverview";
-import { useClientId, useFilters } from "@/hooks";
+import { useId, useFilters } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Combobox } from "./ui/combobox";
 
@@ -47,7 +47,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
 function FilterByRegistrationYear() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const { id } = useId();
 
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
@@ -68,7 +68,7 @@ function FilterByRegistrationYear() {
     params.set(SEARCH_PARAMETERS.REGISTRATION_YEAR, value);
     if (!value.trim()) params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
-    const href = `/${clientId}?${params.toString()}`;
+    const href = `/${id}?${params.toString()}`;
     router.push(href);
   }
 
@@ -89,7 +89,7 @@ function FilterByRegistrationYear() {
 function FilterByResourceType() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const { id } = useId();
 
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
@@ -110,7 +110,7 @@ function FilterByResourceType() {
     params.set(SEARCH_PARAMETERS.RESOURCE_TYPE, value);
     if (!value.trim()) params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
-    const href = `/${clientId}?${params.toString()}`;
+    const href = `/${id}?${params.toString()}`;
     router.push(href);
   }
 
@@ -132,7 +132,7 @@ function FilterByResourceType() {
 function FilterByQuery() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const { id } = useId();
   const [query, setQuery] = useState(
     searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
   );
@@ -140,7 +140,7 @@ function FilterByQuery() {
   const params = new URLSearchParams(searchParams.toString());
   params.set(SEARCH_PARAMETERS.QUERY, query);
   if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
-  const href = `/${clientId}?${params.toString()}`;
+  const href = `/${id}?${params.toString()}`;
 
   const disabled = !query.trim();
 
@@ -175,7 +175,7 @@ function FilterByQuery() {
 }
 
 function ViewInCommons() {
-  const clientId = useClientId();
+  const { id } = useId();
   const filters = useFilters();
 
   const doisSearchParam = new URLSearchParams({
@@ -184,7 +184,7 @@ function ViewInCommons() {
     "resource-type": filters.resourceType || "",
   }).toString();
 
-  const href = `${COMMONS_URL}/repositories/${clientId}?${doisSearchParam}`;
+  const href = `${COMMONS_URL}/repositories/${id}?${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
@@ -197,11 +197,11 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const clientId = useClientId();
+  const { id } = useId();
   const filters = useFilters();
 
   const doisSearchParam = new URLSearchParams({
-    "client-id": clientId,
+    "client-id": id,
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",

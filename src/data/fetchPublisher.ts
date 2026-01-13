@@ -9,14 +9,8 @@ const format = createFormat((p, d) => ({
   publisherIdentifierScheme: d[0],
 }));
 
-export const fetchPublisher = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchPublisher = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function usePublisher() {
   return useCreateQuery("publisher", fetchPublisher);

@@ -12,14 +12,8 @@ const format = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[1],
 }));
 
-export const fetchCreators = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchCreators = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useCreators() {
   return useCreateQuery("creators", fetchCreators);

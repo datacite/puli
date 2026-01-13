@@ -8,14 +8,8 @@ const format = createFormat((p, d) => ({
   titleType: d[0],
 }));
 
-export const fetchTitles = async (clientId: string, filters: Filters) =>
-  await fetchFields(
-    clientId,
-    FIELDS.present,
-    FIELDS.distribution,
-    filters,
-    format,
-  );
+export const fetchTitles = async (id: string, filters: Filters) =>
+  await fetchFields(id, FIELDS.present, FIELDS.distribution, filters, format);
 
 export default function useTitles() {
   return useCreateQuery("titles", fetchTitles);
