@@ -7,7 +7,7 @@ import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import useOverview from "@/data/fetchOverview";
+import useOverview, { fetchDoisSearchParams } from "@/data/fetchOverview";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Combobox } from "./ui/combobox";
@@ -200,13 +200,9 @@ function ViewInApi() {
   const id = useId();
   const filters = useFilters();
 
-  const doisSearchParam = new URLSearchParams({
-    "client-id": id,
-    query: filters.query || "",
-    registered: filters.registered || "",
-    "resource-type-id": filters.resourceType || "",
-    state: "findable",
-  }).toString();
+  const doisSearchParam = new URLSearchParams(
+    fetchDoisSearchParams(id, filters),
+  ).toString();
 
   const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
 

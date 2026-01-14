@@ -27,14 +27,19 @@ async function fetchClient(clientId: string) {
   };
 }
 
-async function fetchDois(id: string, filters: Filters) {
-  const doisSearchParam = new URLSearchParams({
+export const fetchDoisSearchParams = (id: string, filters: Filters) =>
+  ({
     "client-id": id,
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",
-    facets: ["resourceTypes", "registered"].join(","),
     state: "findable",
+  }) as const;
+
+async function fetchDois(id: string, filters: Filters) {
+  const doisSearchParam = new URLSearchParams({
+    ...fetchDoisSearchParams(id, filters),
+    facets: ["resourceTypes", "registered"].join(","),
     "page[size]": "0",
   }).toString();
 
