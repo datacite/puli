@@ -131,6 +131,8 @@ export async function fetchFields<R>(
   return format(present, distribution);
 }
 
+export const isClient = (id: string) => id.includes(".");
+
 export function findBuilder<T, U>(
   array: T[],
   fn: (a: T, b: U) => boolean,
