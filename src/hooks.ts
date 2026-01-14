@@ -7,7 +7,7 @@ import type { Filters } from "@/types";
 
 export function useId() {
   const { id } = useParams<{ id: string }>();
-  return { id, type: id.includes(".") ? "client" : "provider" } as const;
+  return id;
 }
 
 export function useFilters() {
@@ -30,7 +30,7 @@ export function useCreateQuery<R>(
   key: string,
   fetch: (id: string, filters: Filters) => Promise<R>,
 ) {
-  const { id } = useId();
+  const id = useId();
   const filters = useFilters();
 
   return useQuery({

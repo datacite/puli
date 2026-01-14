@@ -13,10 +13,7 @@ export default async function Layout({
 }) {
   // Check if resource exists
   const { id } = await params;
-  const res = await fetchDatacite(
-    `${id.includes(".") ? "clients" : "providers"}/${id}`,
-    { cache: "force-cache" },
-  );
+  const res = await fetchDatacite(`clients/${id}`, { cache: "force-cache" });
   const json = await res.json();
   if (!json.data) notFound();
 

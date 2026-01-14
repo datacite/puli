@@ -8,7 +8,7 @@ import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import useOverview from "@/data/fetchOverview";
-import { useId, useFilters } from "@/hooks";
+import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Combobox } from "./ui/combobox";
 
@@ -47,7 +47,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
 function FilterByRegistrationYear() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { id } = useId();
+  const id = useId();
 
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
@@ -89,7 +89,7 @@ function FilterByRegistrationYear() {
 function FilterByResourceType() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { id } = useId();
+  const id = useId();
 
   const { isPending, isError, data, error } = useOverview();
   const [open, setOpen] = useState(false);
@@ -132,7 +132,7 @@ function FilterByResourceType() {
 function FilterByQuery() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { id } = useId();
+  const id = useId();
   const [query, setQuery] = useState(
     searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
   );
@@ -175,7 +175,7 @@ function FilterByQuery() {
 }
 
 function ViewInCommons() {
-  const { id } = useId();
+  const id = useId();
   const filters = useFilters();
 
   const doisSearchParam = new URLSearchParams({
@@ -197,7 +197,7 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const { id } = useId();
+  const id = useId();
   const filters = useFilters();
 
   const doisSearchParam = new URLSearchParams({

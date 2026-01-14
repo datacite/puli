@@ -18,8 +18,8 @@ export default function useOverview() {
   return useCreateQuery("overview", fetchOverview);
 }
 
-async function fetchClient(id: string) {
-  const res = await fetchDatacite(`clients/${id}`);
+async function fetchClient(clientId: string) {
+  const res = await fetchDatacite(`clients/${clientId}`);
   const json = (await res.json()) as ApiClientResponse;
 
   return {

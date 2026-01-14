@@ -5,7 +5,7 @@ import useOverview from "@/data/fetchOverview";
 import { useId } from "@/hooks";
 
 export default function Header() {
-  const { id } = useId();
+  const id = useId();
   const { isPending, isError, data, error } = useOverview();
 
   if (isError) return `Error: ${error}`;
