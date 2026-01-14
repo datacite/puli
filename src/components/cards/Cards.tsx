@@ -6,18 +6,20 @@ import LearnMore from "@/components/LearnMore";
 import PresentBar from "@/components/PresentBar";
 import PresentChart from "@/components/PresentChart";
 import { ChartsCardSkeleton } from "@/components/Skeleton";
-import useContributors from "@/data/fetchContributors";
-import useCreators from "@/data/fetchCreators";
-import useDates from "@/data/fetchDates";
-import useDescriptions from "@/data/fetchDescriptions";
-import useFundingReferences from "@/data/fetchFundingReferences";
-import useOther from "@/data/fetchOther";
-import usePublisher from "@/data/fetchPublisher";
-import useRelatedIdentifiers from "@/data/fetchRelatedIdentifiers";
-import useResourceType from "@/data/fetchResourceType";
-import useRights from "@/data/fetchRights";
-import useSubjects from "@/data/fetchSubjects";
-import useTitles from "@/data/fetchTitles";
+import {
+  useContributors,
+  useCreators,
+  useDates,
+  useDescriptions,
+  useFundingReferences,
+  useOther,
+  usePublisher,
+  useRelatedIdentifiers,
+  useResourceType,
+  useRights,
+  useSubjects,
+  useTitles,
+} from "@/data/fetchCompleteness";
 
 // Creators
 const CreatorsDescription = (
