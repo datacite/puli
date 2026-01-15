@@ -7,7 +7,11 @@ import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import { fetchDoisSearchParams, useOverview } from "@/data/fetchOverview";
+import {
+  fetchDoisSearchParams,
+  useDois,
+  useResource,
+} from "@/data/fetchOverview";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { isClient } from "@/util";
@@ -50,7 +54,7 @@ function FilterByRegistrationYear() {
   const searchParams = useSearchParams();
   const id = useId();
 
-  const { isPending, isError, data, error } = useOverview();
+  const { isPending, isError, data, error } = useDois();
   const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
@@ -92,7 +96,7 @@ function FilterByResourceType() {
   const searchParams = useSearchParams();
   const id = useId();
 
-  const { isPending, isError, data, error } = useOverview();
+  const { isPending, isError, data, error } = useDois();
   const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
@@ -202,11 +206,14 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const id = useId();
+  const { isPending, isError, data: resource, error } = useResource();
   const filters = useFilters();
 
+  if (isError) return `Error: ${error}`;
+  if (isPending) return null;
+
   const doisSearchParam = new URLSearchParams(
-    fetchDoisSearchParams(id, filters),
+    fetchDoisSearchParams(resource, filters),
   ).toString();
 
   const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;

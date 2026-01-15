@@ -1,12 +1,12 @@
 "use client";
 
 import { H2 } from "@/components/datacite/Headings";
-import { useOverview } from "@/data/fetchOverview";
+import { useResource } from "@/data/fetchOverview";
 import { useId } from "@/hooks";
 
 export default function Header() {
   const id = useId();
-  const { isPending, isError, data, error } = useOverview();
+  const { isPending, isError, data, error } = useResource();
 
   if (isError) return `Error: ${error}`;
 

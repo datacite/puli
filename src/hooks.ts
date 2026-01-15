@@ -29,6 +29,7 @@ export function useFilters() {
 export function useCreateQuery<R>(
   key: string,
   fetch: (id: string, filters: Filters) => Promise<R>,
+  enabled?: boolean,
 ) {
   const id = useId();
   const filters = useFilters();
@@ -36,5 +37,6 @@ export function useCreateQuery<R>(
   return useQuery({
     queryKey: [id, filters, key],
     queryFn: () => fetch(id, filters),
+    enabled,
   });
 }
