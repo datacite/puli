@@ -5,7 +5,7 @@ import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
 import ResourceTypesChart from "@/components/ResourceTypesChart";
 import { OverviewCardSkeleton } from "@/components/Skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import useOverview from "@/data/fetchOverview";
+import { useOverview } from "@/data/fetchOverview";
 import { asNumber } from "@/util";
 
 export default function OverviewCard(cardProps: ComponentProps<"div">) {

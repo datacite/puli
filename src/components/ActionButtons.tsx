@@ -7,7 +7,7 @@ import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import useOverview, { fetchDoisSearchParams } from "@/data/fetchOverview";
+import { fetchDoisSearchParams, useOverview } from "@/data/fetchOverview";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { isClient } from "@/util";

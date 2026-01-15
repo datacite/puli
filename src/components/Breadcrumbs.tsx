@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useOverview from "@/data/fetchOverview";
+import { useOverview } from "@/data/fetchOverview";
 
 export type BreadcrumbData = { title: string; href?: string };
 

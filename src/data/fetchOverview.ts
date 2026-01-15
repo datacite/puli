@@ -14,7 +14,7 @@ export async function fetchOverview(id: string, filters: Filters) {
   };
 }
 
-export default function useOverview() {
+export function useOverview() {
   return useCreateQuery("overview", fetchOverview);
 }
 
