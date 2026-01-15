@@ -105,7 +105,7 @@ export async function fetchFields<R>(
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    client_id: id,
+    [isClient(id) ? "client_id" : "provider_id"]: id,
     present: presentFields.join(","),
     distribution: distributionFields.join(","),
     query: filters.openSearchQuery || "",

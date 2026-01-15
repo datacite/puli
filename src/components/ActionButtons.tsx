@@ -10,6 +10,7 @@ import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import useOverview, { fetchDoisSearchParams } from "@/data/fetchOverview";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { isClient } from "@/util";
 import { Combobox } from "./ui/combobox";
 
 export default function ActionButtons() {
@@ -177,6 +178,10 @@ function FilterByQuery() {
 function ViewInCommons() {
   const id = useId();
   const filters = useFilters();
+
+  // Temporary solution, need to investigating linking to a provider in Commons
+  // Commons doesn't support using provider-id in URL like with repositories
+  if (!isClient(id)) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",

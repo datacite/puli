@@ -1,15 +1,15 @@
 import { useCreateQuery } from "@/hooks";
 import type { Facet, Filters } from "@/types";
-import { fetchDatacite } from "@/util";
+import { fetchDatacite, isClient } from "@/util";
 
 export async function fetchOverview(id: string, filters: Filters) {
-  const [client, dois] = await Promise.all([
-    fetchClient(id),
+  const [resource, dois] = await Promise.all([
+    fetchResource(id),
     fetchDois(id, filters),
   ]);
 
   return {
-    ...client,
+    ...resource,
     ...dois,
   };
 }
@@ -18,8 +18,10 @@ export default function useOverview() {
   return useCreateQuery("overview", fetchOverview);
 }
 
-async function fetchClient(clientId: string) {
-  const res = await fetchDatacite(`clients/${clientId}`);
+async function fetchResource(id: string) {
+  const res = await fetchDatacite(
+    `${isClient(id) ? "clients" : "providers"}/${id}`,
+  );
   const json = (await res.json()) as ApiClientResponse;
 
   return {
@@ -29,7 +31,7 @@ async function fetchClient(clientId: string) {
 
 export const fetchDoisSearchParams = (id: string, filters: Filters) =>
   ({
-    "client-id": id,
+    [isClient(id) ? "client-id" : "provider-id"]: id,
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",

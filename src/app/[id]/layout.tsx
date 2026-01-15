@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import ActionButtons from "@/components/ActionButtons";
 import Breadcrumbs, { type BreadcrumbData } from "@/components/Breadcrumbs";
-import { fetchDatacite } from "@/util";
+import { fetchDatacite, isClient } from "@/util";
 import Header from "./Header";
 
 export default async function Layout({
@@ -13,7 +13,10 @@ export default async function Layout({
 }) {
   // Check if resource exists
   const { id } = await params;
-  const res = await fetchDatacite(`clients/${id}`, { cache: "force-cache" });
+  const res = await fetchDatacite(
+    `${isClient(id) ? "clients" : "providers"}/${id}`,
+    { cache: "force-cache" },
+  );
   const json = await res.json();
   if (!json.data) notFound();
 
