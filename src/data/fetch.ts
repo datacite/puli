@@ -1,7 +1,13 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
 import { useQueryId, useQueryResource } from "@/hooks";
 import type { Facet, Filters } from "@/types";
-import { createFormat, fetchDatacite, fetchFields, isClient } from "@/util";
+import {
+  buildInitialData,
+  createFormat,
+  fetchDatacite,
+  fetchFields,
+  isClient,
+} from "@/util";
 
 // Overview //////////////////////////////////////
 export async function fetchResource(id: string) {
@@ -60,8 +66,17 @@ export function useResource() {
   return useQueryId("resource", fetchResource);
 }
 
+const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
+  (new Date().getFullYear() - (9 - i)).toString(),
+);
+
 export function useDois() {
-  return useQueryResource("overview", fetchDois);
+  return useQueryResource("overview", fetchDois, {
+    total: 0,
+    registrationYears: LAST_10_YEARS.map((id) => ({ id, title: id, count: 0 })),
+    registrationsData: LAST_10_YEARS.map((year) => ({ year, count: 0 })),
+    resourceTypeData: [],
+  });
 }
 
 export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
@@ -156,7 +171,11 @@ export const fetchCreators = async (resource: Resource, filters: Filters) =>
   );
 
 export function useCreators() {
-  return useQueryResource("creators", fetchCreators);
+  return useQueryResource(
+    "creators",
+    fetchCreators,
+    buildInitialData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
+  );
 }
 
 // Contributors
@@ -179,7 +198,11 @@ export const fetchContributors = async (resource: Resource, filters: Filters) =>
   );
 
 export function useContributors() {
-  return useQueryResource("contributors", fetchContributors);
+  return useQueryResource(
+    "contributors",
+    fetchContributors,
+    buildInitialData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
+  );
 }
 
 // Related Identifiers
@@ -202,7 +225,14 @@ export const fetchRelatedIdentifiers = async (
   );
 
 export function useRelatedIdentifiers() {
-  return useQueryResource("relatedIdentifiers", fetchRelatedIdentifiers);
+  return useQueryResource(
+    "relatedIdentifiers",
+    fetchRelatedIdentifiers,
+    buildInitialData(
+      formatRelatedIdentifiers,
+      COMPLETENESS_FIELDS.RELATED_IDENTIFIERS,
+    ),
+  );
 }
 
 // Funding References
@@ -225,7 +255,14 @@ export const fetchFundingReferences = async (
   );
 
 export function useFundingReferences() {
-  return useQueryResource("fundingReferences", fetchFundingReferences);
+  return useQueryResource(
+    "fundingReferences",
+    fetchFundingReferences,
+    buildInitialData(
+      formatFundingReferences,
+      COMPLETENESS_FIELDS.FUNDING_REFERENCES,
+    ),
+  );
 }
 
 // Publisher
@@ -244,7 +281,11 @@ export const fetchPublisher = async (resource: Resource, filters: Filters) =>
   );
 
 export function usePublisher() {
-  return useQueryResource("publisher", fetchPublisher);
+  return useQueryResource(
+    "publisher",
+    fetchPublisher,
+    buildInitialData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
+  );
 }
 
 // Resource Type
@@ -263,7 +304,11 @@ export const fetchResourceType = async (resource: Resource, filters: Filters) =>
   );
 
 export function useResourceType() {
-  return useQueryResource("resourceType", fetchResourceType);
+  return useQueryResource(
+    "resourceType",
+    fetchResourceType,
+    buildInitialData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
+  );
 }
 
 // Subjects
@@ -283,7 +328,11 @@ export const fetchSubjects = async (resource: Resource, filters: Filters) =>
   );
 
 export function useSubjects() {
-  return useQueryResource("subjects", fetchSubjects);
+  return useQueryResource(
+    "subjects",
+    fetchSubjects,
+    buildInitialData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
+  );
 }
 
 // Descriptions
@@ -301,7 +350,11 @@ export const fetchDescriptions = async (resource: Resource, filters: Filters) =>
   );
 
 export function useDescriptions() {
-  return useQueryResource("descriptions", fetchDescriptions);
+  return useQueryResource(
+    "descriptions",
+    fetchDescriptions,
+    buildInitialData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
+  );
 }
 
 // Titles
@@ -319,7 +372,11 @@ export const fetchTitles = async (resource: Resource, filters: Filters) =>
   );
 
 export function useTitles() {
-  return useQueryResource("titles", fetchTitles);
+  return useQueryResource(
+    "titles",
+    fetchTitles,
+    buildInitialData(formatTitles, COMPLETENESS_FIELDS.TITLES),
+  );
 }
 
 // Rights
@@ -338,7 +395,11 @@ export const fetchRights = async (resource: Resource, filters: Filters) =>
   );
 
 export function useRights() {
-  return useQueryResource("rights", fetchRights);
+  return useQueryResource(
+    "rights",
+    fetchRights,
+    buildInitialData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
+  );
 }
 
 // Dates
@@ -352,7 +413,11 @@ export const fetchDates = async (resource: Resource, filters: Filters) =>
   await fetchFields(resource, COMPLETENESS_FIELDS.DATES, filters, formatDates);
 
 export function useDates() {
-  return useQueryResource("dates", fetchDates);
+  return useQueryResource(
+    "dates",
+    fetchDates,
+    buildInitialData(formatDates, COMPLETENESS_FIELDS.DATES),
+  );
 }
 
 // Other
@@ -371,5 +436,9 @@ export const fetchOther = async (resource: Resource, filters: Filters) =>
   await fetchFields(resource, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
 
 export function useOther() {
-  return useQueryResource("other", fetchOther);
+  return useQueryResource(
+    "other",
+    fetchOther,
+    buildInitialData(formatOther, COMPLETENESS_FIELDS.OTHER),
+  );
 }

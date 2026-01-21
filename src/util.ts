@@ -98,6 +98,20 @@ function toDistributionProps(item?: Distribution): DistributionProps {
   };
 }
 
+export function buildInitialData<R>(
+  format: Format<R>,
+  fields: { present: readonly string[]; distribution: readonly string[] },
+) {
+  return format(
+    fields.present.map((f) =>
+      toPresentProps({ field: f, percent: 0, count: 0, absent_count: 0 }),
+    ),
+    fields.distribution.map((f) =>
+      toDistributionProps({ field: f, values: [] }),
+    ),
+  );
+}
+
 export async function fetchFields<R>(
   resource: Resource,
   fields: { present: readonly string[]; distribution: readonly string[] },
