@@ -7,6 +7,7 @@ import type {
   Filters,
   Format,
   Present,
+  Resource,
 } from "@/types";
 
 export function pascal(str: string) {
@@ -98,14 +99,14 @@ function toDistributionProps(item?: Distribution): DistributionProps {
 }
 
 export async function fetchFields<R>(
-  id: string,
+  resource: Resource,
   presentFields: readonly string[],
   distributionFields: readonly string[],
   filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    [isClient(id) ? "client_id" : "provider_id"]: id,
+    [`${resource.type}_id`]: resource.id,
     present: presentFields.join(","),
     distribution: distributionFields.join(","),
     query: filters.openSearchQuery || "",

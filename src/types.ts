@@ -1,5 +1,8 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
+import type { fetchResource } from "./data/fetch";
+
+export type Resource = Awaited<ReturnType<typeof fetchResource>>;
 
 export type Facet = {
   id: string;

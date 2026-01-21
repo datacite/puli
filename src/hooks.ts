@@ -1,9 +1,10 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
-import type { Filters } from "@/types";
+import type { Filters, Resource } from "@/types";
+import { useResource } from "./data/fetch";
 
 export function useId() {
   const { id } = useParams<{ id: string }>();
@@ -26,17 +27,35 @@ export function useFilters() {
   } satisfies Filters;
 }
 
-export function useCreateQuery<R>(
+export function useQueryId<R>(
   key: string,
   fetch: (id: string, filters: Filters) => Promise<R>,
+  initialData?: R,
   enabled?: boolean,
 ) {
   const id = useId();
   const filters = useFilters();
 
-  return useQuery({
+  return useTanstackQuery({
     queryKey: [id, filters, key],
     queryFn: () => fetch(id, filters),
+    initialData,
+    staleTime: 0,
     enabled,
   });
+}
+
+export function useQueryResource<R>(
+  key: string,
+  fetch: (resource: Resource, filters: Filters) => Promise<R>,
+  initialData?: R,
+) {
+  const { data } = useResource();
+
+  return useQueryId<R>(
+    key,
+    (_, filters) => fetch(data!, filters),
+    initialData,
+    !!data,
+  );
 }
