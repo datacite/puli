@@ -19,7 +19,7 @@ import {
   useRights,
   useSubjects,
   useTitles,
-} from "@/data/fetchCompleteness";
+} from "@/data/fetch";
 
 // Creators
 const CreatorsDescription = (

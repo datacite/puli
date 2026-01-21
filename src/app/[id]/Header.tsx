@@ -1,7 +1,7 @@
 "use client";
 
 import { H2 } from "@/components/datacite/Headings";
-import { useResource } from "@/data/fetchOverview";
+import { useResource } from "@/data/fetch";
 import { useId } from "@/hooks";
 
 export default function Header() {
