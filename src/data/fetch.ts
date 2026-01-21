@@ -150,8 +150,7 @@ const formatCreators = createFormat((p, d) => ({
 export const fetchCreators = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.CREATORS.present,
-    COMPLETENESS_FIELDS.CREATORS.distribution,
+    COMPLETENESS_FIELDS.CREATORS,
     filters,
     formatCreators,
   );
@@ -174,8 +173,7 @@ const formatContributors = createFormat((p, d) => ({
 export const fetchContributors = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.CONTRIBUTORS.present,
-    COMPLETENESS_FIELDS.CONTRIBUTORS.distribution,
+    COMPLETENESS_FIELDS.CONTRIBUTORS,
     filters,
     formatContributors,
   );
@@ -198,8 +196,7 @@ export const fetchRelatedIdentifiers = async (
 ) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.RELATED_IDENTIFIERS.present,
-    COMPLETENESS_FIELDS.RELATED_IDENTIFIERS.distribution,
+    COMPLETENESS_FIELDS.RELATED_IDENTIFIERS,
     filters,
     formatRelatedIdentifiers,
   );
@@ -222,8 +219,7 @@ export const fetchFundingReferences = async (
 ) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.FUNDING_REFERENCES.present,
-    COMPLETENESS_FIELDS.FUNDING_REFERENCES.distribution,
+    COMPLETENESS_FIELDS.FUNDING_REFERENCES,
     filters,
     formatFundingReferences,
   );
@@ -242,8 +238,7 @@ const formatPublisher = createFormat((p, d) => ({
 export const fetchPublisher = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.PUBLISHER.present,
-    COMPLETENESS_FIELDS.PUBLISHER.distribution,
+    COMPLETENESS_FIELDS.PUBLISHER,
     filters,
     formatPublisher,
   );
@@ -262,8 +257,7 @@ const formatResourceType = createFormat((p, d) => ({
 export const fetchResourceType = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.RESOURCE_TYPE.present,
-    COMPLETENESS_FIELDS.RESOURCE_TYPE.distribution,
+    COMPLETENESS_FIELDS.RESOURCE_TYPE,
     filters,
     formatResourceType,
   );
@@ -283,8 +277,7 @@ const formatSubjects = createFormat((p, d) => ({
 export const fetchSubjects = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.SUBJECTS.present,
-    COMPLETENESS_FIELDS.SUBJECTS.distribution,
+    COMPLETENESS_FIELDS.SUBJECTS,
     filters,
     formatSubjects,
   );
@@ -302,8 +295,7 @@ const formatDescriptions = createFormat((p, d) => ({
 export const fetchDescriptions = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.DESCRIPTIONS.present,
-    COMPLETENESS_FIELDS.DESCRIPTIONS.distribution,
+    COMPLETENESS_FIELDS.DESCRIPTIONS,
     filters,
     formatDescriptions,
   );
@@ -321,8 +313,7 @@ const formatTitles = createFormat((p, d) => ({
 export const fetchTitles = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.TITLES.present,
-    COMPLETENESS_FIELDS.TITLES.distribution,
+    COMPLETENESS_FIELDS.TITLES,
     filters,
     formatTitles,
   );
@@ -341,8 +332,7 @@ const formatRights = createFormat((p, d) => ({
 export const fetchRights = async (resource: Resource, filters: Filters) =>
   await fetchFields(
     resource,
-    COMPLETENESS_FIELDS.RIGHTS.present,
-    COMPLETENESS_FIELDS.RIGHTS.distribution,
+    COMPLETENESS_FIELDS.RIGHTS,
     filters,
     formatRights,
   );
@@ -359,13 +349,7 @@ const formatDates = createFormat((p, d) => ({
 }));
 
 export const fetchDates = async (resource: Resource, filters: Filters) =>
-  await fetchFields(
-    resource,
-    COMPLETENESS_FIELDS.DATES.present,
-    COMPLETENESS_FIELDS.DATES.distribution,
-    filters,
-    formatDates,
-  );
+  await fetchFields(resource, COMPLETENESS_FIELDS.DATES, filters, formatDates);
 
 export function useDates() {
   return useQueryResource("dates", fetchDates);
@@ -384,13 +368,7 @@ const formatOther = createFormat((p) => ({
 }));
 
 export const fetchOther = async (resource: Resource, filters: Filters) =>
-  await fetchFields(
-    resource,
-    COMPLETENESS_FIELDS.OTHER.present,
-    COMPLETENESS_FIELDS.OTHER.distribution,
-    filters,
-    formatOther,
-  );
+  await fetchFields(resource, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
 
 export function useOther() {
   return useQueryResource("other", fetchOther);

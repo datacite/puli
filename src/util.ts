@@ -100,15 +100,14 @@ function toDistributionProps(item?: Distribution): DistributionProps {
 
 export async function fetchFields<R>(
   resource: Resource,
-  presentFields: readonly string[],
-  distributionFields: readonly string[],
+  fields: { present: readonly string[]; distribution: readonly string[] },
   filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
     [`${resource.type}_id`]: resource.id,
-    present: presentFields.join(","),
-    distribution: distributionFields.join(","),
+    present: fields.present.join(","),
+    distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",
   }).toString();
 
@@ -124,8 +123,8 @@ export async function fetchFields<R>(
     (item, desired: string) => item.field === desired,
   );
 
-  const present = presentFields.map(findInPresent).map(toPresentProps);
-  const distribution = distributionFields
+  const present = fields.present.map(findInPresent).map(toPresentProps);
+  const distribution = fields.distribution
     .map(findInDistribution)
     .map(toDistributionProps);
 
