@@ -178,7 +178,7 @@ function ViewInCommons() {
   const { data: resource } = useResource();
   const filters = useFilters();
 
-  if (!resource || !resource.type) return null;
+  if (!resource) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",
@@ -189,7 +189,7 @@ function ViewInCommons() {
   const href =
     resource.type === "client"
       ? `${COMMONS_URL}/repositories/${resource.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${resource.type}_id:${resource.id}&${doisSearchParam}`;
+      : `${COMMONS_URL}/doi.org?query=${resource.id && resource.type ? resource.type + "_id:" + resource.id : "*"}&${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>

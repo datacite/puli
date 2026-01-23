@@ -7,8 +7,8 @@ import type { Filters, Resource } from "@/types";
 import { useResource } from "./data/fetch";
 
 export function useId() {
-  const { id } = useParams<{ id: string }>();
-  return id;
+  const { id: slug } = useParams<{ id?: string[] }>();
+  return slug?.[0] || "";
 }
 
 export function useFilters() {
