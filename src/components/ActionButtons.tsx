@@ -10,7 +10,6 @@ import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import { fetchDoisSearchParams, useDois, useResource } from "@/data/fetch";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { isClient } from "@/util";
 import { Combobox } from "./ui/combobox";
 
 export default function ActionButtons() {
@@ -176,12 +175,10 @@ function FilterByQuery() {
 }
 
 function ViewInCommons() {
-  const id = useId();
+  const { data: resource } = useResource();
   const filters = useFilters();
 
-  // Temporary solution, need to investigating linking to a provider in Commons
-  // Commons doesn't support using provider-id in URL like with repositories
-  if (!isClient(id)) return null;
+  if (!resource) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",
@@ -189,7 +186,10 @@ function ViewInCommons() {
     "resource-type": filters.resourceType || "",
   }).toString();
 
-  const href = `${COMMONS_URL}/repositories/${id}?${doisSearchParam}`;
+  const href =
+    resource.type === "client"
+      ? `${COMMONS_URL}/repositories/${resource.id}?${doisSearchParam}`
+      : `${COMMONS_URL}/doi.org?query=${resource.type}_id:${resource.id}&${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
