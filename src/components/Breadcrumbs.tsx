@@ -18,13 +18,11 @@ export default function Breadcrumbs({
 }: {
   pages: BreadcrumbData[];
 }) {
-  const { isPending, isError, data, error } = useResource();
+  const { data: resource } = useResource();
 
-  if (isError) return `Error: ${error}`;
-
-  pages = isPending
+  pages = !resource
     ? [{ title: "Home", href: "/" }]
-    : [...pages, { title: data.name }];
+    : [...pages, { title: resource.name }];
 
   return (
     <Breadcrumb>

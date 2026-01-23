@@ -1,5 +1,5 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
-import { useQueryId, useQueryResource } from "@/hooks";
+import { useId, useQueryId, useQueryResource } from "@/hooks";
 import type { Facet, Filters, Resource } from "@/types";
 import {
   buildInitialData,
@@ -10,23 +10,32 @@ import {
 } from "@/util";
 
 // Overview //////////////////////////////////////
-export async function fetchResource(id: string) {
+
+const NAME_ALL = "All of DataCite" as const;
+
+export async function fetchResource(id: string | undefined) {
+  if (!id) return { id: "", type: undefined, name: NAME_ALL } as const;
+
   const resourceData = (
     (await (
-      await fetchDatacite(`${isClient(id) ? "clients" : "providers"}/${id}`)
+      await fetchDatacite(`${isClient(id) ? "clients" : "providers"}/${id}`, {
+        cache: "force-cache",
+      })
     ).json()) as ApiResourceResponse
   ).data;
 
+  if (!resourceData) return { id, type: undefined, name: id } as const;
+
   return {
+    id,
     type:
       resourceData.type === "clients"
         ? ("client" as const)
         : resourceData.attributes.memberType === "consortium"
           ? ("consortium" as const)
           : ("provider" as const),
-    id,
     name: resourceData.attributes.name,
-  };
+  } as const;
 }
 
 export async function fetchDois(resource: Resource, filters: Filters) {
@@ -63,7 +72,12 @@ export async function fetchDois(resource: Resource, filters: Filters) {
 }
 
 export function useResource() {
-  return useQueryId("resource", fetchResource);
+  const id = useId();
+  return useQueryId("resource", fetchResource, {
+    id,
+    type: undefined,
+    name: id || NAME_ALL,
+  });
 }
 
 const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
@@ -81,7 +95,7 @@ export function useDois() {
 
 export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
   ({
-    [`${resource.type}-id`]: resource.id,
+    ...(resource.type && { [`${resource.type}-id`]: resource.id }),
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",
@@ -89,11 +103,13 @@ export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
   }) as const;
 
 type ApiResponse<T extends "clients" | "providers", A extends object> = {
-  data: {
+  data:
+  | {
     id: string;
     type: T;
     attributes: { name: string } & A;
-  };
+  }
+  | undefined;
 };
 
 type ApiClientResponse = ApiResponse<"clients", { clientType: "repository" }>;

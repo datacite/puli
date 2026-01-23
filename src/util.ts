@@ -119,7 +119,7 @@ export async function fetchFields<R>(
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    [`${resource.type}_id`]: resource.id,
+    ...(resource.type && { [`${resource.type}_id`]: resource.id }),
     present: fields.present.join(","),
     distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",

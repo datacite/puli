@@ -178,7 +178,7 @@ function ViewInCommons() {
   const { data: resource } = useResource();
   const filters = useFilters();
 
-  if (!resource) return null;
+  if (!resource || !resource.type) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",

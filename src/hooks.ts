@@ -50,12 +50,12 @@ export function useQueryResource<R>(
   fetch: (resource: Resource, filters: Filters) => Promise<R>,
   initialData?: R,
 ) {
-  const { data } = useResource();
+  const { data: resource } = useResource();
 
   return useQueryId<R>(
     key,
-    (_, filters) => fetch(data!, filters),
+    (_, filters) => fetch(resource!, filters),
     initialData,
-    !!data,
+    !!resource && !!resource.id === !!resource.type,
   );
 }
