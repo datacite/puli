@@ -1,6 +1,6 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
 import { useQueryId, useQueryResource } from "@/hooks";
-import type { Facet, Filters } from "@/types";
+import type { Facet, Filters, Resource } from "@/types";
 import {
   buildInitialData,
   createFormat,
@@ -88,57 +88,22 @@ export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
     state: "findable",
   }) as const;
 
-type ApiClientResponse = {
+type ApiResponse<T extends "clients" | "providers", A extends object> = {
   data: {
     id: string;
-    type: "clients";
-    attributes: {
-      name: string;
-      clientType: "repository";
-    };
+    type: T;
+    attributes: { name: string } & A;
   };
 };
 
-type ApiDirectMemberResponse = {
-  data: {
-    id: string;
-    type: "providers";
-    attributes: {
-      name: string;
-      memberType: "direct_member";
-    };
-  };
-};
+type ApiClientResponse = ApiResponse<"clients", { clientType: "repository" }>;
 
-type ApiConsortiumOrganizationResponse = {
-  data: {
-    id: string;
-    type: "providers";
-    attributes: {
-      name: string;
-      memberType: "consortium_organization";
-    };
-  };
-};
+type ApiProviderResponse = ApiResponse<
+  "providers",
+  { memberType: "direct_member" | "consortium_organization" | "consortium" }
+>;
 
-type ApiConsortiumResponse = {
-  data: {
-    id: string;
-    type: "providers";
-    attributes: {
-      name: string;
-      memberType: "consortium";
-    };
-  };
-};
-
-type ApiProviderResponse =
-  | ApiConsortiumResponse
-  | ApiConsortiumOrganizationResponse
-  | ApiDirectMemberResponse;
 type ApiResourceResponse = ApiProviderResponse | ApiClientResponse;
-
-type Resource = Awaited<ReturnType<typeof fetchResource>>;
 
 type ApiDoisResponse = {
   meta: {
