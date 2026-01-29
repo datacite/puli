@@ -14,8 +14,10 @@ import {
 const NAME_ALL = "All of DataCite" as const;
 
 export async function fetchResource(id: string | undefined) {
-  if (!id) return { id: "", type: undefined, name: NAME_ALL } as const;
+  if (!id)
+    return { id: "", type: undefined, name: NAME_ALL, ancestors: [] } as const;
 
+  // Fetch Resource
   const resourceData = (
     (await (
       await fetchDatacite(`${isClient(id) ? "clients" : "providers"}/${id}`, {
@@ -24,7 +26,39 @@ export async function fetchResource(id: string | undefined) {
     ).json()) as ApiResourceResponse
   ).data;
 
-  if (!resourceData) return { id, type: undefined, name: id } as const;
+  if (!resourceData)
+    return { id, type: undefined, name: id, ancestors: [] } as const;
+
+  // Fetch Ancestors
+  const parentId =
+    resourceData.type === "clients"
+      ? resourceData.relationships.provider.data.id
+      : resourceData.relationships.consortium?.data.id;
+
+  const grandparentId =
+    resourceData.type === "clients"
+      ? resourceData.relationships.consortium?.data.id
+      : null;
+
+  const [parent, grandparent] = await Promise.all(
+    [parentId, grandparentId].map(async (id) => {
+      if (!id) return null;
+
+      const provider = (await (
+        await fetchDatacite(`providers/${id}`)
+      ).json()) as ApiProviderResponse;
+
+      if (!provider.data) return null;
+      return {
+        id: provider.data.id,
+        type:
+          provider.data.attributes.memberType === "consortium"
+            ? "consortium"
+            : "organization",
+        name: provider.data.attributes.name,
+      };
+    }),
+  );
 
   return {
     id,
@@ -35,6 +69,7 @@ export async function fetchResource(id: string | undefined) {
           ? ("consortium" as const)
           : ("provider" as const),
     name: resourceData.attributes.name,
+    ancestors: [parent, grandparent].filter((a) => !!a),
   } as const;
 }
 
@@ -77,6 +112,7 @@ export function useResource() {
     id,
     type: undefined,
     name: id || NAME_ALL,
+    ancestors: [],
   });
 }
 
