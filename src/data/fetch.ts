@@ -102,21 +102,39 @@ export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
     state: "findable",
   }) as const;
 
-type ApiResponse<T extends "clients" | "providers", A extends object> = {
+type Relationship = { data: { id: string; type: string } };
+type Relationships<Required extends string, Optional extends string = never> = {
+  [K in Required]: Relationship;
+} & { [K in Optional]?: Relationship };
+
+type ApiResponse<
+  T extends "clients" | "providers",
+  A extends object,
+  R extends string,
+  O extends string = never,
+> = {
   data:
   | {
     id: string;
     type: T;
     attributes: { name: string } & A;
+    relationships: Relationships<R, O>;
   }
   | undefined;
 };
 
-type ApiClientResponse = ApiResponse<"clients", { clientType: "repository" }>;
+type ApiClientResponse = ApiResponse<
+  "clients",
+  { clientType: "repository" },
+  "provider",
+  "consortium"
+>;
 
 type ApiProviderResponse = ApiResponse<
   "providers",
-  { memberType: "direct_member" | "consortium_organization" | "consortium" }
+  { memberType: "direct_member" | "consortium_organization" | "consortium" },
+  never,
+  "consortium"
 >;
 
 type ApiResourceResponse = ApiProviderResponse | ApiClientResponse;
