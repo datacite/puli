@@ -13,16 +13,18 @@ import { useResource } from "@/data/fetch";
 
 export type BreadcrumbData = { title: string; href?: string };
 
-export default function Breadcrumbs({
-  pages = [],
-}: {
-  pages: BreadcrumbData[];
-}) {
+export default function Breadcrumbs() {
   const { data: resource } = useResource();
 
-  pages = !resource
-    ? [{ title: "Home", href: "/" }]
-    : [...pages, { title: resource.name }];
+  if (!resource) return null;
+
+  const pages = [...resource.ancestors, resource]
+    .filter((p) => !!p)
+    .map((p) => ({
+      title: p.name,
+      href: p.id === resource.id ? undefined : `/${p.id}`,
+      type: p.type,
+    }));
 
   return (
     <Breadcrumb>
@@ -31,14 +33,24 @@ export default function Breadcrumbs({
           <React.Fragment key={page.title + page.href}>
             {index > 0 && <BreadcrumbSeparator />}
             <BreadcrumbItem>
-              {page.href && (
-                <BreadcrumbLink href={page.href}>{page.title}</BreadcrumbLink>
-              )}
-              {!page.href && <BreadcrumbPage>{page.title}</BreadcrumbPage>}
+              <BreadcrumbContent href={page.href}>
+                {page.title}
+              </BreadcrumbContent>
             </BreadcrumbItem>
           </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
+  );
+}
+
+function BreadcrumbContent(props: {
+  href?: string;
+  children: React.ReactNode;
+}) {
+  return props.href ? (
+    <BreadcrumbLink {...props} />
+  ) : (
+    <BreadcrumbPage {...props} />
   );
 }
