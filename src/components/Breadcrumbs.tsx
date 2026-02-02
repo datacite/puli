@@ -10,6 +10,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { useResource } from "@/data/fetch";
+import { Badge } from "./ui/badge";
 
 export type BreadcrumbData = { title: string; href?: string };
 
@@ -34,7 +35,7 @@ export default function Breadcrumbs() {
             {index > 0 && <BreadcrumbSeparator />}
             <BreadcrumbItem>
               <BreadcrumbContent href={page.href}>
-                {page.title}
+                {page.title} <TypeBadge>{page.type}</TypeBadge>
               </BreadcrumbContent>
             </BreadcrumbItem>
           </React.Fragment>
@@ -52,5 +53,17 @@ function BreadcrumbContent(props: {
     <BreadcrumbLink {...props} />
   ) : (
     <BreadcrumbPage {...props} />
+  );
+}
+
+function TypeBadge(props: { children: React.ReactNode }) {
+  if (!props.children) return null;
+
+  return (
+    <Badge
+      variant="outline"
+      className="ml-2 rounded-[40px] text-datacite-blue-dark bg-datacite-blue-light/20 text-[0.8em] p-y-0 p-x-1 border-none"
+      {...props}
+    />
   );
 }
