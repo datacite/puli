@@ -138,23 +138,47 @@ export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
     state: "findable",
   }) as const;
 
-type Relationship = { data: { id: string; type: string } };
-type Relationships<Required extends string, Optional extends string = never> = {
-  [K in Required]: Relationship;
-} & { [K in Optional]?: Relationship };
+type Relationship<
+  Title extends string,
+  IsOptional extends boolean = false,
+  IsArray extends boolean = false,
+> = {
+  title: Title;
+  isArray: IsArray;
+  isOptional: IsOptional;
+};
+
+type Relationships<
+  T extends readonly Relationship<string, boolean, boolean>[],
+> = {
+  // required relationships
+  [D in T[number]as D["isOptional"] extends false
+  ? D["title"]
+  : never]: D["isArray"] extends true
+  ? ApiRelationshipResponse[]
+  : ApiRelationshipResponse;
+} & {
+    // optional relationships
+    [D in T[number]as D["isOptional"] extends true
+    ? D["title"]
+    : never]?: D["isArray"] extends true
+    ? ApiRelationshipResponse[]
+    : ApiRelationshipResponse;
+  };
+
+type ApiRelationshipResponse = { data: { id: string; type: string } };
 
 type ApiResponse<
   T extends "clients" | "providers",
   A extends object,
-  R extends string,
-  O extends string = never,
+  R extends readonly Relationship<string, boolean, boolean>[],
 > = {
   data:
   | {
     id: string;
     type: T;
     attributes: { name: string } & A;
-    relationships: Relationships<R, O>;
+    relationships: Relationships<R>;
   }
   | undefined;
 };
@@ -162,15 +186,13 @@ type ApiResponse<
 type ApiClientResponse = ApiResponse<
   "clients",
   { clientType: "repository" },
-  "provider",
-  "consortium"
+  [Relationship<"provider">, Relationship<"consortium", true>]
 >;
 
 type ApiProviderResponse = ApiResponse<
   "providers",
   { memberType: "direct_member" | "consortium_organization" | "consortium" },
-  never,
-  "consortium"
+  [Relationship<"consortium", true>]
 >;
 
 type ApiResourceResponse = ApiProviderResponse | ApiClientResponse;
