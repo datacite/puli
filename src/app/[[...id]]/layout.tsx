@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import ActionButtons from "@/components/ActionButtons";
-import Breadcrumbs, { type BreadcrumbData } from "@/components/Breadcrumbs";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { fetchResource } from "@/data/fetch";
 import Header from "./Header";
 
@@ -19,14 +19,9 @@ export default async function Layout({
   const resource = await fetchResource(id);
   if (resource.id && !resource.type) notFound();
 
-  const pages: BreadcrumbData[] = [
-    { title: "Home", href: "/" },
-    { title: "Example", href: "/" },
-  ];
-
   return (
     <>
-      <Breadcrumbs pages={pages} />
+      <Breadcrumbs />
       <Header />
       <ActionButtons />
       {children}
