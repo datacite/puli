@@ -21,20 +21,25 @@ import {
   ComboboxList,
   ComboboxTrigger,
 } from "@/components/ui/combobox";
+import {
+  Item,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "@/components/ui/item";
 import { useResource } from "@/data/fetch";
 import { useId } from "@/hooks";
 import type { Resource } from "@/types";
-import { Badge } from "./ui/badge";
+import { ResourceBadge } from "./Badges";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 export type BreadcrumbData = { title: string; href?: string };
 
 export default function Breadcrumbs() {
   const { data: resource } = useResource();
 
-  if (!resource) return null;
-
-  const pages = [resource.parent?.parent, resource.parent, resource].filter(
+  const pages = [resource?.parent?.parent, resource?.parent, resource].filter(
     (p) => !!p,
   );
 
@@ -61,7 +66,7 @@ export default function Breadcrumbs() {
           </React.Fragment>
         ))}
 
-        {resource.children.length > 0 && (
+        {resource && resource.children.length > 0 && (
           <>
             <BreadcrumbSeparator>
               <Slash opacity={0.25} />
@@ -102,15 +107,7 @@ function BreadcrumbContent(props: { resource: Resource }) {
   return (
     <BreadcrumbItem>
       <BreadcrumbPageLink>
-        {props.resource.name}{" "}
-        {props.resource.subtype && (
-          <Badge
-            variant="outline"
-            className="ml-2 rounded-[40px] text-datacite-blue-dark bg-datacite-blue-light/20 p-y-0 p-x-1 border-none"
-          >
-            {props.resource.subtype.replaceAll("_", " ")}
-          </Badge>
-        )}
+        {props.resource.name} <ResourceBadge {...props} />
       </BreadcrumbPageLink>
     </BreadcrumbItem>
   );
@@ -130,22 +127,19 @@ function ChildrenSelect(props: {
     <Combobox
       items={props.items}
       itemToStringValue={(item) => item.id}
-      itemToStringLabel={(item) => item.name || item.id}
-      value={{
-        id: props.resource.id,
-        name: props.resource.name,
-      }}
+      itemToStringLabel={(item) => item.name}
+      value={props.resource}
       disabled={props.items.length === 0}
     >
       <ComboboxTrigger
         render={
-          <Button variant="ghost" className={props.className}>
+          <Button variant="ghost" className={cn("h-min py-0", props.className)}>
             {props.children}
             {props.items.length > 0 && <ChevronsUpDown />}
           </Button>
         }
       />
-      <ComboboxContent className="w-max" align="end">
+      <ComboboxContent className="w-max">
         <ComboboxInput
           placeholder={`Search ${props.resource.name || props.resource.id}`}
           showTrigger={false}
@@ -158,14 +152,26 @@ function ChildrenSelect(props: {
           found.
         </ComboboxEmpty>
         <ComboboxList>
-          {(item) => {
+          {(item: Resource) => {
             return (
-              <Link
-                href={`/${item.id}?${searchParams.toString()}`}
-                key={item.id}
-              >
-                <ComboboxItem value={item.id}>{item.id}</ComboboxItem>
-              </Link>
+              <ComboboxItem value={item} key={item.id}>
+                <Link
+                  href={`/${item.id}?${searchParams.toString()}`}
+                  className="size-full"
+                >
+                  <Item size="sm" className="px-0 py-0.5">
+                    <ItemContent className="gap-0.5">
+                      <ItemTitle>{item.name}</ItemTitle>
+                      <ItemDescription>{item.id}</ItemDescription>
+                    </ItemContent>
+                    <ItemContent className="flex-none text-center">
+                      <ItemDescription>
+                        <ResourceBadge resource={item} />
+                      </ItemDescription>
+                    </ItemContent>
+                  </Item>
+                </Link>
+              </ComboboxItem>
             );
           }}
         </ComboboxList>
