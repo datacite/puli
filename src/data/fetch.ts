@@ -43,7 +43,7 @@ export async function fetchResource(
         ).map((c) => ({
           id: c.id,
           name: c.attributes.name,
-          type:
+          subtype:
             c.type === "clients"
               ? ("client" as const)
               : c.attributes.memberType,

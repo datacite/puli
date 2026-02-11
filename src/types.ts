@@ -1,6 +1,5 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
-import type { fetchResource } from "./data/fetch";
 
 // Api
 export type Relationship<
@@ -98,7 +97,11 @@ export type Resource = {
   children: {
     id: string;
     name: string;
-    type: "client" | "direct_member" | "consortium_organization" | "consortium";
+    subtype:
+    | "client"
+    | "direct_member"
+    | "consortium_organization"
+    | "consortium";
   }[];
   parent: Resource | null;
 };
