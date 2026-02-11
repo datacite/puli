@@ -173,7 +173,7 @@ const ALTERNATE_IDS = "identifiers";
 const LANGUAGE = "language";
 const SIZES = "sizes";
 const FORMATS = "formats";
-const VERSION = "version";
+const VERSION = "version_info";
 const GEO_LOCATION = "geo_locations";
 const RELATED_ITEM = "related_items";
 
