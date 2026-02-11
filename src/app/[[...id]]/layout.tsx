@@ -17,7 +17,7 @@ export default async function Layout({
 
   // Check if resource exists
   const resource = await fetchResource(id);
-  if (resource.id && !resource.type) notFound();
+  if (!resource) notFound();
 
   return (
     <>
