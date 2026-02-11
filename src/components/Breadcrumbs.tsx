@@ -101,6 +101,7 @@ function BreadcrumbContent(props: { resource: Resource }) {
         {...wrapperProps}
         href={`/${props.resource.id}`}
         className={className}
+        onMouseDown={(e) => e.stopPropagation()}
       />
     );
 
