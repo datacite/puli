@@ -5,7 +5,7 @@ interface Props extends BadgeProps {
   show: boolean;
 }
 
-export default function HighImpactBadge(props: Props) {
+export function HighImpactBadge(props: Props) {
   const { show = true, className, ...badgeProps } = props;
 
   if (!show) return null;
