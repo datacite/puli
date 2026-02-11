@@ -234,11 +234,11 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const { isPending, isError, data: resource, error } = useResource();
+  const { isError, data: resource, error } = useResource();
   const filters = useFilters();
 
   if (isError) return `Error: ${error}`;
-  if (isPending) return null;
+  if (!resource) return null;
 
   const doisSearchParam = new URLSearchParams(
     fetchDoisSearchParams(resource, filters),
