@@ -91,7 +91,7 @@ export default function Breadcrumbs() {
 
 function BreadcrumbContent(props: { resource: Resource }) {
   const id = useId();
-  const className = `rounded-lg ${props.resource.id === id ? "bg-black/0 font-semibold" : ""}`;
+  const className = `flex flex-row items-center ${props.resource.id === id ? "bg-black/0 font-semibold" : ""}`;
 
   const BreadcrumbPageLink = (wrapperProps: { children: ReactNode }) =>
     props.resource.id === id ? (
