@@ -29,10 +29,10 @@ import {
 } from "@/components/ui/item";
 import { useResource } from "@/data/fetch";
 import { useId } from "@/hooks";
+import { cn } from "@/lib/utils";
 import type { Resource } from "@/types";
 import { ResourceBadge } from "./Badges";
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 
 export type BreadcrumbData = { title: string; href?: string };
 
@@ -130,6 +130,7 @@ function ChildrenSelect(props: {
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.name}
       value={props.resource}
+      isItemEqualToValue={(item, value) => item.id === value.id}
       disabled={props.items.length === 0}
     >
       <ComboboxTrigger
