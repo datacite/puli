@@ -172,7 +172,7 @@ function ChildrenSelect(props: {
           </Button>
         }
       />
-      <ComboboxContent className="w-max">
+      <ComboboxContent className="w-125">
         <ComboboxInput
           placeholder={`Search ${props.resource.name || props.resource.id}`}
           showTrigger={false}
