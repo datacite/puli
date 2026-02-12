@@ -122,7 +122,20 @@ function BreadcrumbContent(props: {
   return (
     <BreadcrumbItem>
       <BreadcrumbPageLink>
-        {props.resource.name} <ResourceBadge {...props} />
+        <Item className="p-0 pt-5">
+          <ItemContent className="gap-0">
+            <ItemTitle
+              className={
+                props.resource.id === id ? "bg-black/0 font-semibold" : ""
+              }
+            >
+              {props.resource.name} <ResourceBadge resource={props.resource} />
+            </ItemTitle>
+            <ItemDescription className="text-muted-foreground/75 text-start">
+              {props.resource.id}
+            </ItemDescription>
+          </ItemContent>
+        </Item>
       </BreadcrumbPageLink>
     </BreadcrumbItem>
   );
