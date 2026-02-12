@@ -193,9 +193,11 @@ function ChildrenSelect(props: {
                   className="size-full"
                 >
                   <Item size="sm" className="px-0 py-0.5">
-                    <ItemContent className="gap-0.5">
+                    <ItemContent className="gap-0">
                       <ItemTitle>{item.name}</ItemTitle>
-                      <ItemDescription>{item.id}</ItemDescription>
+                      <ItemDescription className="text-muted-foreground/75">
+                        {item.id}
+                      </ItemDescription>
                     </ItemContent>
                     <ItemContent className="flex-none text-center">
                       <ItemDescription>
