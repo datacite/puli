@@ -33,59 +33,70 @@ import { cn } from "@/lib/utils";
 import type { Resource } from "@/types";
 import { ResourceBadge } from "./Badges";
 import { Button } from "./ui/button";
+import { Spinner } from "./ui/spinner";
 
 export type BreadcrumbData = { title: string; href?: string };
 
 export default function Breadcrumbs() {
   const { data: resource } = useResource();
 
-  const pages = [resource?.parent?.parent, resource?.parent, resource].filter(
-    (p) => !!p,
-  );
-
-  return (
+  const BreadcrumbWrapper = (wrapperProps: { children: ReactNode }) => (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbLink href="/">
           <Home />
         </BreadcrumbLink>
-        <BreadcrumbSeparator>
-          <Slash opacity={0.25} />
-        </BreadcrumbSeparator>
-
-        {pages.map((page, index) => (
-          <React.Fragment key={page.id || index}>
-            {index > 0 && (
-              <BreadcrumbSeparator>
-                <Slash opacity={0.25} />
-              </BreadcrumbSeparator>
-            )}
-            <ChildrenSelect resource={page} items={page.parent?.children || []}>
-              <BreadcrumbContent resource={page} />
-            </ChildrenSelect>
-          </React.Fragment>
-        ))}
-
-        {resource && resource.children.length > 0 && (
-          <>
-            <BreadcrumbSeparator>
-              <Slash opacity={0.25} />
-            </BreadcrumbSeparator>
-            <ChildrenSelect
-              resource={resource}
-              items={resource.children}
-              className="opacity-70"
-            >
-              Select{" "}
-              {resource.subtype === "consortium"
-                ? "organization"
-                : "repository"}
-              ...
-            </ChildrenSelect>
-          </>
-        )}
+        <Separator />
+        {wrapperProps.children}
       </BreadcrumbList>
     </Breadcrumb>
+  );
+
+  if (!resource)
+    return (
+      <BreadcrumbWrapper>
+        <Spinner />
+      </BreadcrumbWrapper>
+    );
+
+  const pages = [resource?.parent?.parent, resource?.parent, resource].filter(
+    (p) => !!p,
+  );
+
+  return (
+    <BreadcrumbWrapper>
+      {pages.map((page, index) => (
+        <React.Fragment key={page.id || index}>
+          {index > 0 && <Separator />}
+          <ChildrenSelect resource={page} items={page.parent?.children || []}>
+            <BreadcrumbContent resource={page} />
+          </ChildrenSelect>
+        </React.Fragment>
+      ))}
+
+      {resource && resource.children.length > 0 && (
+        <>
+          <Separator />
+          <ChildrenSelect
+            resource={resource}
+            items={resource.children}
+            className="opacity-70"
+          >
+            Select{" "}
+            {resource.subtype === "consortium" ? "organization" : "repository"}
+            ...
+          </ChildrenSelect>
+        </>
+      )}
+    </BreadcrumbWrapper>
+  );
+}
+
+function Separator() {
+  return (
+    <BreadcrumbSeparator>
+      <Slash opacity={0.25} />
+    </BreadcrumbSeparator>
   );
 }
 
