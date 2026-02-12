@@ -89,7 +89,7 @@ export type Resource = {
   id: string;
   type: "client" | "provider" | "consortium";
   subtype:
-  | "client"
+  | "repository"
   | "direct_member"
   | "consortium_organization"
   | "consortium";
@@ -98,7 +98,7 @@ export type Resource = {
     id: string;
     name: string;
     subtype:
-    | "client"
+    | "repository"
     | "direct_member"
     | "consortium_organization"
     | "consortium";

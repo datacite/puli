@@ -31,7 +31,7 @@ export async function fetchResource(
           : ("provider" as const),
     subtype:
       data.type === "clients"
-        ? ("client" as const)
+        ? ("repository" as const)
         : data.attributes.memberType,
     name: data.attributes.name,
     children:
@@ -45,7 +45,7 @@ export async function fetchResource(
           name: c.attributes.name,
           subtype:
             c.type === "clients"
-              ? ("client" as const)
+              ? ("repository" as const)
               : c.attributes.memberType,
         }))
         : [],
