@@ -131,6 +131,10 @@ function ChildrenSelect(props: {
       itemToStringLabel={(item) => item.name}
       value={props.resource}
       isItemEqualToValue={(item, value) => item.id === value.id}
+      filter={(itemValue, query) =>
+        itemValue.id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
+        itemValue.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
+      }
       disabled={props.items.length === 0}
     >
       <ComboboxTrigger
