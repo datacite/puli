@@ -7,7 +7,9 @@ const DEFAULT_CLASS =
 export function ResourceBadge(props: { resource: { subtype: string } }) {
   return (
     <Badge variant="outline" className={DEFAULT_CLASS}>
-      {props.resource.subtype.replaceAll("_", " ")}
+      {props.resource.subtype
+        .replaceAll("_", " ")
+        .replace(/\b\w/g, (s) => s.toUpperCase())}
     </Badge>
   );
 }
