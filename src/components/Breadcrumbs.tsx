@@ -38,7 +38,8 @@ import { Spinner } from "./ui/spinner";
 export type BreadcrumbData = { title: string; href?: string };
 
 export default function Breadcrumbs() {
-  const { data: resource } = useResource();
+  const id = useId();
+  const { isPending, data: resource } = useResource();
 
   const BreadcrumbWrapper = (wrapperProps: { children: ReactNode }) => (
     <Breadcrumb>
@@ -47,7 +48,7 @@ export default function Breadcrumbs() {
           <Home />
         </BreadcrumbLink>
         <Separator />
-        {wrapperProps.children}
+        {wrapperProps.children} {isPending && <Spinner />}
       </BreadcrumbList>
     </Breadcrumb>
   );
@@ -55,7 +56,7 @@ export default function Breadcrumbs() {
   if (!resource)
     return (
       <BreadcrumbWrapper>
-        <Spinner />
+        <BreadcrumbContent resource={{ id, name: id, subtype: "" }} />
       </BreadcrumbWrapper>
     );
 
@@ -100,7 +101,9 @@ function Separator() {
   );
 }
 
-function BreadcrumbContent(props: { resource: Resource }) {
+function BreadcrumbContent(props: {
+  resource: { id: string; name: string; subtype: string };
+}) {
   const id = useId();
   const className = `flex flex-row items-center ${props.resource.id === id ? "bg-black/0 font-semibold" : ""}`;
 
