@@ -1,14 +1,7 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
 import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
-import type {
-  ApiResponse,
-  Distribution,
-  Filters,
-  Format,
-  Present,
-  Resource,
-} from "@/types";
+import type { Distribution, Filters, Format, Present, Resource } from "@/types";
 
 export function pascal(str: string) {
   return str
@@ -119,14 +112,17 @@ export async function fetchFields<R>(
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    ...(resource.type && { [`${resource.type}_id`]: resource.id }),
+    [`${resource.type}_id`]: resource.id,
     present: fields.present.join(","),
     distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",
   }).toString();
 
   const res = await fetchCompleteness(`?${searchParams}`);
-  const json = (await res.json()) as ApiResponse;
+  const json = (await res.json()) as {
+    present: Present[];
+    distribution: Distribution[];
+  };
 
   const findInPresent = findBuilder(
     json.present,

@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import HighImpactBadge from "@/components/HighImpactBadge";
+import { HighImpactBadge } from "@/components/Badges";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
 import { asRoundedPercent } from "@/util";

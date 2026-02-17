@@ -5,12 +5,19 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
 import { fetchDoisSearchParams, useDois, useResource } from "@/data/fetch";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { Combobox } from "./ui/combobox";
 
 export default function ActionButtons() {
   return (
@@ -50,39 +57,53 @@ function FilterByRegistrationYear() {
   const id = useId();
 
   const { isPending, isError, data, error } = useDois();
-  const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
 
-  const registrationYears = isPending
-    ? []
-    : data.registrationYears.map((ry) => ({
-      value: ry.id,
-      label: ry.title,
-    }));
-
-  const value = searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR) || "";
-
-  function onValueChange(value: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(SEARCH_PARAMETERS.REGISTRATION_YEAR, value);
-    if (!value.trim()) params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
-
-    const href = `/${id}?${params.toString()}`;
-    router.push(href);
-  }
+  const value =
+    data?.registrationYears.find(
+      (y) => y.id === searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR),
+    ) || null;
 
   return (
     <Combobox
-      placeholderButton="Filter by Registration Year"
-      options={registrationYears}
-      open={open}
-      setOpen={setOpen}
+      items={data?.registrationYears ?? []}
+      itemToStringValue={(item) => item.id}
+      itemToStringLabel={(item) => item.title}
       value={value}
-      setValue={onValueChange}
-      className="text-xs px-6 py-2 w-full h-full"
       disabled={isPending}
-    />
+    >
+      <ComboboxInput
+        placeholder="Filter by Registration Year"
+        showClear={!!value}
+        onClear={() => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
+          router.push(`/${id}?${params.toString()}`);
+        }}
+        className="text-xs w-full h-full"
+      />
+      <ComboboxContent>
+        <ComboboxEmpty>No years found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(SEARCH_PARAMETERS.REGISTRATION_YEAR, item.id);
+
+            if (
+              searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR) === item.id
+            )
+              params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
+
+            return (
+              <Link href={`/${id}?${params.toString()}`} key={item.id}>
+                <ComboboxItem value={item.id}>{item.title}</ComboboxItem>
+              </Link>
+            );
+          }}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 }
 
@@ -92,40 +113,51 @@ function FilterByResourceType() {
   const id = useId();
 
   const { isPending, isError, data, error } = useDois();
-  const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
 
-  const resourceTypes = isPending
-    ? []
-    : data.resourceTypeData.map((rt) => ({
-      value: rt.id,
-      label: rt.type,
-    }));
-
-  const value = searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) || "";
-
-  function onValueChange(value: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set(SEARCH_PARAMETERS.RESOURCE_TYPE, value);
-    if (!value.trim()) params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
-
-    const href = `/${id}?${params.toString()}`;
-    router.push(href);
-  }
+  const value =
+    data?.resourceTypeData.find(
+      (rt) => rt.id === searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE),
+    ) || null;
 
   return (
     <Combobox
-      placeholderButton="Filter by Resource Type"
-      placeholderSearch="Search resource types..."
-      options={resourceTypes}
-      open={open}
-      setOpen={setOpen}
+      items={data?.resourceTypeData ?? []}
+      itemToStringValue={(item) => item.id}
+      itemToStringLabel={(item) => item.type}
       value={value}
-      setValue={onValueChange}
-      className="text-xs px-6 py-2 w-full h-full"
       disabled={isPending}
-    />
+    >
+      <ComboboxInput
+        placeholder="Filter by Resource Type"
+        showClear={!!value}
+        onClear={() => {
+          const params = new URLSearchParams(searchParams.toString());
+          params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
+          router.push(`/${id}?${params.toString()}`);
+        }}
+        className="text-xs w-full h-full"
+      />
+      <ComboboxContent>
+        <ComboboxEmpty>No resource types found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item) => {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set(SEARCH_PARAMETERS.RESOURCE_TYPE, item.id);
+
+            if (searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) === item.id)
+              params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
+
+            return (
+              <Link href={`/${id}?${params.toString()}`} key={item.id}>
+                <ComboboxItem value={item.id}>{item.type}</ComboboxItem>
+              </Link>
+            );
+          }}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 }
 
@@ -189,7 +221,7 @@ function ViewInCommons() {
   const href =
     resource.type === "client"
       ? `${COMMONS_URL}/repositories/${resource.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${resource.id && resource.type ? resource.type + "_id:" + resource.id : "*"}&${doisSearchParam}`;
+      : `${COMMONS_URL}/doi.org?query=${resource.type}_id:${resource.id}&${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
@@ -202,11 +234,11 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const { isPending, isError, data: resource, error } = useResource();
+  const { isError, data: resource, error } = useResource();
   const filters = useFilters();
 
   if (isError) return `Error: ${error}`;
-  if (isPending) return null;
+  if (!resource) return null;
 
   const doisSearchParam = new URLSearchParams(
     fetchDoisSearchParams(resource, filters),

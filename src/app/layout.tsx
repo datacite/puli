@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${barlow.className} antialiased bg-gray-100`}>
         <Providers>
           <Header />
-          <div className="flex flex-col gap-8 py-4 max-w-7xl mx-auto px-6">
+          <div className="flex flex-col gap-12 py-4 max-w-7xl mx-auto px-6">
             {children}
           </div>
           <LoadingIndicator />

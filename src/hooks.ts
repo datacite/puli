@@ -56,6 +56,6 @@ export function useQueryResource<R>(
     key,
     (_, filters) => fetch(resource!, filters),
     initialData,
-    !!resource && !!resource.id === !!resource.type,
+    !!resource,
   );
 }

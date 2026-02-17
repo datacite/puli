@@ -1,6 +1,6 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
-import { useId, useQueryId, useQueryResource } from "@/hooks";
-import type { Facet, Filters, Resource } from "@/types";
+import { useQueryId, useQueryResource } from "@/hooks";
+import type { ApiDois, ApiResource, Filters, Resource } from "@/types";
 import {
   buildInitialData,
   createFormat,
@@ -11,32 +11,56 @@ import {
 
 // Overview //////////////////////////////////////
 
-const NAME_ALL = "All of DataCite" as const;
+export async function fetchResource(
+  id: string | null,
+): Promise<Resource | null> {
+  if (!id) return null;
 
-export async function fetchResource(id: string | undefined) {
-  if (!id) return { id: "", type: undefined, name: NAME_ALL } as const;
+  const data = await getData<ApiResource>(
+    `${isClient(id) ? "clients" : "providers"}/${id}`,
+  );
+  if (!data) return null;
 
-  const resourceData = (
-    (await (
-      await fetchDatacite(`${isClient(id) ? "clients" : "providers"}/${id}`, {
-        cache: "force-cache",
-      })
-    ).json()) as ApiResourceResponse
-  ).data;
-
-  if (!resourceData) return { id, type: undefined, name: id } as const;
-
-  return {
-    id,
+  const resource = {
+    id: data.id,
     type:
-      resourceData.type === "clients"
+      data.type === "clients"
         ? ("client" as const)
-        : resourceData.attributes.memberType === "consortium"
+        : data.attributes.memberType === "consortium"
           ? ("consortium" as const)
           : ("provider" as const),
-    name: resourceData.attributes.name,
-  } as const;
+    subtype:
+      data.type === "clients"
+        ? ("repository" as const)
+        : data.attributes.memberType,
+    name: data.attributes.name,
+    children:
+      data.type !== "clients"
+        ? (
+          await getData<ApiResource<true>>(
+            `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
+          )
+        ).map((c) => ({
+          id: c.id,
+          name: c.attributes.name,
+          subtype:
+            c.type === "clients"
+              ? ("repository" as const)
+              : c.attributes.memberType,
+        }))
+        : [],
+    parent: await fetchResource(
+      data.type === "clients"
+        ? data.relationships.provider.data.id
+        : data.relationships.consortium?.data.id || null,
+    ),
+  };
+  console.info(resource);
+  return resource;
 }
+
+const getData = async <T extends { data: unknown }>(url: string) =>
+  ((await (await fetchDatacite(url)).json()) as T).data as T["data"];
 
 export async function fetchDois(resource: Resource, filters: Filters) {
   const doisSearchParam = new URLSearchParams({
@@ -46,9 +70,7 @@ export async function fetchDois(resource: Resource, filters: Filters) {
   }).toString();
 
   const doisMeta = (
-    (await (
-      await fetchDatacite(`dois?${doisSearchParam}`)
-    ).json()) as ApiDoisResponse
+    (await (await fetchDatacite(`dois?${doisSearchParam}`)).json()) as ApiDois
   ).meta;
 
   const resourceTypeData =
@@ -72,12 +94,7 @@ export async function fetchDois(resource: Resource, filters: Filters) {
 }
 
 export function useResource() {
-  const id = useId();
-  return useQueryId("resource", fetchResource, {
-    id,
-    type: undefined,
-    name: id || NAME_ALL,
-  });
+  return useQueryId("resource", fetchResource);
 }
 
 const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
@@ -95,41 +112,12 @@ export function useDois() {
 
 export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
   ({
-    ...(resource.type && { [`${resource.type}-id`]: resource.id }),
+    [`${resource.type}-id`]: resource.id,
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",
     state: "findable",
   }) as const;
-
-type ApiResponse<T extends "clients" | "providers", A extends object> = {
-  data:
-  | {
-    id: string;
-    type: T;
-    attributes: { name: string } & A;
-  }
-  | undefined;
-};
-
-type ApiClientResponse = ApiResponse<"clients", { clientType: "repository" }>;
-
-type ApiProviderResponse = ApiResponse<
-  "providers",
-  { memberType: "direct_member" | "consortium_organization" | "consortium" }
->;
-
-type ApiResourceResponse = ApiProviderResponse | ApiClientResponse;
-
-type ApiDoisResponse = {
-  meta: {
-    total: number;
-    totalPages: number;
-    page: number;
-    resourceTypes: Facet[];
-    registered: Facet[];
-  };
-};
 
 // Completeness //////////////////////////////////
 

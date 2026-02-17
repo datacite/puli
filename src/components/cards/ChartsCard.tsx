@@ -1,6 +1,6 @@
 import React, { type ComponentProps, type ReactNode } from "react";
+import { HighImpactBadge } from "@/components/Badges";
 import { H4 } from "@/components/datacite/Headings";
-import HighImpactBadge from "@/components/HighImpactBadge";
 import RadialChart from "@/components/RadialChart";
 import {
   Card,
