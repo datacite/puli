@@ -9,13 +9,16 @@ import { useDois } from "@/data/fetch";
 import { asNumber } from "@/util";
 
 export default function OverviewCard(cardProps: ComponentProps<"div">) {
-  const { isPending, isError, data, error } = useDois();
+  const { isPending, isFetching, isError, data, error } = useDois();
 
   if (isPending) return <OverviewCardSkeleton />;
   if (isError) return `Error: ${error}`;
 
   return (
-    <Card className={"md:col-span-full w-full p-2"} {...cardProps}>
+    <Card
+      className={`md:col-span-full w-full p-2 ${isFetching ? "opacity-50" : ""}`}
+      {...cardProps}
+    >
       <CardContent className="grid md:grid-cols-max-3 grid-rows-[min-content_150px] max-md:gap-8 md:gap-x-25 mx-auto items-center justify-items-center">
         <TotalDois totalDois={data.total} />
         <p>DOI Registrations by Year</p>

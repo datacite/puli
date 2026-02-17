@@ -35,7 +35,7 @@ const CreatorsDescription = (
 );
 
 export function Creators() {
-  const { isPending, isError, data, error } = useCreators();
+  const { isPending, isFetching, isError, data, error } = useCreators();
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -47,7 +47,7 @@ export function Creators() {
       description={CreatorsDescription}
       present={data.creators.present}
       isHighImpact={data.creators.isHighImpact}
-      className="md:col-span-full"
+      className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
       <PresentChart data={data.properties} />
       <CardColumn>
@@ -79,7 +79,7 @@ const ContributorsDescription = (
 );
 
 export function Contributors() {
-  const { isPending, isError, data, error } = useContributors();
+  const { isPending, isFetching, isError, data, error } = useContributors();
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -90,7 +90,7 @@ export function Contributors() {
       description={ContributorsDescription}
       present={data.contributors.present}
       isHighImpact={data.contributors.isHighImpact}
-      className="md:col-span-full"
+      className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentChart data={data.properties} />
@@ -125,7 +125,8 @@ const RelatedIdentifiersDescription = (
 );
 
 export function RelatedIdentifiers() {
-  const { isPending, isError, data, error } = useRelatedIdentifiers();
+  const { isPending, isFetching, isError, data, error } =
+    useRelatedIdentifiers();
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -137,7 +138,7 @@ export function RelatedIdentifiers() {
       description={RelatedIdentifiersDescription}
       present={data.relatedIdentifiers.present}
       isHighImpact={data.relatedIdentifiers.isHighImpact}
-      className="md:col-span-full"
+      className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
       <DistributionChart {...data.relationType} />
       <DistributionChart {...data.relatedIdentifierType} />
@@ -159,7 +160,8 @@ const FundingReferencesDescription = (
 );
 
 export function FundingReferences() {
-  const { isPending, isError, data, error } = useFundingReferences();
+  const { isPending, isFetching, isError, data, error } =
+    useFundingReferences();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -171,7 +173,7 @@ export function FundingReferences() {
       description={FundingReferencesDescription}
       present={data.fundingReferences.present}
       isHighImpact={data.fundingReferences.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentChart data={data.funderProperties} />
@@ -198,7 +200,7 @@ const PublisherDescription = (
 );
 
 export function Publisher() {
-  const { isPending, isError, data, error } = usePublisher();
+  const { isPending, isFetching, isError, data, error } = usePublisher();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -210,7 +212,7 @@ export function Publisher() {
       description={PublisherDescription}
       present={data.publisher.present}
       isHighImpact={data.publisher.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentBar {...data.publisherIdentifier} />
@@ -237,7 +239,7 @@ const ResourceTypeDescription = (
 );
 
 export function ResourceType() {
-  const { isPending, isError, data, error } = useResourceType();
+  const { isPending, isFetching, isError, data, error } = useResourceType();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -249,7 +251,7 @@ export function ResourceType() {
       description={ResourceTypeDescription}
       present={data.resourceType.present}
       isHighImpact={data.resourceType.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentChart data={data.properties} />
@@ -272,7 +274,7 @@ const SubjectsDescription = (
 );
 
 export function Subjects() {
-  const { isPending, isError, data, error } = useSubjects();
+  const { isPending, isFetching, isError, data, error } = useSubjects();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -284,7 +286,7 @@ export function Subjects() {
       description={SubjectsDescription}
       present={data.subjects.present}
       isHighImpact={data.subjects.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentBar {...data.subjectScheme} />
@@ -311,7 +313,7 @@ const DescriptionsDescription = (
 );
 
 export function Descriptions() {
-  const { isPending, isError, data, error } = useDescriptions();
+  const { isPending, isFetching, isError, data, error } = useDescriptions();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -323,7 +325,7 @@ export function Descriptions() {
       description={DescriptionsDescription}
       present={data.descriptions.present}
       isHighImpact={data.descriptions.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <DistributionChart {...data.descriptionType} />
     </ChartsCard>
@@ -344,7 +346,7 @@ const TitlesDescription = (
 );
 
 export function Titles() {
-  const { isPending, isError, data, error } = useTitles();
+  const { isPending, isFetching, isError, data, error } = useTitles();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -356,7 +358,7 @@ export function Titles() {
       description={TitlesDescription}
       present={data.titles.present}
       isHighImpact={data.titles.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <DistributionChart {...data.titleType} />
     </ChartsCard>
@@ -377,7 +379,7 @@ const RightsDescription = (
 );
 
 export function Rights() {
-  const { isPending, isError, data, error } = useRights();
+  const { isPending, isFetching, isError, data, error } = useRights();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -389,7 +391,7 @@ export function Rights() {
       description={RightsDescription}
       present={data.rights.present}
       isHighImpact={data.rights.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <PresentChart data={data.properties} />
@@ -413,7 +415,7 @@ const DatesDescription = (
 );
 
 export function Dates() {
-  const { isPending, isError, data, error } = useDates();
+  const { isPending, isFetching, isError, data, error } = useDates();
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -425,7 +427,7 @@ export function Dates() {
       description={DatesDescription}
       present={data.dates.present}
       isHighImpact={data.dates.isHighImpact}
-      className="md:col-span-[2]"
+      className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
         <DistributionChart {...data.dateType} className="mb-6" />
@@ -448,7 +450,7 @@ const PublicationYearDescription = (
 );
 
 export function PublicationYear() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -459,6 +461,7 @@ export function PublicationYear() {
       description={PublicationYearDescription}
       present={data.publicationYear.present}
       isHighImpact={data.publicationYear.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -476,7 +479,7 @@ const AlternateIdentifiersDescription = (
 );
 
 export function AlternateIdentifiers() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -487,6 +490,7 @@ export function AlternateIdentifiers() {
       description={AlternateIdentifiersDescription}
       present={data.alternateIdentifiers.present}
       isHighImpact={data.alternateIdentifiers.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -503,7 +507,7 @@ const LanguageDescription = (
 );
 
 export function Language() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -514,6 +518,7 @@ export function Language() {
       description={LanguageDescription}
       present={data.language.present}
       isHighImpact={data.language.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -530,7 +535,7 @@ const SizesDescription = (
 );
 
 export function Sizes() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -541,6 +546,7 @@ export function Sizes() {
       description={SizesDescription}
       present={data.sizes.present}
       isHighImpact={data.sizes.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -557,7 +563,7 @@ const FormatsDescription = (
 );
 
 export function Formats() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -568,6 +574,7 @@ export function Formats() {
       description={FormatsDescription}
       present={data.formats.present}
       isHighImpact={data.formats.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -584,7 +591,7 @@ const VersionDescription = (
 );
 
 export function Version() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -595,6 +602,7 @@ export function Version() {
       description={VersionDescription}
       present={data.version.present}
       isHighImpact={data.version.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -612,7 +620,7 @@ const GeoLocationDescription = (
 );
 
 export function GeoLocation() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -623,6 +631,7 @@ export function GeoLocation() {
       description={GeoLocationDescription}
       present={data.geoLocation.present}
       isHighImpact={data.geoLocation.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
@@ -640,7 +649,7 @@ const RelatedItemDescription = (
 );
 
 export function RelatedItem() {
-  const { isPending, isError, data, error } = useOther();
+  const { isPending, isFetching, isError, data, error } = useOther();
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -651,6 +660,7 @@ export function RelatedItem() {
       description={RelatedItemDescription}
       present={data.relatedItem.present}
       isHighImpact={data.relatedItem.isHighImpact}
+      className={isFetching ? "opacity-50" : ""}
     />
   );
 }
