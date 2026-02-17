@@ -1,6 +1,13 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
 import { useQueryEntity, useQueryId } from "@/hooks";
-import type { ApiDois, ApiEntity, Entity, Filters } from "@/types";
+import type {
+  ApiClient,
+  ApiDois,
+  ApiEntity,
+  ApiProvider,
+  Entity,
+  Filters,
+} from "@/types";
 import {
   buildInitialData,
   createFormat,
@@ -9,14 +16,34 @@ import {
   isClient,
 } from "@/util";
 
-// Overview //////////////////////////////////////
+// Global Search /////////////////////////////////
 
-export async function fetchEntity(id: string | null): Promise<Entity | null> {
-  if (!id) return null;
+export async function searchEntities(
+  query: string,
+): Promise<{ clients: Entity[]; providers: Entity[] }> {
+  if (!query) return { clients: [], providers: [] };
 
-  const data = await getData<ApiEntity>(
-    `${isClient(id) ? "clients" : "providers"}/${id}`,
-  );
+  const [clientsData, providersData] = await Promise.all([
+    getData<ApiClient<true>>(`clients?page[size]=1000&query=${query}`),
+    getData<ApiProvider<true>>(`providers?page[size]=1000&query=${query}`),
+  ]);
+
+  const [clients, providers] = await Promise.all([
+    Promise.all(clientsData.map((c) => apiDataToEntity(c))),
+    Promise.all(providersData.map((p) => apiDataToEntity(p))),
+  ]);
+
+  return {
+    clients: clients.filter((c) => c !== null),
+    providers: providers.filter((p) => p !== null),
+  };
+}
+
+async function apiDataToEntity(
+  data: ApiEntity["data"],
+  populateChildren = false,
+  fetchParent = false,
+) {
   if (!data) return null;
 
   const entity = {
@@ -32,33 +59,49 @@ export async function fetchEntity(id: string | null): Promise<Entity | null> {
         ? ("repository" as const)
         : data.attributes.memberType,
     name: data.attributes.name,
-    children:
-      data.type !== "clients"
-        ? (
-          await getData<ApiEntity<true>>(
-            `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
-          )
-        ).map((c) => ({
-          id: c.id,
-          name: c.attributes.name,
-          subtype:
-            c.type === "clients"
-              ? ("repository" as const)
-              : c.attributes.memberType,
-        }))
-        : [],
-    parent: await fetchEntity(
+    children: [],
+    parent: null,
+  } as Entity;
+
+  if (populateChildren && data.type !== "clients") {
+    const childrenData = await getData<ApiEntity<true>>(
+      `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
+    );
+
+    entity.children = childrenData.map((child) => ({
+      id: child.id,
+      name: child.attributes.name,
+      subtype:
+        child.type === "clients"
+          ? ("repository" as const)
+          : child.attributes.memberType,
+    }));
+  }
+
+  if (fetchParent)
+    entity.parent = await fetchEntity(
       data.type === "clients"
         ? data.relationships.provider.data.id
         : data.relationships.consortium?.data.id || null,
-    ),
-  };
-  console.info(entity);
+    );
+
   return entity;
 }
 
 const getData = async <T extends { data: unknown }>(url: string) =>
   ((await (await fetchDatacite(url)).json()) as T).data as T["data"];
+
+// Overview //////////////////////////////////////
+
+export async function fetchEntity(id: string | null): Promise<Entity | null> {
+  if (!id) return null;
+
+  const data = await getData<ApiEntity>(
+    `${isClient(id) ? "clients" : "providers"}/${id}`,
+  );
+
+  return apiDataToEntity(data, true, true);
+}
 
 export async function fetchDois(entity: Entity, filters: Filters) {
   const doisSearchParam = new URLSearchParams({
