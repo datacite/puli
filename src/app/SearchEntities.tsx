@@ -26,7 +26,7 @@ export default function SearchEntities(props: { query: string | undefined }) {
     <Input
       title="Search repositories and organizations"
       placeholder="Enter query..."
-      className="text-xs px-6 py-2 h-full rounded-r-none border-r-0"
+      className="text-xs px-6 py-2 h-full bg-white"
       value={query}
       onChange={(e) => setQuery(e.target.value)}
       onKeyDown={onKeyDown}
