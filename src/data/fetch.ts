@@ -15,6 +15,7 @@ import {
   fetchFields,
   isClient,
 } from "@/util";
+import { useQuery } from "@tanstack/react-query";
 
 // Global Search /////////////////////////////////
 
@@ -37,6 +38,14 @@ export async function searchEntities(
     clients: clients.filter((c) => c !== null),
     providers: providers.filter((p) => p !== null),
   };
+}
+
+export function useSearchEntities(query: string | undefined) {
+  return useQuery({
+    queryKey: ["search entities", query],
+    queryFn: () => searchEntities(query || ""),
+    staleTime: 0,
+  });
 }
 
 async function apiDataToEntity(
