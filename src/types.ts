@@ -70,7 +70,7 @@ export type ApiProvider<IsArray extends boolean = false> = ApiResponse<
   IsArray
 >;
 
-export type ApiResource<IsArray extends boolean = false> =
+export type ApiEntity<IsArray extends boolean = false> =
   | ApiClient<IsArray>
   | ApiProvider<IsArray>;
 
@@ -85,7 +85,7 @@ export type ApiDois = {
 };
 
 // Other
-export type Resource = {
+export type Entity = {
   id: string;
   type: "client" | "provider" | "consortium";
   subtype:
@@ -103,7 +103,7 @@ export type Resource = {
     | "consortium_organization"
     | "consortium";
   }[];
-  parent: Resource | null;
+  parent: Entity | null;
 };
 
 export type Facet = {

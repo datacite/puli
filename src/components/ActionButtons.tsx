@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import { fetchDoisSearchParams, useDois, useResource } from "@/data/fetch";
+import { fetchDoisSearchParams, useDois, useEntity } from "@/data/fetch";
 import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 
@@ -207,10 +207,10 @@ function FilterByQuery() {
 }
 
 function ViewInCommons() {
-  const { data: resource } = useResource();
+  const { data: entity } = useEntity();
   const filters = useFilters();
 
-  if (!resource) return null;
+  if (!entity) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",
@@ -219,9 +219,9 @@ function ViewInCommons() {
   }).toString();
 
   const href =
-    resource.type === "client"
-      ? `${COMMONS_URL}/repositories/${resource.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${resource.type}_id:${resource.id}&${doisSearchParam}`;
+    entity.type === "client"
+      ? `${COMMONS_URL}/repositories/${entity.id}?${doisSearchParam}`
+      : `${COMMONS_URL}/doi.org?query=${entity.type}_id:${entity.id}&${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
@@ -234,14 +234,14 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const { isError, data: resource, error } = useResource();
+  const { isError, data: entity, error } = useEntity();
   const filters = useFilters();
 
   if (isError) return `Error: ${error}`;
-  if (!resource) return null;
+  if (!entity) return null;
 
   const doisSearchParam = new URLSearchParams(
-    fetchDoisSearchParams(resource, filters),
+    fetchDoisSearchParams(entity, filters),
   ).toString();
 
   const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;

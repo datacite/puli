@@ -3,8 +3,8 @@
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
-import type { Filters, Resource } from "@/types";
-import { useResource } from "./data/fetch";
+import type { Entity, Filters } from "@/types";
+import { useEntity } from "./data/fetch";
 
 export function useId() {
   const { id: slug } = useParams<{ id?: string[] }>();
@@ -45,17 +45,17 @@ export function useQueryId<R>(
   });
 }
 
-export function useQueryResource<R>(
+export function useQueryEntity<R>(
   key: string,
-  fetch: (resource: Resource, filters: Filters) => Promise<R>,
+  fetch: (entity: Entity, filters: Filters) => Promise<R>,
   initialData?: R,
 ) {
-  const { data: resource } = useResource();
+  const { data: entity } = useEntity();
 
   return useQueryId<R>(
     key,
-    (_, filters) => fetch(resource!, filters),
+    (_, filters) => fetch(entity!, filters),
     initialData,
-    !!resource,
+    !!entity,
   );
 }

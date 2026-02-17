@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
 import { H3 } from "@/components/datacite/Headings";
-import { fetchResource } from "@/data/fetch";
+import { fetchEntity } from "@/data/fetch";
 
 export default async function Page({
   params,
@@ -28,9 +28,9 @@ export default async function Page({
     redirect(`/${id.toLowerCase()}?${urlSearchParams.toString()}`);
   }
 
-  // Check if resource exists
-  const resource = await fetchResource(id);
-  if (!resource) notFound();
+  // Check if entity exists
+  const entity = await fetchEntity(id);
+  if (!entity) notFound();
 
   return (
     <main className="grid md:grid-cols-4 gap-4">

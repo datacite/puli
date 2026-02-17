@@ -27,11 +27,11 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { useResource } from "@/data/fetch";
+import { useEntity } from "@/data/fetch";
 import { useId } from "@/hooks";
 import { cn } from "@/lib/utils";
-import type { Resource } from "@/types";
-import { ResourceBadge } from "./Badges";
+import type { Entity } from "@/types";
+import { EntityBadge } from "./Badges";
 import { Button } from "./ui/button";
 import { Spinner } from "./ui/spinner";
 
@@ -39,7 +39,7 @@ export type BreadcrumbData = { title: string; href?: string };
 
 export default function Breadcrumbs() {
   const id = useId();
-  const { isPending, data: resource } = useResource();
+  const { isPending, data: entity } = useEntity();
 
   const BreadcrumbWrapper = (wrapperProps: { children: ReactNode }) => (
     <Breadcrumb>
@@ -53,14 +53,14 @@ export default function Breadcrumbs() {
     </Breadcrumb>
   );
 
-  if (!resource)
+  if (!entity)
     return (
       <BreadcrumbWrapper>
-        <BreadcrumbContent resource={{ id, name: id, subtype: "" }} />
+        <BreadcrumbContent entity={{ id, name: id, subtype: "" }} />
       </BreadcrumbWrapper>
     );
 
-  const pages = [resource?.parent?.parent, resource?.parent, resource].filter(
+  const pages = [entity?.parent?.parent, entity?.parent, entity].filter(
     (p) => !!p,
   );
 
@@ -69,22 +69,22 @@ export default function Breadcrumbs() {
       {pages.map((page, index) => (
         <React.Fragment key={page.id || index}>
           {index > 0 && <Separator />}
-          <ChildrenSelect resource={page} items={page.parent?.children || []}>
-            <BreadcrumbContent resource={page} />
+          <ChildrenSelect entity={page} items={page.parent?.children || []}>
+            <BreadcrumbContent entity={page} />
           </ChildrenSelect>
         </React.Fragment>
       ))}
 
-      {resource && resource.children.length > 0 && (
+      {entity && entity.children.length > 0 && (
         <>
           <Separator />
           <ChildrenSelect
-            resource={resource}
-            items={resource.children}
+            entity={entity}
+            items={entity.children}
             className="opacity-70"
           >
             Select{" "}
-            {resource.subtype === "consortium" ? "organization" : "repository"}
+            {entity.subtype === "consortium" ? "organization" : "repository"}
             ...
           </ChildrenSelect>
         </>
@@ -102,18 +102,18 @@ function Separator() {
 }
 
 function BreadcrumbContent(props: {
-  resource: { id: string; name: string; subtype: string };
+  entity: { id: string; name: string; subtype: string };
 }) {
   const id = useId();
-  const className = `flex flex-row items-center ${props.resource.id === id ? "bg-black/0 font-semibold" : ""}`;
+  const className = `flex flex-row items-center ${props.entity.id === id ? "bg-black/0 font-semibold" : ""}`;
 
   const BreadcrumbPageLink = (wrapperProps: { children: ReactNode }) =>
-    props.resource.id === id ? (
+    props.entity.id === id ? (
       <BreadcrumbPage {...wrapperProps} className={className} />
     ) : (
       <BreadcrumbLink
         {...wrapperProps}
-        href={`/${props.resource.id}`}
+        href={`/${props.entity.id}`}
         className={className}
         onMouseDown={(e) => e.stopPropagation()}
       />
@@ -126,13 +126,13 @@ function BreadcrumbContent(props: {
           <ItemContent className="gap-0">
             <ItemTitle
               className={
-                props.resource.id === id ? "bg-black/0 font-semibold" : ""
+                props.entity.id === id ? "bg-black/0 font-semibold" : ""
               }
             >
-              {props.resource.name} <ResourceBadge resource={props.resource} />
+              {props.entity.name} <EntityBadge entity={props.entity} />
             </ItemTitle>
             <ItemDescription className="text-muted-foreground/75 text-start">
-              {props.resource.id}
+              {props.entity.id}
             </ItemDescription>
           </ItemContent>
         </Item>
@@ -142,7 +142,7 @@ function BreadcrumbContent(props: {
 }
 
 function ChildrenSelect(props: {
-  resource: Resource;
+  entity: Entity;
   items: { id: string; name: string }[];
   children?: ReactNode;
   className?: string;
@@ -156,7 +156,7 @@ function ChildrenSelect(props: {
       items={props.items}
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.name}
-      value={props.resource}
+      value={props.entity}
       isItemEqualToValue={(item, value) => item.id === value.id}
       filter={(itemValue, query) =>
         itemValue.id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
@@ -174,18 +174,18 @@ function ChildrenSelect(props: {
       />
       <ComboboxContent className="w-125">
         <ComboboxInput
-          placeholder={`Search ${props.resource.name || props.resource.id}`}
+          placeholder={`Search ${props.entity.name || props.entity.id}`}
           showTrigger={false}
         />
         <ComboboxEmpty>
           No{" "}
-          {props.resource.type === "consortium"
+          {props.entity.type === "consortium"
             ? "organizations"
             : "repositories"}{" "}
           found.
         </ComboboxEmpty>
         <ComboboxList>
-          {(item: Resource) => {
+          {(item: Entity) => {
             return (
               <ComboboxItem value={item} key={item.id}>
                 <Link
@@ -201,7 +201,7 @@ function ChildrenSelect(props: {
                     </ItemContent>
                     <ItemContent className="flex-none text-center">
                       <ItemDescription>
-                        <ResourceBadge resource={item} />
+                        <EntityBadge entity={item} />
                       </ItemDescription>
                     </ItemContent>
                   </Item>
