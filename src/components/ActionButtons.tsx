@@ -81,7 +81,7 @@ function FilterByRegistrationYear() {
           params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
           router.push(`/${id}?${params.toString()}`);
         }}
-        className="text-xs w-full h-full"
+        className="text-xs bg-white w-full h-full"
       />
       <ComboboxContent>
         <ComboboxEmpty>No years found.</ComboboxEmpty>
@@ -137,7 +137,7 @@ function FilterByResourceType() {
           params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
           router.push(`/${id}?${params.toString()}`);
         }}
-        className="text-xs w-full h-full"
+        className="text-xs bg-white w-full h-full"
       />
       <ComboboxContent>
         <ComboboxEmpty>No resource types found.</ComboboxEmpty>
@@ -188,7 +188,7 @@ function FilterByQuery() {
       <Input
         title="filter by text input"
         placeholder="Enter query..."
-        className="text-xs px-6 py-2 h-full rounded-r-none border-r-0"
+        className="text-xs bg-white px-6 py-2 h-full rounded-r-none border-r-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
