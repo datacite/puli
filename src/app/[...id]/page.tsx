@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
-import { H3 } from "@/components/datacite/Headings";
+import { SectionHeader } from "@/components/datacite/Headings";
 import { fetchEntity } from "@/data/fetch";
 
 export default async function Page({
@@ -11,8 +11,6 @@ export default async function Page({
   const { id: slug } = await params;
   if (slug.length > 1) throw "Incorrect ID format";
   const id = slug?.[0] || "";
-
-  console.log(await searchParams);
 
   // Redirect to lowercased id if it contains uppercase letters
   if (id !== id.toLowerCase()) {
@@ -36,14 +34,16 @@ export default async function Page({
     <main className="grid md:grid-cols-4 gap-4">
       <OverviewCard />
 
-      <SectionHeader title="Connections to People, Organizations, and Related Resources" />
+      <SectionHeader>
+        Connections to People, Organizations, and Related Resources
+      </SectionHeader>
       <Cards.Creators />
       <Cards.Contributors />
       <Cards.RelatedIdentifiers />
       <Cards.FundingReferences />
       <Cards.Publisher />
 
-      <SectionHeader title="Descriptive Metadata" />
+      <SectionHeader>Descriptive Metadata</SectionHeader>
       <Cards.ResourceType />
       <Cards.Subjects />
       <Cards.Descriptions />
@@ -60,8 +60,4 @@ export default async function Page({
       <Cards.RelatedItem />
     </main>
   );
-}
-
-function SectionHeader({ title }: { title: string }) {
-  return <H3 className="mt-12 col-span-full font-light">{title}</H3>;
 }

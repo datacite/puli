@@ -43,3 +43,7 @@ export function H5({ className, ...props }: React.ComponentProps<"h5">) {
 export function H6({ className, ...props }: React.ComponentProps<"h6">) {
   return <h6 className={cn("", className)} {...props} />;
 }
+
+export function SectionHeader({ children }: { children: React.ReactNode }) {
+  return <H3 className="mt-12 col-span-full font-light">{children}</H3>;
+}
