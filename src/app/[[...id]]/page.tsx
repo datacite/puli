@@ -1,8 +1,37 @@
+import { notFound, redirect } from "next/navigation";
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
 import { H3 } from "@/components/datacite/Headings";
+import { fetchResource } from "@/data/fetch";
 
-export default async function Home() {
+export default async function Page({
+  params,
+  searchParams,
+}: PageProps<"/[[...id]]">) {
+  const { id: slug } = await params;
+  if (slug && slug.length > 1) throw "Incorrect ID format";
+  const id = slug?.[0] || "";
+
+  console.log(await searchParams);
+
+  // Redirect to lowercased id if it contains uppercase letters
+  if (id !== id.toLowerCase()) {
+    const urlSearchParams = new URLSearchParams();
+    Object.entries(await searchParams).forEach(([key, value]) => {
+      if (!value) return;
+
+      if (Array.isArray(value))
+        for (const v in value) urlSearchParams.append(key, v);
+      else urlSearchParams.append(key, value);
+    });
+
+    redirect(`/${id.toLowerCase()}?${urlSearchParams.toString()}`);
+  }
+
+  // Check if resource exists
+  const resource = await fetchResource(id);
+  if (!resource) notFound();
+
   return (
     <main className="grid md:grid-cols-4 gap-4">
       <OverviewCard />

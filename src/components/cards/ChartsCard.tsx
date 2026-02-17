@@ -44,8 +44,7 @@ export default function ChartsCard({
       <CardHeader>
         <CardTitle>
           <H4>
-            {title}
-            <HighImpactBadge show={isHighImpact} />
+            {title} <HighImpactBadge show={isHighImpact} />
           </H4>
         </CardTitle>
         <CardDescription>{description}</CardDescription>
