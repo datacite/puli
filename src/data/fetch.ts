@@ -24,9 +24,15 @@ export async function searchEntities(
 ): Promise<{ clients: Entity[]; providers: Entity[] }> {
   if (!query) return { clients: [], providers: [] };
 
+  const searchParams = new URLSearchParams({
+    query,
+    sort: "relevance",
+    "page[size]": "1000",
+  }).toString();
+
   const [clientsData, providersData] = await Promise.all([
-    getData<ApiClient<true>>(`clients?page[size]=1000&query=${query}`),
-    getData<ApiProvider<true>>(`providers?page[size]=1000&query=${query}`),
+    getData<ApiClient<true>>(`clients?${searchParams}`),
+    getData<ApiProvider<true>>(`providers?${searchParams}`),
   ]);
 
   const [clients, providers] = await Promise.all([
