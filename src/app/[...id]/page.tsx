@@ -7,9 +7,9 @@ import { fetchEntity } from "@/data/fetch";
 export default async function Page({
   params,
   searchParams,
-}: PageProps<"/[[...id]]">) {
+}: PageProps<"/[...id]">) {
   const { id: slug } = await params;
-  if (slug && slug.length > 1) throw "Incorrect ID format";
+  if (slug.length > 1) throw "Incorrect ID format";
   const id = slug?.[0] || "";
 
   console.log(await searchParams);
