@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { EntityBadge } from "@/components/Badges";
 import { SectionHeader } from "@/components/datacite/Headings";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Item,
@@ -32,13 +34,25 @@ function Section(props: {
   isFetching: boolean;
   results: { id: string; name: string; subtype: string }[];
 }) {
+  const [numShown, setNumShown] = useState(10);
+
   if (props.results.length === 0) return <i>No results found</i>;
+
+  function onShowMore() {
+    setNumShown(numShown + 10);
+  }
+
   return (
     <Card className={`w-full p-2 ${props.isFetching ? "opacity-50" : ""}`}>
       <CardContent className="flex flex-col gap-2 px-0 mx-0 items-center justify-items-center">
-        {props.results.map((c) => (
+        {props.results.slice(0, numShown).map((c) => (
           <EntityItem entity={c} key={c.id} />
         ))}
+        {props.results.length >= numShown && (
+          <Button onClick={onShowMore} variant="ghost" className="w-full">
+            Show more
+          </Button>
+        )}
       </CardContent>
     </Card>
   );
