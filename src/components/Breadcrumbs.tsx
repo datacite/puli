@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import useOverview from "@/data/fetchOverview";
+import { useResource } from "@/data/fetch";
 
 export type BreadcrumbData = { title: string; href?: string };
 
@@ -18,13 +18,11 @@ export default function Breadcrumbs({
 }: {
   pages: BreadcrumbData[];
 }) {
-  const { isPending, isError, data, error } = useOverview();
+  const { data: resource } = useResource();
 
-  if (isError) return `Error: ${error}`;
-
-  pages = isPending
+  pages = !resource
     ? [{ title: "Home", href: "/" }]
-    : [...pages, { title: data.name }];
+    : [...pages, { title: resource.name }];
 
   return (
     <Breadcrumb>

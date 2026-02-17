@@ -7,8 +7,8 @@ import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import useOverview from "@/data/fetchOverview";
-import { useClientId, useFilters } from "@/hooks";
+import { fetchDoisSearchParams, useDois, useResource } from "@/data/fetch";
+import { useFilters, useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { Combobox } from "./ui/combobox";
 
@@ -47,9 +47,9 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
 function FilterByRegistrationYear() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const id = useId();
 
-  const { isPending, isError, data, error } = useOverview();
+  const { isPending, isError, data, error } = useDois();
   const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
@@ -68,7 +68,7 @@ function FilterByRegistrationYear() {
     params.set(SEARCH_PARAMETERS.REGISTRATION_YEAR, value);
     if (!value.trim()) params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
-    const href = `/${clientId}?${params.toString()}`;
+    const href = `/${id}?${params.toString()}`;
     router.push(href);
   }
 
@@ -89,9 +89,9 @@ function FilterByRegistrationYear() {
 function FilterByResourceType() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const id = useId();
 
-  const { isPending, isError, data, error } = useOverview();
+  const { isPending, isError, data, error } = useDois();
   const [open, setOpen] = useState(false);
 
   if (isError) return `Error: ${error}`;
@@ -110,7 +110,7 @@ function FilterByResourceType() {
     params.set(SEARCH_PARAMETERS.RESOURCE_TYPE, value);
     if (!value.trim()) params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
-    const href = `/${clientId}?${params.toString()}`;
+    const href = `/${id}?${params.toString()}`;
     router.push(href);
   }
 
@@ -132,7 +132,7 @@ function FilterByResourceType() {
 function FilterByQuery() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const clientId = useClientId();
+  const id = useId();
   const [query, setQuery] = useState(
     searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
   );
@@ -140,7 +140,7 @@ function FilterByQuery() {
   const params = new URLSearchParams(searchParams.toString());
   params.set(SEARCH_PARAMETERS.QUERY, query);
   if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
-  const href = `/${clientId}?${params.toString()}`;
+  const href = `/${id}?${params.toString()}`;
 
   const disabled = !query.trim();
 
@@ -175,8 +175,10 @@ function FilterByQuery() {
 }
 
 function ViewInCommons() {
-  const clientId = useClientId();
+  const { data: resource } = useResource();
   const filters = useFilters();
+
+  if (!resource) return null;
 
   const doisSearchParam = new URLSearchParams({
     filterQuery: filters.query || "",
@@ -184,7 +186,10 @@ function ViewInCommons() {
     "resource-type": filters.resourceType || "",
   }).toString();
 
-  const href = `${COMMONS_URL}/repositories/${clientId}?${doisSearchParam}`;
+  const href =
+    resource.type === "client"
+      ? `${COMMONS_URL}/repositories/${resource.id}?${doisSearchParam}`
+      : `${COMMONS_URL}/doi.org?query=${resource.id && resource.type ? resource.type + "_id:" + resource.id : "*"}&${doisSearchParam}`;
 
   return (
     <Button className="max-md:col-span-2" asChild>
@@ -197,16 +202,15 @@ function ViewInCommons() {
 }
 
 function ViewInApi() {
-  const clientId = useClientId();
+  const { isPending, isError, data: resource, error } = useResource();
   const filters = useFilters();
 
-  const doisSearchParam = new URLSearchParams({
-    "client-id": clientId,
-    query: filters.query || "",
-    registered: filters.registered || "",
-    "resource-type-id": filters.resourceType || "",
-    state: "findable",
-  }).toString();
+  if (isError) return `Error: ${error}`;
+  if (isPending) return null;
+
+  const doisSearchParam = new URLSearchParams(
+    fetchDoisSearchParams(resource, filters),
+  ).toString();
 
   const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
 
