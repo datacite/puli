@@ -1,6 +1,5 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
@@ -14,9 +13,9 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import { fetchDoisSearchParams, useDois, useEntity } from "@/data/fetch";
-import { useFilters, useId } from "@/hooks";
+import { SEARCH_PARAMETERS } from "@/constants";
+import { useDois } from "@/data/fetch";
+import { useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 
 export default function ActionButtons() {
@@ -25,9 +24,6 @@ export default function ActionButtons() {
       <FilterByRegistrationYear />
       <FilterByResourceType />
       <FilterByQuery />
-
-      <ViewInCommons />
-      <ViewInApi />
     </ButtonsGrid>
   );
 }
@@ -46,7 +42,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr_repeat(2,min-content)] gap-x-2 gap-y-4"
+      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr] gap-x-2 gap-y-4"
     />
   );
 }
@@ -184,7 +180,7 @@ function FilterByQuery() {
   }
 
   return (
-    <div className="max-md:col-span-2 flex md:mr-10 h-full">
+    <div className="max-md:col-span-2 flex h-full">
       <Input
         title="filter by text input"
         placeholder="Enter query..."
@@ -203,55 +199,5 @@ function FilterByQuery() {
         <Link href={href}>Filter by Query</Link>
       </Button>
     </div>
-  );
-}
-
-function ViewInCommons() {
-  const { data: entity } = useEntity();
-  const filters = useFilters();
-
-  if (!entity) return null;
-
-  const doisSearchParam = new URLSearchParams({
-    filterQuery: filters.query || "",
-    published: filters.registered || "",
-    "resource-type": filters.resourceType || "",
-  }).toString();
-
-  const href =
-    entity.type === "client"
-      ? `${COMMONS_URL}/repositories/${entity.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${entity.type}_id:${entity.id}&${doisSearchParam}`;
-
-  return (
-    <Button className="max-md:col-span-2" asChild>
-      <a href={href} target="_blank">
-        View Records in Commons{" "}
-        <ExternalLink className="stroke-muted-foreground" />
-      </a>
-    </Button>
-  );
-}
-
-function ViewInApi() {
-  const { isError, data: entity, error } = useEntity();
-  const filters = useFilters();
-
-  if (isError) return `Error: ${error}`;
-  if (!entity) return null;
-
-  const doisSearchParam = new URLSearchParams(
-    fetchDoisSearchParams(entity, filters),
-  ).toString();
-
-  const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
-
-  return (
-    <Button className="max-md:col-span-2" asChild>
-      <a href={href} target="_blank">
-        View Records in REST API{" "}
-        <ExternalLink className="stroke-muted-foreground" />
-      </a>
-    </Button>
   );
 }
