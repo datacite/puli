@@ -1,11 +1,14 @@
 "use client";
 
+import { ExternalLink } from "lucide-react";
 import type { ComponentProps } from "react";
 import DOIRegistrationsChart from "@/components/DoiRegistrationsChart";
 import ResourceTypesChart from "@/components/ResourceTypesChart";
 import { OverviewCardSkeleton } from "@/components/Skeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import { useDois } from "@/data/fetch";
+import { API_URL_DATACITE, COMMONS_URL } from "@/constants";
+import { fetchDoisSearchParams, useDois, useEntity } from "@/data/fetch";
+import { useFilters } from "@/hooks";
 import { asNumber } from "@/util";
 
 export default function OverviewCard(cardProps: ComponentProps<"div">) {
@@ -32,9 +35,64 @@ export default function OverviewCard(cardProps: ComponentProps<"div">) {
 
 function TotalDois({ totalDois }: { totalDois: number }) {
   return (
-    <p className="flex flex-col items-center row-span-full gap-2">
+    <p className="flex flex-col items-center row-span-full gap-1">
       <span className="text-5xl">{asNumber(totalDois)}</span>
-      <span>Total DOIs</span>
+      <span className="mb-2">Total DOIs</span>
+
+      <ViewInCommons />
+      <ViewInApi />
     </p>
+  );
+}
+
+function ViewInCommons() {
+  const { data: entity } = useEntity();
+  const filters = useFilters();
+
+  if (!entity) return null;
+
+  const doisSearchParam = new URLSearchParams({
+    filterQuery: filters.query || "",
+    published: filters.registered || "",
+    "resource-type": filters.resourceType || "",
+  }).toString();
+
+  const href =
+    entity.type === "client"
+      ? `${COMMONS_URL}/repositories/${entity.id}?${doisSearchParam}`
+      : `${COMMONS_URL}/doi.org?query=${entity.type}_id:${entity.id}&${doisSearchParam}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      className="text-datacite-blue-light text-[0.8em] flex items-center gap-1"
+    >
+      View in Commons <ExternalLink size={"1em"} />
+    </a>
+  );
+}
+
+function ViewInApi() {
+  const { isError, data: entity, error } = useEntity();
+  const filters = useFilters();
+
+  if (isError) return `Error: ${error}`;
+  if (!entity) return null;
+
+  const doisSearchParam = new URLSearchParams(
+    fetchDoisSearchParams(entity, filters),
+  ).toString();
+
+  const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      className="text-datacite-blue-light text-[0.8em] flex items-center gap-1"
+    >
+      View in REST API <ExternalLink size={"1em"} />
+    </a>
   );
 }
