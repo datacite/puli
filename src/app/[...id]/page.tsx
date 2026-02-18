@@ -19,7 +19,7 @@ export default async function Page({
       if (!value) return;
 
       if (Array.isArray(value))
-        for (const v in value) urlSearchParams.append(key, v);
+        for (const v of value) urlSearchParams.append(key, v);
       else urlSearchParams.append(key, value);
     });
 
