@@ -73,7 +73,7 @@ const ContributorsDescription = (
     ROR IDs for the highest impact.{" "}
     <LearnMore
       text="Contributor documentation"
-      href="https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/contributor/"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/contributor/"
     />
   </>
 );
