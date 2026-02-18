@@ -141,7 +141,7 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     total: doisMeta.total,
     resourceTypeData,
     registrationYears,
-    registrationsData: registrationYears.reverse().map((f) => ({
+    registrationsData: [...registrationYears].reverse().map((f) => ({
       year: f.id,
       count: f.count,
     })),
