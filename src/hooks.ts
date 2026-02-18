@@ -7,8 +7,8 @@ import type { Entity, Filters } from "@/types";
 import { useEntity } from "./data/fetch";
 
 export function useId() {
-  const { id: slug } = useParams<{ id?: string[] }>();
-  return slug?.[0] || "";
+  const { id } = useParams<{ id: string }>();
+  return id;
 }
 
 export function useFilters() {
