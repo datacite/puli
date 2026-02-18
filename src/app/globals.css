@@ -50,6 +50,7 @@
 
 @theme {
   --shadow-sm: 0px 28px 36px -10px rgba(13, 96, 212, 0.08);
+  --shadow-xs: 0 5px 10px -5px rgba(13, 96, 212, 0.08);
 }
 
 :root {
