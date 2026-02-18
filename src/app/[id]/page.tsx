@@ -7,10 +7,8 @@ import { fetchEntity } from "@/data/fetch";
 export default async function Page({
   params,
   searchParams,
-}: PageProps<"/[...id]">) {
-  const { id: slug } = await params;
-  if (slug.length > 1) throw "Incorrect ID format";
-  const id = slug?.[0] || "";
+}: PageProps<"/[id]">) {
+  const { id } = await params;
 
   // Redirect to lowercased id if it contains uppercase letters
   if (id !== id.toLowerCase()) {
