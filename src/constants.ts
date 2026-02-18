@@ -1,3 +1,6 @@
+import { pascal } from "@/util";
+
+// URLs
 const API_URL_DATACITE_STAGE = "https://api.stage.datacite.org";
 const COMMONS_URL_STAGE = "https://commons.stage.datacite.org";
 
@@ -11,19 +14,76 @@ export const API_URL_COMPLETENESS =
 export const COMMONS_URL =
   process.env.NEXT_PUBLIC_COMMONS_URL || COMMONS_URL_STAGE;
 
+// Colors
+const PALETTE_OTHER = {
+  Other: "gray",
+  Missing: "#555",
+  Unknown: "#555",
+} as const;
+
+// Source: https://gist.github.com/kjgarza/30558b663d4fd36e7d9970a6b5bdebe6
+export const PALETTE_RESOURCE_TYPE = {
+  ...PALETTE_OTHER,
+  Audiovisual: "#AEC7E8",
+  Award: "#D4AF37",
+  Book: "#FF7F0E",
+  "Book Chapter": "#FFBB78",
+  Collection: "#D62728",
+  "Computational Notebook": "#FF9896",
+  "Conference Paper": "#9467BD",
+  "Conference Proceeding": "#C5B0D5",
+  "Data Paper": "#8C564B",
+  Dataset: "#1F77B4",
+  Dissertation: "#C49C94",
+  Event: "#E377C2",
+  Image: "#F7B6D2",
+  Instrument: "#35424A",
+  "Interactive Resource": "#7F7F7F",
+  Journal: "#C7C7C7",
+  "Journal Article": "#BCBD22",
+  Model: "#DBDB8D",
+  "Output Management Plan": "#17BECF",
+  "Peer Review": "#9EDAE5",
+  "Physical Object": "#3182BD",
+  Preprint: "#6BAED6",
+  Project: "#AB8DF8",
+  Report: "#9ECAE1",
+  Service: "#C6DBEF",
+  Software: "#E6550D",
+  Sound: "#FD8D3C",
+  Standard: "#FDAE6B",
+  "Study Registration": "#6DBB5E",
+  Text: "#FDD0A2",
+  Workflow: "#9F4639",
+  Other: "#C59088",
+} as const;
+
+// Chart
 export const CHART = {
   bar: {
     gap: 20,
     size: 12,
-    radius: 3,
+    radius: 0,
+    color: "var(--color-datacite-blue-light)",
+    background: "var(--color-datacite-gray)",
   },
 };
 
 // URL Search Parameters
+const QUERY = "query";
+const REGISTRATION_YEAR = "registrationYear";
+const RESOURCE_TYPE = "resourceType";
+
 export const SEARCH_PARAMETERS = {
-  QUERY: "query",
-  REGISTRATION_YEAR: "registrationYear",
-  RESOURCE_TYPE: "resourceType",
+  QUERY,
+  REGISTRATION_YEAR,
+  RESOURCE_TYPE,
+} as const;
+
+export const FILTERS: Record<string, (str: string) => string> = {
+  [QUERY]: (query) => query,
+  [REGISTRATION_YEAR]: (year) => `registered:[${year}-01-01 TO ${year}-12-31]`,
+  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${pascal(rt)}"`,
 } as const;
 
 // Field Names
@@ -108,12 +168,12 @@ const DATES_TYPE = "dates.dateType";
 const DATES_INFORMATION = "dates.dateInformation";
 
 //// Other
-const PUBLICATION_YEAR = "publicationYear";
+const PUBLICATION_YEAR = "publication_year";
 const ALTERNATE_IDS = "identifiers";
 const LANGUAGE = "language";
 const SIZES = "sizes";
 const FORMATS = "formats";
-const VERSION = "version";
+const VERSION = "version_info";
 const GEO_LOCATION = "geo_locations";
 const RELATED_ITEM = "related_items";
 
@@ -319,3 +379,18 @@ export const OTHER_FIELDS = {
   ],
   distribution: [],
 } as const;
+
+export const COMPLETENESS_FIELDS = {
+  CREATORS: CREATOR_FIELDS,
+  CONTRIBUTORS: CONTRIBUTOR_FIELDS,
+  RELATED_IDENTIFIERS: RELATED_IDENTIFIER_FIELDS,
+  FUNDING_REFERENCES: FUNDING_REFERENCES_FIELDS,
+  PUBLISHER: PUBLISHER_FIELDS,
+  RESOURCE_TYPE: RESOURCE_TYPE_FIELDS,
+  SUBJECTS: SUBJECTS_FIELDS,
+  DESCRIPTIONS: DESCRIPTIONS_FIELDS,
+  TITLES: TITLES_FIELDS,
+  RIGHTS: RIGHTS_FIELDS,
+  DATES: DATES_FIELDS,
+  OTHER: OTHER_FIELDS,
+};

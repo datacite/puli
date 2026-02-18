@@ -20,14 +20,8 @@ export interface Props {
 const BAR = { ...CHART.bar, size: 20 };
 
 const chartConfig = {
-  present: {
-    label: "Present",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  present: { label: "Present" },
+  absent: { label: "Absent" },
 } satisfies ChartConfig;
 
 export default function RadialChart(props: Props) {
@@ -64,17 +58,19 @@ export default function RadialChart(props: Props) {
           dataKey="present"
           stackId="a"
           cornerRadius={BAR.radius}
-          fill="var(--color-present)"
+          fill={BAR.color}
           className="stroke-transparent stroke-2"
-          background={{ fill: "var(--color-absent)", radius: BAR.radius }}
+          background={{
+            fill: BAR.background,
+            radius: BAR.radius,
+          }}
         />
         <RadialBar
           dataKey="absent"
-          fill="#ffffff00"
+          fill={BAR.background}
           stackId="a"
           cornerRadius={BAR.radius}
           className="stroke-transparent stroke-2"
-          // background={{ fill: "#00000000", radius: BAR.radius }}
         />
       </RadialBarChart>
     </ChartContainer>
@@ -86,7 +82,7 @@ export default function RadialChart(props: Props) {
 
     return (
       <text x={cx} y={cy} textAnchor="middle">
-        <tspan x={cx} y={cy - 6} className="fill-foreground text-3xl">
+        <tspan x={cx} y={cy - 6} className="fill-foreground text-2xl">
           {asRoundedPercent(present)}
         </tspan>
       </text>

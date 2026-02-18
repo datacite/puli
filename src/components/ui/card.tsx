@@ -1,5 +1,5 @@
 import type * as React from "react";
-
+import { barlow, dmSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 function Card({ className, ...props }: React.ComponentProps<"div">) {
@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm",
+        "bg-card text-card-foreground flex flex-col gap-6 border py-6 shadow-sm",
         className,
       )}
       {...props}
@@ -42,7 +42,12 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="card-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn(
+        "text-muted-foreground text-sm",
+        "font-normal text-md",
+        barlow.className,
+        className,
+      )}
       {...props}
     />
   );

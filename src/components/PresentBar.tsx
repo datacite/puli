@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import HighImpactBadge from "@/components/HighImpactBadge";
+import { HighImpactBadge } from "@/components/Badges";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
 import { asRoundedPercent } from "@/util";
@@ -22,14 +22,7 @@ export interface Props {
 const BAR = CHART.bar;
 
 const chartConfig = {
-  present: {
-    label: "Present",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  present: { label: "Present" },
 } satisfies ChartConfig;
 
 export default function PresentBar(props: Props) {
@@ -39,13 +32,15 @@ export default function PresentBar(props: Props) {
   const data = [{ property, present }];
 
   return (
-    <div className="w-full flex flex-col h-min">
-      <span className="text-xs mb-[-4px]">
-        {property}
-        <HighImpactBadge show={isHighImpact} />
+    <div className="w-full text-sm grid grid-cols-[max-content_1fr_max-content] h-min items-center gap-x-1">
+      <span className="mb-[-4px]">{property}</span>{" "}
+      <HighImpactBadge show={isHighImpact} />
+      <span className="mb-[-4px] col-start-3 text-muted-foreground">
+        {asRoundedPercent(present)}
       </span>
       <ChartContainer
         config={chartConfig}
+        className="col-span-full w-full"
         style={{ height: `${containerHeight}px` }}
       >
         <BarChart
@@ -65,12 +60,16 @@ export default function PresentBar(props: Props) {
             interval={0}
             tickFormatter={(value) => asRoundedPercent(value)}
             tick={{ textAnchor: "end", dx: 30 }}
+            hide
           />
           <XAxis dataKey="present" type="number" domain={[0, 100]} hide />
           <Bar
             dataKey="present"
-            fill="var(--color-present)"
-            background={{ fill: "var(--color-absent)", radius: BAR.radius }}
+            fill={BAR.color}
+            background={{
+              fill: BAR.background,
+              radius: BAR.radius,
+            }}
             radius={BAR.radius}
           >
             <LabelList dataKey="category" content={CategoryLabel} />

@@ -1,49 +1,61 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { useParams, useSearchParams } from "next/navigation";
-import { SEARCH_PARAMETERS } from "@/constants";
-import type { Filters } from "@/types";
-import { pascal } from "@/util";
+import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
+import type { Filters, Resource } from "@/types";
+import { useResource } from "./data/fetch";
 
-const { QUERY, REGISTRATION_YEAR, RESOURCE_TYPE } = SEARCH_PARAMETERS;
-
-const PARAMETERS = [QUERY, REGISTRATION_YEAR, RESOURCE_TYPE] as const;
-const FILTERS: Record<string, (str: string) => string> = {
-  [QUERY]: (query) => query,
-  [REGISTRATION_YEAR]: (year) => `registered:[${year}-01-01 TO ${year}-12-31]`,
-  [RESOURCE_TYPE]: (rt) => `types.resourceTypeGeneral:"${pascal(rt)}"`,
-} as const;
-
-export function useClientId() {
-  const { clientId } = useParams<{ clientId: string }>();
-  return clientId;
+export function useId() {
+  const { id: slug } = useParams<{ id?: string[] }>();
+  return slug?.[0] || "";
 }
 
 export function useFilters() {
   const searchParams = useSearchParams();
 
-  const openSearchQuery = PARAMETERS.filter((f) => searchParams.has(f))
+  const openSearchQuery = Object.values(SEARCH_PARAMETERS)
+    .filter((f) => searchParams.has(f))
     .map((f) => FILTERS[f](searchParams.get(f) as string))
     .join(" AND ");
 
   return {
-    query: searchParams.get(QUERY),
-    registered: searchParams.get(REGISTRATION_YEAR),
-    resourceType: searchParams.get(RESOURCE_TYPE),
+    query: searchParams.get(SEARCH_PARAMETERS.QUERY),
+    registered: searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR),
+    resourceType: searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE),
     openSearchQuery,
   } satisfies Filters;
 }
 
-export function useCreateQuery<R>(
+export function useQueryId<R>(
   key: string,
-  fetch: (clientId: string, filters: Filters) => Promise<R>,
+  fetch: (id: string, filters: Filters) => Promise<R>,
+  initialData?: R,
+  enabled?: boolean,
 ) {
-  const clientId = useClientId();
+  const id = useId();
   const filters = useFilters();
 
-  return useQuery({
-    queryKey: [clientId, filters, key],
-    queryFn: () => fetch(clientId, filters),
+  return useTanstackQuery({
+    queryKey: [id, filters, key],
+    queryFn: () => fetch(id, filters),
+    initialData,
+    staleTime: 0,
+    enabled,
   });
+}
+
+export function useQueryResource<R>(
+  key: string,
+  fetch: (resource: Resource, filters: Filters) => Promise<R>,
+  initialData?: R,
+) {
+  const { data: resource } = useResource();
+
+  return useQueryId<R>(
+    key,
+    (_, filters) => fetch(resource!, filters),
+    initialData,
+    !!resource,
+  );
 }

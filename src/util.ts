@@ -1,13 +1,7 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
 import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
-import type {
-  ApiResponse,
-  Distribution,
-  Filters,
-  Format,
-  Present,
-} from "@/types";
+import type { Distribution, Filters, Format, Present, Resource } from "@/types";
 
 export function pascal(str: string) {
   return str
@@ -97,22 +91,38 @@ function toDistributionProps(item?: Distribution): DistributionProps {
   };
 }
 
+export function buildInitialData<R>(
+  format: Format<R>,
+  fields: { present: readonly string[]; distribution: readonly string[] },
+) {
+  return format(
+    fields.present.map((f) =>
+      toPresentProps({ field: f, percent: 0, count: 0, absent_count: 0 }),
+    ),
+    fields.distribution.map((f) =>
+      toDistributionProps({ field: f, values: [] }),
+    ),
+  );
+}
+
 export async function fetchFields<R>(
-  clientId: string,
-  presentFields: readonly string[],
-  distributionFields: readonly string[],
+  resource: Resource,
+  fields: { present: readonly string[]; distribution: readonly string[] },
   filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    client_id: clientId,
-    present: presentFields.join(","),
-    distribution: distributionFields.join(","),
+    [`${resource.type}_id`]: resource.id,
+    present: fields.present.join(","),
+    distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",
   }).toString();
 
   const res = await fetchCompleteness(`?${searchParams}`);
-  const json = (await res.json()) as ApiResponse;
+  const json = (await res.json()) as {
+    present: Present[];
+    distribution: Distribution[];
+  };
 
   const findInPresent = findBuilder(
     json.present,
@@ -123,13 +133,15 @@ export async function fetchFields<R>(
     (item, desired: string) => item.field === desired,
   );
 
-  const present = presentFields.map(findInPresent).map(toPresentProps);
-  const distribution = distributionFields
+  const present = fields.present.map(findInPresent).map(toPresentProps);
+  const distribution = fields.distribution
     .map(findInDistribution)
     .map(toDistributionProps);
 
   return format(present, distribution);
 }
+
+export const isClient = (id: string) => id.includes(".");
 
 export function findBuilder<T, U>(
   array: T[],

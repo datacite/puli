@@ -1,7 +1,12 @@
 "use client";
 
 import { Bar, BarChart, XAxis, YAxis } from "recharts";
-import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { CHART } from "@/constants";
 import { asNumber } from "@/util";
 
@@ -17,14 +22,7 @@ interface Props {
 const BAR = { ...CHART.bar };
 
 const chartConfig = {
-  count: {
-    label: "Count",
-    color: "var(--color-primary-light-blue)",
-  },
-  absent: {
-    label: "Absent",
-    color: "var(--color-primary-dark-blue)",
-  },
+  count: { label: "DOIs" },
 } satisfies ChartConfig;
 
 export default function DoiRegistrationsChart(props: Props) {
@@ -32,14 +30,24 @@ export default function DoiRegistrationsChart(props: Props) {
 
   return (
     <ChartContainer config={chartConfig} className="h-full">
-      <BarChart data={data} margin={{ top: 10 }} accessibilityLayer>
+      <BarChart data={data} margin={{ top: 20 }} accessibilityLayer>
         <XAxis dataKey="year" type="category" tickLine={false} />
         <YAxis dataKey="count" type="number" hide />
         <Bar
           dataKey="count"
-          fill="var(--color-count)"
+          fill={BAR.color}
           radius={[BAR.radius, BAR.radius, 0, 0]}
-          label={{ position: "top", formatter: asNumber }}
+        />
+        <ChartTooltip
+          cursor={false}
+          content={
+            <ChartTooltipContent
+              hideIndicator
+              formatter={(v) => (
+                <span className="font-semibold">{asNumber(v as number)}</span>
+              )}
+            />
+          }
         />
       </BarChart>
     </ChartContainer>
