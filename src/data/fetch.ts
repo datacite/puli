@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import { COMPLETENESS_FIELDS } from "@/constants";
 import { useQueryEntity, useQueryId } from "@/hooks";
 import type {
@@ -9,13 +10,12 @@ import type {
   Filters,
 } from "@/types";
 import {
-  buildInitialData,
+  buildPlaceholderData,
   createFormat,
   fetchDatacite,
   fetchFields,
   isClient,
 } from "@/util";
-import { useQuery } from "@tanstack/react-query";
 
 // Global Search /////////////////////////////////
 
@@ -50,7 +50,6 @@ export function useSearchEntities(query: string | undefined) {
   return useQuery({
     queryKey: ["search entities", query],
     queryFn: () => searchEntities(query || ""),
-    staleTime: 0,
   });
 }
 
@@ -199,7 +198,7 @@ export function useCreators() {
   return useQueryEntity(
     "creators",
     fetchCreators,
-    buildInitialData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
+    buildPlaceholderData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
   );
 }
 
@@ -226,7 +225,7 @@ export function useContributors() {
   return useQueryEntity(
     "contributors",
     fetchContributors,
-    buildInitialData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
+    buildPlaceholderData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
   );
 }
 
@@ -253,7 +252,7 @@ export function useRelatedIdentifiers() {
   return useQueryEntity(
     "relatedIdentifiers",
     fetchRelatedIdentifiers,
-    buildInitialData(
+    buildPlaceholderData(
       formatRelatedIdentifiers,
       COMPLETENESS_FIELDS.RELATED_IDENTIFIERS,
     ),
@@ -283,7 +282,7 @@ export function useFundingReferences() {
   return useQueryEntity(
     "fundingReferences",
     fetchFundingReferences,
-    buildInitialData(
+    buildPlaceholderData(
       formatFundingReferences,
       COMPLETENESS_FIELDS.FUNDING_REFERENCES,
     ),
@@ -309,7 +308,7 @@ export function usePublisher() {
   return useQueryEntity(
     "publisher",
     fetchPublisher,
-    buildInitialData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
+    buildPlaceholderData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
   );
 }
 
@@ -332,7 +331,7 @@ export function useResourceType() {
   return useQueryEntity(
     "resourceType",
     fetchResourceType,
-    buildInitialData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
+    buildPlaceholderData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
   );
 }
 
@@ -356,7 +355,7 @@ export function useSubjects() {
   return useQueryEntity(
     "subjects",
     fetchSubjects,
-    buildInitialData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
+    buildPlaceholderData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
   );
 }
 
@@ -378,7 +377,7 @@ export function useDescriptions() {
   return useQueryEntity(
     "descriptions",
     fetchDescriptions,
-    buildInitialData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
+    buildPlaceholderData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
   );
 }
 
@@ -395,7 +394,7 @@ export function useTitles() {
   return useQueryEntity(
     "titles",
     fetchTitles,
-    buildInitialData(formatTitles, COMPLETENESS_FIELDS.TITLES),
+    buildPlaceholderData(formatTitles, COMPLETENESS_FIELDS.TITLES),
   );
 }
 
@@ -413,7 +412,7 @@ export function useRights() {
   return useQueryEntity(
     "rights",
     fetchRights,
-    buildInitialData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
+    buildPlaceholderData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
   );
 }
 
@@ -431,7 +430,7 @@ export function useDates() {
   return useQueryEntity(
     "dates",
     fetchDates,
-    buildInitialData(formatDates, COMPLETENESS_FIELDS.DATES),
+    buildPlaceholderData(formatDates, COMPLETENESS_FIELDS.DATES),
   );
 }
 
@@ -454,6 +453,6 @@ export function useOther() {
   return useQueryEntity(
     "other",
     fetchOther,
-    buildInitialData(formatOther, COMPLETENESS_FIELDS.OTHER),
+    buildPlaceholderData(formatOther, COMPLETENESS_FIELDS.OTHER),
   );
 }
