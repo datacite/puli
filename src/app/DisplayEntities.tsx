@@ -48,7 +48,7 @@ function Section(props: {
         {props.results.slice(0, numShown).map((c) => (
           <EntityItem entity={c} key={c.id} />
         ))}
-        {props.results.length >= numShown && (
+        {props.results.length > numShown && (
           <Button onClick={onShowMore} variant="ghost" className="w-full">
             Show more
           </Button>
