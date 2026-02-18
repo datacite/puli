@@ -1,7 +1,7 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
 import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
-import type { Distribution, Filters, Format, Present, Resource } from "@/types";
+import type { Distribution, Entity, Filters, Format, Present } from "@/types";
 
 export function pascal(str: string) {
   return str
@@ -106,13 +106,13 @@ export function buildInitialData<R>(
 }
 
 export async function fetchFields<R>(
-  resource: Resource,
+  entity: Entity,
   fields: { present: readonly string[]; distribution: readonly string[] },
   filters: Filters,
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    [`${resource.type}_id`]: resource.id,
+    [`${entity.type}_id`]: entity.id,
     present: fields.present.join(","),
     distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",

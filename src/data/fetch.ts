@@ -1,6 +1,6 @@
 import { COMPLETENESS_FIELDS } from "@/constants";
-import { useQueryId, useQueryResource } from "@/hooks";
-import type { ApiDois, ApiResource, Filters, Resource } from "@/types";
+import { useQueryEntity, useQueryId } from "@/hooks";
+import type { ApiDois, ApiEntity, Entity, Filters } from "@/types";
 import {
   buildInitialData,
   createFormat,
@@ -11,17 +11,15 @@ import {
 
 // Overview //////////////////////////////////////
 
-export async function fetchResource(
-  id: string | null,
-): Promise<Resource | null> {
+export async function fetchEntity(id: string | null): Promise<Entity | null> {
   if (!id) return null;
 
-  const data = await getData<ApiResource>(
+  const data = await getData<ApiEntity>(
     `${isClient(id) ? "clients" : "providers"}/${id}`,
   );
   if (!data) return null;
 
-  const resource = {
+  const entity = {
     id: data.id,
     type:
       data.type === "clients"
@@ -37,7 +35,7 @@ export async function fetchResource(
     children:
       data.type !== "clients"
         ? (
-          await getData<ApiResource<true>>(
+          await getData<ApiEntity<true>>(
             `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
           )
         ).map((c) => ({
@@ -49,22 +47,22 @@ export async function fetchResource(
               : c.attributes.memberType,
         }))
         : [],
-    parent: await fetchResource(
+    parent: await fetchEntity(
       data.type === "clients"
         ? data.relationships.provider.data.id
         : data.relationships.consortium?.data.id || null,
     ),
   };
-  console.info(resource);
-  return resource;
+  console.info(entity);
+  return entity;
 }
 
 const getData = async <T extends { data: unknown }>(url: string) =>
   ((await (await fetchDatacite(url)).json()) as T).data as T["data"];
 
-export async function fetchDois(resource: Resource, filters: Filters) {
+export async function fetchDois(entity: Entity, filters: Filters) {
   const doisSearchParam = new URLSearchParams({
-    ...fetchDoisSearchParams(resource, filters),
+    ...fetchDoisSearchParams(entity, filters),
     facets: ["resourceTypes", "registered"].join(","),
     "page[size]": "0",
   }).toString();
@@ -93,8 +91,8 @@ export async function fetchDois(resource: Resource, filters: Filters) {
   };
 }
 
-export function useResource() {
-  return useQueryId("resource", fetchResource);
+export function useEntity() {
+  return useQueryId("entity", fetchEntity);
 }
 
 const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
@@ -102,7 +100,7 @@ const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
 );
 
 export function useDois() {
-  return useQueryResource("overview", fetchDois, {
+  return useQueryEntity("overview", fetchDois, {
     total: 0,
     registrationYears: LAST_10_YEARS.map((id) => ({ id, title: id, count: 0 })),
     registrationsData: LAST_10_YEARS.map((year) => ({ year, count: 0 })),
@@ -110,9 +108,9 @@ export function useDois() {
   });
 }
 
-export const fetchDoisSearchParams = (resource: Resource, filters: Filters) =>
+export const fetchDoisSearchParams = (entity: Entity, filters: Filters) =>
   ({
-    [`${resource.type}-id`]: resource.id,
+    [`${entity.type}-id`]: entity.id,
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",
@@ -131,16 +129,16 @@ const formatCreators = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[1],
 }));
 
-export const fetchCreators = async (resource: Resource, filters: Filters) =>
+export const fetchCreators = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.CREATORS,
     filters,
     formatCreators,
   );
 
 export function useCreators() {
-  return useQueryResource(
+  return useQueryEntity(
     "creators",
     fetchCreators,
     buildInitialData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
@@ -158,16 +156,16 @@ const formatContributors = createFormat((p, d) => ({
   affiliationIdentifierScheme: d[2],
 }));
 
-export const fetchContributors = async (resource: Resource, filters: Filters) =>
+export const fetchContributors = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.CONTRIBUTORS,
     filters,
     formatContributors,
   );
 
 export function useContributors() {
-  return useQueryResource(
+  return useQueryEntity(
     "contributors",
     fetchContributors,
     buildInitialData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
@@ -183,18 +181,18 @@ const formatRelatedIdentifiers = createFormat((p, d) => ({
 }));
 
 export const fetchRelatedIdentifiers = async (
-  resource: Resource,
+  entity: Entity,
   filters: Filters,
 ) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.RELATED_IDENTIFIERS,
     filters,
     formatRelatedIdentifiers,
   );
 
 export function useRelatedIdentifiers() {
-  return useQueryResource(
+  return useQueryEntity(
     "relatedIdentifiers",
     fetchRelatedIdentifiers,
     buildInitialData(
@@ -213,18 +211,18 @@ const formatFundingReferences = createFormat((p, d) => ({
 }));
 
 export const fetchFundingReferences = async (
-  resource: Resource,
+  entity: Entity,
   filters: Filters,
 ) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.FUNDING_REFERENCES,
     filters,
     formatFundingReferences,
   );
 
 export function useFundingReferences() {
-  return useQueryResource(
+  return useQueryEntity(
     "fundingReferences",
     fetchFundingReferences,
     buildInitialData(
@@ -241,16 +239,16 @@ const formatPublisher = createFormat((p, d) => ({
   publisherIdentifierScheme: d[0],
 }));
 
-export const fetchPublisher = async (resource: Resource, filters: Filters) =>
+export const fetchPublisher = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.PUBLISHER,
     filters,
     formatPublisher,
   );
 
 export function usePublisher() {
-  return useQueryResource(
+  return useQueryEntity(
     "publisher",
     fetchPublisher,
     buildInitialData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
@@ -264,16 +262,16 @@ const formatResourceType = createFormat((p, d) => ({
   resourceTypeGeneral: d[0],
 }));
 
-export const fetchResourceType = async (resource: Resource, filters: Filters) =>
+export const fetchResourceType = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.RESOURCE_TYPE,
     filters,
     formatResourceType,
   );
 
 export function useResourceType() {
-  return useQueryResource(
+  return useQueryEntity(
     "resourceType",
     fetchResourceType,
     buildInitialData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
@@ -288,16 +286,16 @@ const formatSubjects = createFormat((p, d) => ({
   valueURI: p[2],
 }));
 
-export const fetchSubjects = async (resource: Resource, filters: Filters) =>
+export const fetchSubjects = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.SUBJECTS,
     filters,
     formatSubjects,
   );
 
 export function useSubjects() {
-  return useQueryResource(
+  return useQueryEntity(
     "subjects",
     fetchSubjects,
     buildInitialData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
@@ -310,16 +308,16 @@ const formatDescriptions = createFormat((p, d) => ({
   descriptionType: d[0],
 }));
 
-export const fetchDescriptions = async (resource: Resource, filters: Filters) =>
+export const fetchDescriptions = async (entity: Entity, filters: Filters) =>
   await fetchFields(
-    resource,
+    entity,
     COMPLETENESS_FIELDS.DESCRIPTIONS,
     filters,
     formatDescriptions,
   );
 
 export function useDescriptions() {
-  return useQueryResource(
+  return useQueryEntity(
     "descriptions",
     fetchDescriptions,
     buildInitialData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
@@ -332,16 +330,11 @@ const formatTitles = createFormat((p, d) => ({
   titleType: d[0],
 }));
 
-export const fetchTitles = async (resource: Resource, filters: Filters) =>
-  await fetchFields(
-    resource,
-    COMPLETENESS_FIELDS.TITLES,
-    filters,
-    formatTitles,
-  );
+export const fetchTitles = async (entity: Entity, filters: Filters) =>
+  await fetchFields(entity, COMPLETENESS_FIELDS.TITLES, filters, formatTitles);
 
 export function useTitles() {
-  return useQueryResource(
+  return useQueryEntity(
     "titles",
     fetchTitles,
     buildInitialData(formatTitles, COMPLETENESS_FIELDS.TITLES),
@@ -355,16 +348,11 @@ const formatRights = createFormat((p, d) => ({
   rightsIdentifier: d[0],
 }));
 
-export const fetchRights = async (resource: Resource, filters: Filters) =>
-  await fetchFields(
-    resource,
-    COMPLETENESS_FIELDS.RIGHTS,
-    filters,
-    formatRights,
-  );
+export const fetchRights = async (entity: Entity, filters: Filters) =>
+  await fetchFields(entity, COMPLETENESS_FIELDS.RIGHTS, filters, formatRights);
 
 export function useRights() {
-  return useQueryResource(
+  return useQueryEntity(
     "rights",
     fetchRights,
     buildInitialData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
@@ -378,11 +366,11 @@ const formatDates = createFormat((p, d) => ({
   dateInformation: p[1],
 }));
 
-export const fetchDates = async (resource: Resource, filters: Filters) =>
-  await fetchFields(resource, COMPLETENESS_FIELDS.DATES, filters, formatDates);
+export const fetchDates = async (entity: Entity, filters: Filters) =>
+  await fetchFields(entity, COMPLETENESS_FIELDS.DATES, filters, formatDates);
 
 export function useDates() {
-  return useQueryResource(
+  return useQueryEntity(
     "dates",
     fetchDates,
     buildInitialData(formatDates, COMPLETENESS_FIELDS.DATES),
@@ -401,11 +389,11 @@ const formatOther = createFormat((p) => ({
   relatedItem: p[7],
 }));
 
-export const fetchOther = async (resource: Resource, filters: Filters) =>
-  await fetchFields(resource, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
+export const fetchOther = async (entity: Entity, filters: Filters) =>
+  await fetchFields(entity, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
 
 export function useOther() {
-  return useQueryResource(
+  return useQueryEntity(
     "other",
     fetchOther,
     buildInitialData(formatOther, COMPLETENESS_FIELDS.OTHER),
