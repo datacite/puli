@@ -30,7 +30,7 @@ export function useFilters() {
 export function useQueryId<R>(
   key: string,
   fetch: (id: string, filters: Filters) => Promise<R>,
-  initialData?: R,
+  placeholderData?: R,
   enabled?: boolean,
 ) {
   const id = useId();
@@ -39,8 +39,8 @@ export function useQueryId<R>(
   return useTanstackQuery({
     queryKey: [id, filters, key],
     queryFn: () => fetch(id, filters),
-    initialData,
-    staleTime: 0,
+    // @ts-expect-error I don't know exactly why this is giving a type error but it works
+    placeholderData,
     enabled,
   });
 }
@@ -48,14 +48,14 @@ export function useQueryId<R>(
 export function useQueryEntity<R>(
   key: string,
   fetch: (entity: Entity, filters: Filters) => Promise<R>,
-  initialData?: R,
+  placeholderData?: R,
 ) {
   const { data: entity } = useEntity();
 
   return useQueryId<R>(
     key,
     (_, filters) => fetch(entity!, filters),
-    initialData,
+    placeholderData,
     !!entity,
   );
 }
