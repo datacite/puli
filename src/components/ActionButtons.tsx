@@ -182,8 +182,8 @@ function FilterByQuery() {
   return (
     <div className="max-md:col-span-2 flex h-full">
       <Input
-        title="filter by text input"
-        placeholder="Enter query..."
+        title="Filter using query string syntax"
+        placeholder="Filter using query string syntax…"
         className="text-xs bg-white px-6 py-2 h-full rounded-r-none border-r-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
