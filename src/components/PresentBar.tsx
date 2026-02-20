@@ -11,12 +11,14 @@ import {
 import { HighImpactBadge } from "@/components/Badges";
 import { type ChartConfig, ChartContainer } from "@/components/ui/chart";
 import { CHART } from "@/constants";
+import { cn } from "@/lib/utils";
 import { asRoundedPercent } from "@/util";
 
 export interface Props {
   property: string;
   present: number;
   isHighImpact?: boolean;
+  className?: string;
 }
 
 const BAR = CHART.bar;
@@ -32,7 +34,12 @@ export default function PresentBar(props: Props) {
   const data = [{ property, present }];
 
   return (
-    <div className="w-full text-sm grid grid-cols-[auto_min-content_1fr] h-min items-center gap-x-1">
+    <div
+      className={cn(
+        "w-full text-sm grid grid-cols-[auto_min-content_1fr] h-min items-center gap-x-1",
+        props.className,
+      )}
+    >
       <span className="mb-[-4px] truncate">{property}</span>{" "}
       <HighImpactBadge show={isHighImpact} />
       <span className="mb-[-4px] col-start-3 text-right text-muted-foreground">
