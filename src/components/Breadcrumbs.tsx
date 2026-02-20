@@ -175,6 +175,7 @@ function ChildrenSelect(props: {
               <ComboboxItem value={item} key={item.id}>
                 <Link
                   href={`/${item.id}?${searchParams.toString()}`}
+                  prefetch
                   className="size-full"
                 >
                   <Item size="sm" className="px-0 py-0.5">
