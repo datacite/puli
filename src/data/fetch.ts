@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { COMPLETENESS_FIELDS } from "@/constants";
-import { useQueryEntity, useQueryId } from "@/hooks";
+import { useQuery } from "@/hooks";
 import type {
   ApiClient,
   ApiDois,
@@ -47,7 +47,7 @@ export async function searchEntities(
 }
 
 export function useSearchEntities(query: string | undefined) {
-  return useQuery({
+  return useTanstackQuery({
     queryKey: ["search entities", query],
     queryFn: () => searchEntities(query || ""),
   });
@@ -103,7 +103,8 @@ async function apiDataToEntity(
 }
 
 const getData = async <T extends { data: unknown }>(url: string) =>
-  ((await (await fetchDatacite(url)).json()) as T).data as T["data"];
+  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)
+    .data as T["data"];
 
 // Overview //////////////////////////////////////
 
@@ -148,16 +149,12 @@ export async function fetchDois(entity: Entity, filters: Filters) {
   };
 }
 
-export function useEntity() {
-  return useQueryId("entity", fetchEntity);
-}
-
 const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
   (new Date().getFullYear() - (9 - i)).toString(),
 );
 
-export function useDois() {
-  return useQueryEntity("overview", fetchDois, {
+export function useDois(entity: Entity) {
+  return useQuery(entity, "overview", fetchDois, {
     total: 0,
     registrationYears: LAST_10_YEARS.map((id) => ({ id, title: id, count: 0 })),
     registrationsData: LAST_10_YEARS.map((year) => ({ year, count: 0 })),
@@ -194,8 +191,9 @@ export const fetchCreators = async (entity: Entity, filters: Filters) =>
     formatCreators,
   );
 
-export function useCreators() {
-  return useQueryEntity(
+export function useCreators(entity: Entity) {
+  return useQuery(
+    entity,
     "creators",
     fetchCreators,
     buildPlaceholderData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
@@ -221,8 +219,9 @@ export const fetchContributors = async (entity: Entity, filters: Filters) =>
     formatContributors,
   );
 
-export function useContributors() {
-  return useQueryEntity(
+export function useContributors(entity: Entity) {
+  return useQuery(
+    entity,
     "contributors",
     fetchContributors,
     buildPlaceholderData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
@@ -251,8 +250,9 @@ export const fetchRelatedIdentifiers = async (
     formatRelatedIdentifiers,
   );
 
-export function useRelatedIdentifiers() {
-  return useQueryEntity(
+export function useRelatedIdentifiers(entity: Entity) {
+  return useQuery(
+    entity,
     "relatedIdentifiers",
     fetchRelatedIdentifiers,
     buildPlaceholderData(
@@ -281,8 +281,9 @@ export const fetchFundingReferences = async (
     formatFundingReferences,
   );
 
-export function useFundingReferences() {
-  return useQueryEntity(
+export function useFundingReferences(entity: Entity) {
+  return useQuery(
+    entity,
     "fundingReferences",
     fetchFundingReferences,
     buildPlaceholderData(
@@ -307,8 +308,9 @@ export const fetchPublisher = async (entity: Entity, filters: Filters) =>
     formatPublisher,
   );
 
-export function usePublisher() {
-  return useQueryEntity(
+export function usePublisher(entity: Entity) {
+  return useQuery(
+    entity,
     "publisher",
     fetchPublisher,
     buildPlaceholderData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
@@ -330,8 +332,9 @@ export const fetchResourceType = async (entity: Entity, filters: Filters) =>
     formatResourceType,
   );
 
-export function useResourceType() {
-  return useQueryEntity(
+export function useResourceType(entity: Entity) {
+  return useQuery(
+    entity,
     "resourceType",
     fetchResourceType,
     buildPlaceholderData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
@@ -354,8 +357,9 @@ export const fetchSubjects = async (entity: Entity, filters: Filters) =>
     formatSubjects,
   );
 
-export function useSubjects() {
-  return useQueryEntity(
+export function useSubjects(entity: Entity) {
+  return useQuery(
+    entity,
     "subjects",
     fetchSubjects,
     buildPlaceholderData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
@@ -377,8 +381,9 @@ export const fetchDescriptions = async (entity: Entity, filters: Filters) =>
     formatDescriptions,
   );
 
-export function useDescriptions() {
-  return useQueryEntity(
+export function useDescriptions(entity: Entity) {
+  return useQuery(
+    entity,
     "descriptions",
     fetchDescriptions,
     buildPlaceholderData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
@@ -395,8 +400,9 @@ const formatTitles = createFormat((p, d) => ({
 export const fetchTitles = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.TITLES, filters, formatTitles);
 
-export function useTitles() {
-  return useQueryEntity(
+export function useTitles(entity: Entity) {
+  return useQuery(
+    entity,
     "titles",
     fetchTitles,
     buildPlaceholderData(formatTitles, COMPLETENESS_FIELDS.TITLES),
@@ -413,8 +419,9 @@ const formatRights = createFormat((p, d) => ({
 export const fetchRights = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.RIGHTS, filters, formatRights);
 
-export function useRights() {
-  return useQueryEntity(
+export function useRights(entity: Entity) {
+  return useQuery(
+    entity,
     "rights",
     fetchRights,
     buildPlaceholderData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
@@ -431,8 +438,9 @@ const formatDates = createFormat((p, d) => ({
 export const fetchDates = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.DATES, filters, formatDates);
 
-export function useDates() {
-  return useQueryEntity(
+export function useDates(entity: Entity) {
+  return useQuery(
+    entity,
     "dates",
     fetchDates,
     buildPlaceholderData(formatDates, COMPLETENESS_FIELDS.DATES),
@@ -454,8 +462,9 @@ const formatOther = createFormat((p) => ({
 export const fetchOther = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
 
-export function useOther() {
-  return useQueryEntity(
+export function useOther(entity: Entity) {
+  return useQuery(
+    entity,
     "other",
     fetchOther,
     buildPlaceholderData(formatOther, COMPLETENESS_FIELDS.OTHER),

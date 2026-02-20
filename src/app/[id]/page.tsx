@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
 import { SectionHeader } from "@/components/datacite/Headings";
@@ -24,38 +24,37 @@ export default async function Page({
     redirect(`/${id.toLowerCase()}?${urlSearchParams.toString()}`);
   }
 
-  // Check if entity exists
   const entity = await fetchEntity(id);
-  if (!entity) notFound();
+  if (!entity) return null;
 
   return (
     <main className="grid md:grid-cols-4 gap-4">
-      <OverviewCard />
+      <OverviewCard entity={entity} />
 
       <SectionHeader>
         Connections to People, Organizations, and Related Resources
       </SectionHeader>
-      <Cards.Creators />
-      <Cards.Contributors />
-      <Cards.RelatedIdentifiers />
-      <Cards.FundingReferences />
-      <Cards.Publisher />
+      <Cards.Creators entity={entity} />
+      <Cards.Contributors entity={entity} />
+      <Cards.RelatedIdentifiers entity={entity} />
+      <Cards.FundingReferences entity={entity} />
+      <Cards.Publisher entity={entity} />
 
       <SectionHeader>Descriptive Metadata</SectionHeader>
-      <Cards.ResourceType />
-      <Cards.Subjects />
-      <Cards.Descriptions />
-      <Cards.Titles />
-      <Cards.Rights />
-      <Cards.Dates />
-      <Cards.PublicationYear />
-      <Cards.AlternateIdentifiers />
-      <Cards.Language />
-      <Cards.Sizes />
-      <Cards.Formats />
-      <Cards.Version />
-      <Cards.GeoLocation />
-      <Cards.RelatedItem />
+      <Cards.ResourceType entity={entity} />
+      <Cards.Subjects entity={entity} />
+      <Cards.Descriptions entity={entity} />
+      <Cards.Titles entity={entity} />
+      <Cards.Rights entity={entity} />
+      <Cards.Dates entity={entity} />
+      <Cards.PublicationYear entity={entity} />
+      <Cards.AlternateIdentifiers entity={entity} />
+      <Cards.Language entity={entity} />
+      <Cards.Sizes entity={entity} />
+      <Cards.Formats entity={entity} />
+      <Cards.Version entity={entity} />
+      <Cards.GeoLocation entity={entity} />
+      <Cards.RelatedItem entity={entity} />
     </main>
   );
 }

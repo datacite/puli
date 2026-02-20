@@ -1,15 +1,9 @@
 "use client";
 
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
 import type { Entity, Filters } from "@/types";
-import { useEntity } from "./data/fetch";
-
-export function useId() {
-  const { id } = useParams<{ id: string }>();
-  return id;
-}
 
 export function useFilters() {
   const searchParams = useSearchParams();
@@ -27,35 +21,18 @@ export function useFilters() {
   } satisfies Filters;
 }
 
-export function useQueryId<R>(
-  key: string,
-  fetch: (id: string, filters: Filters) => Promise<R>,
-  placeholderData?: R,
-  enabled?: boolean,
-) {
-  const id = useId();
-  const filters = useFilters();
-
-  return useTanstackQuery({
-    queryKey: [id, filters, key],
-    queryFn: () => fetch(id, filters),
-    // @ts-expect-error I don't know exactly why this is giving a type error but it works
-    placeholderData,
-    enabled,
-  });
-}
-
-export function useQueryEntity<R>(
+export function useQuery<R>(
+  entity: Entity,
   key: string,
   fetch: (entity: Entity, filters: Filters) => Promise<R>,
   placeholderData?: R,
 ) {
-  const { data: entity } = useEntity();
+  const filters = useFilters();
 
-  return useQueryId<R>(
-    key,
-    (_, filters) => fetch(entity!, filters),
+  return useTanstackQuery({
+    queryKey: [entity.id, filters, key],
+    queryFn: () => fetch(entity, filters),
+    // @ts-expect-error I don't know exactly why this is giving a type error but it works
     placeholderData,
-    !!entity,
-  );
+  });
 }

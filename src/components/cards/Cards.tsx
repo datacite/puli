@@ -20,6 +20,7 @@ import {
   useSubjects,
   useTitles,
 } from "@/data/fetch";
+import type { Entity } from "@/types";
 
 // Creators
 const CreatorsDescription = (
@@ -34,8 +35,10 @@ const CreatorsDescription = (
   </>
 );
 
-export function Creators() {
-  const { isPending, isFetching, isError, data, error } = useCreators();
+export function Creators(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useCreators(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -78,8 +81,10 @@ const ContributorsDescription = (
   </>
 );
 
-export function Contributors() {
-  const { isPending, isFetching, isError, data, error } = useContributors();
+export function Contributors(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useContributors(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -124,9 +129,10 @@ const RelatedIdentifiersDescription = (
   </>
 );
 
-export function RelatedIdentifiers() {
-  const { isPending, isFetching, isError, data, error } =
-    useRelatedIdentifiers();
+export function RelatedIdentifiers(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useRelatedIdentifiers(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -168,9 +174,10 @@ const FundingReferencesDescription = (
   </>
 );
 
-export function FundingReferences() {
-  const { isPending, isFetching, isError, data, error } =
-    useFundingReferences();
+export function FundingReferences(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useFundingReferences(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -208,8 +215,10 @@ const PublisherDescription = (
   </>
 );
 
-export function Publisher() {
-  const { isPending, isFetching, isError, data, error } = usePublisher();
+export function Publisher(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = usePublisher(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -247,8 +256,10 @@ const ResourceTypeDescription = (
   </>
 );
 
-export function ResourceType() {
-  const { isPending, isFetching, isError, data, error } = useResourceType();
+export function ResourceType(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useResourceType(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -282,8 +293,10 @@ const SubjectsDescription = (
   </>
 );
 
-export function Subjects() {
-  const { isPending, isFetching, isError, data, error } = useSubjects();
+export function Subjects(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useSubjects(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -321,8 +334,10 @@ const DescriptionsDescription = (
   </>
 );
 
-export function Descriptions() {
-  const { isPending, isFetching, isError, data, error } = useDescriptions();
+export function Descriptions(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useDescriptions(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -357,8 +372,10 @@ const TitlesDescription = (
   </>
 );
 
-export function Titles() {
-  const { isPending, isFetching, isError, data, error } = useTitles();
+export function Titles(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useTitles(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -393,8 +410,10 @@ const RightsDescription = (
   </>
 );
 
-export function Rights() {
-  const { isPending, isFetching, isError, data, error } = useRights();
+export function Rights(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useRights(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -429,8 +448,10 @@ const DatesDescription = (
   </>
 );
 
-export function Dates() {
-  const { isPending, isFetching, isError, data, error } = useDates();
+export function Dates(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useDates(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -464,8 +485,10 @@ const PublicationYearDescription = (
   </>
 );
 
-export function PublicationYear() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function PublicationYear(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -493,8 +516,10 @@ const AlternateIdentifiersDescription = (
   </>
 );
 
-export function AlternateIdentifiers() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function AlternateIdentifiers(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -521,8 +546,10 @@ const LanguageDescription = (
   </>
 );
 
-export function Language() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Language(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -549,8 +576,10 @@ const SizesDescription = (
   </>
 );
 
-export function Sizes() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Sizes(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -577,8 +606,10 @@ const FormatsDescription = (
   </>
 );
 
-export function Formats() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Formats(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -605,8 +636,10 @@ const VersionDescription = (
   </>
 );
 
-export function Version() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Version(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -634,8 +667,10 @@ const GeoLocationDescription = (
   </>
 );
 
-export function GeoLocation() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function GeoLocation(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -663,8 +698,10 @@ const RelatedItemDescription = (
   </>
 );
 
-export function RelatedItem() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function RelatedItem(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
