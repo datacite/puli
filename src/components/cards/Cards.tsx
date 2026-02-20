@@ -51,7 +51,7 @@ export function Creators() {
     >
       <PresentChart data={data.properties} />
       <CardColumn>
-        <PresentBar {...data.nameIdentifier} />
+        <PresentChart data={data.nameIdentifier} />
         <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
@@ -97,7 +97,7 @@ export function Contributors() {
         <DistributionChart {...data.contributorType} className="mt-4" />
       </CardColumn>
       <CardColumn>
-        <PresentBar {...data.nameIdentifier} />
+        <PresentChart data={data.nameIdentifier} />
         <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
@@ -140,9 +140,18 @@ export function RelatedIdentifiers() {
       isHighImpact={data.relatedIdentifiers.isHighImpact}
       className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.relationType} />
-      <DistributionChart {...data.relatedIdentifierType} />
-      <DistributionChart {...data.resourceTypeGeneral} />
+      <CardColumn>
+        <PresentBar {...data.relationType} />
+        <DistributionChart {...data.relationTypeDistribution} />
+      </CardColumn>
+      <CardColumn>
+        <PresentBar {...data.relatedIdentifierType} />
+        <DistributionChart {...data.relatedIdentifierTypeDistribution} />
+      </CardColumn>
+      <CardColumn>
+        <PresentBar {...data.resourceTypeGeneral} />
+        <DistributionChart {...data.resourceTypeGeneralDistribution} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -215,7 +224,7 @@ export function Publisher() {
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
-        <PresentBar {...data.publisherIdentifier} />
+        <PresentChart data={data.publisherIdentifier} />
         <DistributionChart
           {...data.publisherIdentifierScheme}
           className="mt-4"
@@ -327,7 +336,10 @@ export function Descriptions() {
       isHighImpact={data.descriptions.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.descriptionType} />
+      <CardColumn>
+        <PresentChart data={data.descriptionsProperties} />
+        <DistributionChart {...data.descriptionType} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -360,7 +372,10 @@ export function Titles() {
       isHighImpact={data.titles.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.titleType} />
+      <CardColumn>
+        <PresentChart data={data.titleProperties} />
+        <DistributionChart {...data.titleType} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -430,8 +445,8 @@ export function Dates() {
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
+        <PresentChart data={data.dateProperties} />
         <DistributionChart {...data.dateType} className="mb-6" />
-        <PresentBar {...data.dateInformation} />
       </CardColumn>
     </ChartsCard>
   );

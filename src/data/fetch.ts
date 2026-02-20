@@ -180,9 +180,9 @@ export const fetchDoisSearchParams = (entity: Entity, filters: Filters) =>
 const formatCreators = createFormat((p, d) => ({
   creators: p[0],
   properties: p.slice(1, 5),
-  nameIdentifier: p[5],
+  nameIdentifier: p.slice(5, 7),
   nameIdentifierScheme: d[0],
-  affiliation: p.slice(-2),
+  affiliation: p.slice(-3),
   affiliationIdentifierScheme: d[1],
 }));
 
@@ -205,11 +205,11 @@ export function useCreators() {
 // Contributors
 const formatContributors = createFormat((p, d) => ({
   contributors: p[0],
-  properties: p.slice(1, 5),
+  properties: p.slice(1, 6),
   contributorType: d[0],
-  nameIdentifier: p[5],
+  nameIdentifier: p.slice(6, 8),
   nameIdentifierScheme: d[1],
-  affiliation: p.slice(-2),
+  affiliation: p.slice(-3),
   affiliationIdentifierScheme: d[2],
 }));
 
@@ -232,9 +232,12 @@ export function useContributors() {
 // Related Identifiers
 const formatRelatedIdentifiers = createFormat((p, d) => ({
   relatedIdentifiers: p[0],
-  relationType: d[0],
-  relatedIdentifierType: d[1],
-  resourceTypeGeneral: d[2],
+  relationType: p[1],
+  relationTypeDistribution: d[0],
+  relatedIdentifierType: p[2],
+  relatedIdentifierTypeDistribution: d[1],
+  resourceTypeGeneral: p[3],
+  resourceTypeGeneralDistribution: d[2],
 }));
 
 export const fetchRelatedIdentifiers = async (
@@ -262,7 +265,7 @@ export function useRelatedIdentifiers() {
 // Funding References
 const formatFundingReferences = createFormat((p, d) => ({
   fundingReferences: p[0],
-  funderProperties: p.slice(1, 3),
+  funderProperties: p.slice(1, 4),
   funderIdentifierType: d[0],
   awardProperties: p.slice(-3),
 }));
@@ -292,7 +295,7 @@ export function useFundingReferences() {
 // Publisher
 const formatPublisher = createFormat((p, d) => ({
   publisher: p[0],
-  publisherIdentifier: p[1],
+  publisherIdentifier: p.slice(1, 3),
   publisherIdentifierScheme: d[0],
 }));
 
@@ -362,6 +365,7 @@ export function useSubjects() {
 // Descriptions
 const formatDescriptions = createFormat((p, d) => ({
   descriptions: p[0],
+  descriptionsProperties: p.slice(1, 2),
   descriptionType: d[0],
 }));
 
@@ -384,6 +388,7 @@ export function useDescriptions() {
 // Titles
 const formatTitles = createFormat((p, d) => ({
   titles: p[0],
+  titleProperties: p.slice(1, 2),
   titleType: d[0],
 }));
 
@@ -419,8 +424,8 @@ export function useRights() {
 // Dates
 const formatDates = createFormat((p, d) => ({
   dates: p[0],
+  dateProperties: p.slice(1),
   dateType: d[0],
-  dateInformation: p[1],
 }));
 
 export const fetchDates = async (entity: Entity, filters: Filters) =>
