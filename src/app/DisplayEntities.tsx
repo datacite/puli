@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { EntityBadge } from "@/components/Badges";
-import { SectionHeader } from "@/components/datacite/Headings";
+import { H3 } from "@/components/datacite/Headings";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -13,6 +13,9 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { useSearchEntities } from "@/data/fetch";
+import { cn } from "@/lib/utils";
+
+const INITIAL_NUM_SHOWN = 5;
 
 export default function DisplayEntities(props: { query: string | undefined }) {
   const { isFetching, data } = useSearchEntities(props.query);
@@ -20,13 +23,31 @@ export default function DisplayEntities(props: { query: string | undefined }) {
   if (!props.query || !data) return null;
 
   return (
-    <>
-      <SectionHeader>Repositories</SectionHeader>
-      <Section results={data.clients} isFetching={isFetching} />
+    <Card className={`w-full p-2 ${isFetching ? "opacity-50" : ""}`}>
+      <CardContent className="flex flex-col gap-2 px-0 mx-0 items-center justify-items-center">
+        <SectionHeader>Repositories</SectionHeader>
+        <Section results={data.clients} isFetching={isFetching} />
 
-      <SectionHeader>Organizations</SectionHeader>
-      <Section results={data.providers} isFetching={isFetching} />
-    </>
+        <SectionHeader className="mt-10">Organizations</SectionHeader>
+        <Section results={data.providers} isFetching={isFetching} />
+      </CardContent>
+    </Card>
+  );
+}
+
+function SectionHeader(props: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <H3
+      className={cn(
+        "font-normal mt-2 mb-4 text-start w-full px-2",
+        props.className,
+      )}
+    >
+      {props.children}
+    </H3>
   );
 }
 
@@ -34,7 +55,7 @@ function Section(props: {
   isFetching: boolean;
   results: { id: string; name: string; subtype: string }[];
 }) {
-  const [numShown, setNumShown] = useState(10);
+  const [numShown, setNumShown] = useState(INITIAL_NUM_SHOWN);
 
   if (props.results.length === 0) return <i>No results found</i>;
 
@@ -43,18 +64,16 @@ function Section(props: {
   }
 
   return (
-    <Card className={`w-full p-2 ${props.isFetching ? "opacity-50" : ""}`}>
-      <CardContent className="flex flex-col gap-2 px-0 mx-0 items-center justify-items-center">
-        {props.results.slice(0, numShown).map((c) => (
-          <EntityItem entity={c} key={c.id} />
-        ))}
-        {props.results.length > numShown && (
-          <Button onClick={onShowMore} variant="ghost" className="w-full">
-            Show more ↓
-          </Button>
-        )}
-      </CardContent>
-    </Card>
+    <>
+      {props.results.slice(0, numShown).map((c) => (
+        <EntityItem entity={c} key={c.id} />
+      ))}
+      {props.results.length > numShown && (
+        <Button onClick={onShowMore} variant="ghost" className="w-full">
+          Show more ↓
+        </Button>
+      )}
+    </>
   );
 }
 
