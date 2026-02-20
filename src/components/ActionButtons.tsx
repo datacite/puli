@@ -93,6 +93,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
             return (
               <Link
                 href={`/${props.entity.id}?${params.toString()}`}
+                prefetch
                 key={item.id}
               >
                 <ComboboxItem value={item.id}>{item.title}</ComboboxItem>
@@ -149,6 +150,7 @@ function FilterByResourceType(props: { entity: Entity }) {
             return (
               <Link
                 href={`/${props.entity.id}?${params.toString()}`}
+                prefetch
                 key={item.id}
               >
                 <ComboboxItem value={item.id}>{item.type}</ComboboxItem>
@@ -199,7 +201,9 @@ function FilterByQuery(props: { entity: Entity }) {
         disabled={disabled}
         asChild={!disabled}
       >
-        <Link href={href}>Filter by Query</Link>
+        <Link href={href} prefetch>
+          Filter by Query
+        </Link>
       </Button>
     </div>
   );
