@@ -15,15 +15,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { SEARCH_PARAMETERS } from "@/constants";
 import { useDois } from "@/data/fetch";
-import { useId } from "@/hooks";
 import { cn } from "@/lib/utils";
+import type { Entity } from "@/types";
 
-export default function ActionButtons() {
+export default function ActionButtons(props: { entity: Entity }) {
   return (
     <ButtonsGrid>
-      <FilterByRegistrationYear />
-      <FilterByResourceType />
-      <FilterByQuery />
+      <FilterByRegistrationYear entity={props.entity} />
+      <FilterByResourceType entity={props.entity} />
+      <FilterByQuery entity={props.entity} />
     </ButtonsGrid>
   );
 }
@@ -47,12 +47,11 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
   );
 }
 
-function FilterByRegistrationYear() {
+function FilterByRegistrationYear(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
 
-  const { isPending, isError, data, error } = useDois();
+  const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
 
@@ -75,7 +74,7 @@ function FilterByRegistrationYear() {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
-          router.push(`/${id}?${params.toString()}`);
+          router.push(`/${props.entity.id}?${params.toString()}`);
         }}
         className="text-xs bg-white w-full h-full"
       />
@@ -92,7 +91,10 @@ function FilterByRegistrationYear() {
               params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
             return (
-              <Link href={`/${id}?${params.toString()}`} key={item.id}>
+              <Link
+                href={`/${props.entity.id}?${params.toString()}`}
+                key={item.id}
+              >
                 <ComboboxItem value={item.id}>{item.title}</ComboboxItem>
               </Link>
             );
@@ -103,12 +105,11 @@ function FilterByRegistrationYear() {
   );
 }
 
-function FilterByResourceType() {
+function FilterByResourceType(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
 
-  const { isPending, isError, data, error } = useDois();
+  const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
 
@@ -131,7 +132,7 @@ function FilterByResourceType() {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
-          router.push(`/${id}?${params.toString()}`);
+          router.push(`/${props.entity.id}?${params.toString()}`);
         }}
         className="text-xs bg-white w-full h-full"
       />
@@ -146,7 +147,10 @@ function FilterByResourceType() {
               params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
             return (
-              <Link href={`/${id}?${params.toString()}`} key={item.id}>
+              <Link
+                href={`/${props.entity.id}?${params.toString()}`}
+                key={item.id}
+              >
                 <ComboboxItem value={item.id}>{item.type}</ComboboxItem>
               </Link>
             );
@@ -157,10 +161,9 @@ function FilterByResourceType() {
   );
 }
 
-function FilterByQuery() {
+function FilterByQuery(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
   const [query, setQuery] = useState(
     searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
   );
@@ -168,7 +171,7 @@ function FilterByQuery() {
   const params = new URLSearchParams(searchParams.toString());
   params.set(SEARCH_PARAMETERS.QUERY, query);
   if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
-  const href = `/${id}?${params.toString()}`;
+  const href = `/${props.entity.id}?${params.toString()}`;
 
   const disabled = !query.trim();
 

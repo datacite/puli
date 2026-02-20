@@ -27,69 +27,52 @@ import {
   ItemDescription,
   ItemTitle,
 } from "@/components/ui/item";
-import { useEntity } from "@/data/fetch";
-import { useId } from "@/hooks";
 import { cn } from "@/lib/utils";
 import type { Entity } from "@/types";
 import { EntityBadge } from "./Badges";
 import { Button } from "./ui/button";
-import { Spinner } from "./ui/spinner";
 
-export type BreadcrumbData = { title: string; href?: string };
+export default function Breadcrumbs(props: { entity: Entity }) {
+  const pages = [
+    props.entity?.parent?.parent,
+    props.entity?.parent,
+    props.entity,
+  ].filter((p) => !!p);
 
-export default function Breadcrumbs() {
-  const id = useId();
-  const { isPending, data: entity } = useEntity();
-
-  const BreadcrumbWrapper = (wrapperProps: { children: ReactNode }) => (
+  return (
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbLink href="/">
           <Home />
         </BreadcrumbLink>
         <Separator />
-        {wrapperProps.children} {isPending && <Spinner />}
+        {pages.map((page, index) => (
+          <React.Fragment key={page.id || index}>
+            {index > 0 && <Separator />}
+            <ChildrenSelect entity={page} items={page.parent?.children || []}>
+              <BreadcrumbContent active={props.entity} entity={page} />
+            </ChildrenSelect>
+          </React.Fragment>
+        ))}
+
+        {props.entity && props.entity.children.length > 0 && (
+          <>
+            <Separator />
+            <ChildrenSelect
+              entity={props.entity}
+              items={props.entity.children}
+              className="opacity-70"
+            >
+              Select{" "}
+              {props.entity.subtype === "consortium"
+                ? "organization"
+                : "repository"}
+              ...
+            </ChildrenSelect>
+          </>
+        )}
       </BreadcrumbList>
     </Breadcrumb>
-  );
-
-  if (!entity)
-    return (
-      <BreadcrumbWrapper>
-        <BreadcrumbContent entity={{ id, name: id, subtype: "" }} />
-      </BreadcrumbWrapper>
-    );
-
-  const pages = [entity?.parent?.parent, entity?.parent, entity].filter(
-    (p) => !!p,
-  );
-
-  return (
-    <BreadcrumbWrapper>
-      {pages.map((page, index) => (
-        <React.Fragment key={page.id || index}>
-          {index > 0 && <Separator />}
-          <ChildrenSelect entity={page} items={page.parent?.children || []}>
-            <BreadcrumbContent entity={page} />
-          </ChildrenSelect>
-        </React.Fragment>
-      ))}
-
-      {entity && entity.children.length > 0 && (
-        <>
-          <Separator />
-          <ChildrenSelect
-            entity={entity}
-            items={entity.children}
-            className="opacity-70"
-          >
-            Select{" "}
-            {entity.subtype === "consortium" ? "organization" : "repository"}
-            ...
-          </ChildrenSelect>
-        </>
-      )}
-    </BreadcrumbWrapper>
   );
 }
 
@@ -102,13 +85,13 @@ function Separator() {
 }
 
 function BreadcrumbContent(props: {
+  active: { id: string };
   entity: { id: string; name: string; subtype: string };
 }) {
-  const id = useId();
-  const className = `flex flex-row items-center ${props.entity.id === id ? "bg-black/0 font-semibold" : ""}`;
+  const className = `flex flex-row items-center ${props.entity.id === props.active.id ? "bg-black/0 font-semibold" : ""}`;
 
   const BreadcrumbPageLink = (wrapperProps: { children: ReactNode }) =>
-    props.entity.id === id ? (
+    props.entity.id === props.active.id ? (
       <BreadcrumbPage {...wrapperProps} className={className} />
     ) : (
       <BreadcrumbLink
@@ -126,7 +109,9 @@ function BreadcrumbContent(props: {
           <ItemContent className="gap-0">
             <ItemTitle
               className={
-                props.entity.id === id ? "bg-black/0 font-semibold" : ""
+                props.entity.id === props.active.id
+                  ? "bg-black/0 font-semibold"
+                  : ""
               }
             >
               {props.entity.name} <EntityBadge entity={props.entity} />
