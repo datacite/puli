@@ -50,7 +50,7 @@ function Section(props: {
         ))}
         {props.results.length > numShown && (
           <Button onClick={onShowMore} variant="ghost" className="w-full">
-            Show more
+            Show more ↓
           </Button>
         )}
       </CardContent>
