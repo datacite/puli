@@ -1,5 +1,6 @@
 "use client";
 
+import { Info } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
@@ -24,6 +25,14 @@ export default function ActionButtons(props: { entity: Entity }) {
       <FilterByRegistrationYear entity={props.entity} />
       <FilterByResourceType entity={props.entity} />
       <FilterByQuery entity={props.entity} />
+      <a
+        href="https://support.datacite.org/docs/queries"
+        target="_blank"
+        rel="noopener"
+        className="text-datacite-blue-light text-[0.8em] flex items-center gap-1 -col-start-2"
+      >
+        <Info size={"1em"} /> How can I use filter queries?
+      </a>
     </ButtonsGrid>
   );
 }
@@ -42,7 +51,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr] gap-x-2 gap-y-4"
+      className="w-full grid grid-cols-4 auto-rows-min md:grid-cols-[repeat(2,1fr)_2fr] gap-x-2 gap-y-1 justify-items-end"
     />
   );
 }
@@ -185,7 +194,7 @@ function FilterByQuery(props: { entity: Entity }) {
   }
 
   return (
-    <div className="max-md:col-span-2 flex h-full">
+    <div className="max-md:col-span-2 flex size-full">
       <Input
         title="Filter using query string syntax"
         placeholder="Filter using query string syntax…"
