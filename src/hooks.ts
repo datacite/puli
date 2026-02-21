@@ -2,8 +2,23 @@
 
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
 import type { Entity, Filters } from "@/types";
+
+export function useDebounce<T>(value: T, callback: (value: T) => void, delay: number) {
+  const [debounceValue, setDebounceValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceValue(value)
+      callback(value)
+    }, delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+
+  return debounceValue;
+}
 
 export function useFilters() {
   const searchParams = useSearchParams();
