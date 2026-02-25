@@ -25,7 +25,7 @@ import type { Entity } from "@/types";
 // Creators
 const CreatorsDescription = (
   <>
-    The Creator property supports citation and connects resources to people and
+    Creator metadata supports citation and connects resources to people and
     organizations. Add nameIdentifiers with ORCID iDs and ROR IDs and
     affiliationIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
@@ -71,7 +71,7 @@ export function Creators(props: { entity: Entity }) {
 // Contributors
 const ContributorsDescription = (
   <>
-    The Contributor property connects resources to people and organizations. Add
+    Contributor metadata connects resources to people and organizations. Add
     nameIdentifiers with ORCID iDs and ROR IDs and affiliationIdentifiers with
     ROR IDs for the highest impact.{" "}
     <LearnMore
@@ -119,7 +119,7 @@ export function Contributors(props: { entity: Entity }) {
 // Related Identifiers
 const RelatedIdentifiersDescription = (
   <>
-    The RelatedIdentifier property connects resources to other resources.
+    RelatedIdentifier metadata connects resources to other resources.
     RelatedIdentifiers with the DOI relatedIdentifierType have the highest
     impact.{" "}
     <LearnMore
@@ -165,7 +165,7 @@ export function RelatedIdentifiers(props: { entity: Entity }) {
 // Funding References
 const FundingReferencesDescription = (
   <>
-    The FundingReference property connects resources to funding sources. Add
+    FundingReference metadata connects resources to funding sources. Add
     funderIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
       text="FundingReference documentation"
@@ -206,7 +206,7 @@ export function FundingReferences(props: { entity: Entity }) {
 // Publisher
 const PublisherDescription = (
   <>
-    The Publisher property connects resources to publishers. Add
+    Publisher metadata connects resources to publishers. Add
     publisherIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
       text="Publisher documentation"
@@ -246,7 +246,7 @@ export function Publisher(props: { entity: Entity }) {
 // Resource Type
 const ResourceTypeDescription = (
   <>
-    The ResourceType property describes the type of resource. Select the most
+    ResourceType metadata describes the type of resource. Select the most
     specific applicable resourceTypeGeneral value to improve discoverability.
     Avoid using “Text” and “Other” where possible.{" "}
     <LearnMore
@@ -284,7 +284,7 @@ export function ResourceType(props: { entity: Entity }) {
 // Subjects
 const SubjectsDescription = (
   <>
-    The Subject property contains subject terms or keywords describing the
+    Subject metadata contains subject terms or keywords describing the
     resource. Use controlled vocabulary terms to improve discoverability.{" "}
     <LearnMore
       text="Subject documentation"
@@ -325,7 +325,7 @@ export function Subjects(props: { entity: Entity }) {
 // Descriptions
 const DescriptionsDescription = (
   <>
-    The Description property is recommended for a general description of a
+    Description metadata is recommended for a general description of a
     resource. Include an abstract to improve discoverability.{" "}
     <LearnMore
       text="Description documentation"
@@ -362,7 +362,7 @@ export function Descriptions(props: { entity: Entity }) {
 // Titles
 const TitlesDescription = (
   <>
-    The Title property contains the name of the resource and is used in the
+    Title metadata contains the name of the resource and is used in the
     citation. Include additional titles where applicable to improve
     discoverability.{" "}
     <LearnMore
@@ -400,7 +400,7 @@ export function Titles(props: { entity: Entity }) {
 // Rights
 const RightsDescription = (
   <>
-    The Rights property contains information about how the resource can be
+    Rights metadata contains information about how the resource can be
     reused, such as a license. Use standardized rights identifiers to improve
     discoverability.{" "}
     <LearnMore
@@ -438,7 +438,7 @@ export function Rights(props: { entity: Entity }) {
 // Dates
 const DatesDescription = (
   <>
-    The Date property contains dates relevant to the resource. Include all
+    Date metadata contains dates relevant to the resource. Include all
     relevant dates with their corresponding dateTypes to improve
     discoverability.{" "}
     <LearnMore
@@ -476,7 +476,7 @@ export function Dates(props: { entity: Entity }) {
 // Publication Year
 const PublicationYearDescription = (
   <>
-    The PublicationYear property is for the year when the resource was or will
+    PublicationYear metadata is for the year when the resource was or will
     be made publicly available.{" "}
     <LearnMore
       text="PublicationYear documentation"
@@ -507,7 +507,7 @@ export function PublicationYear(props: { entity: Entity }) {
 // Alternate Identifiers
 const AlternateIdentifiersDescription = (
   <>
-    The AlternateIdentifier property contains alternate identifiers for the
+    AlternateIdentifier metadata contains alternate identifiers for the
     resource, such as local identifiers.{" "}
     <LearnMore
       text="AlternateIdentifier documentation"
@@ -538,7 +538,7 @@ export function AlternateIdentifiers(props: { entity: Entity }) {
 // Language
 const LanguageDescription = (
   <>
-    The Language property is for the primary language of the resource.{" "}
+    Language metadata is for the primary language of the resource.{" "}
     <LearnMore
       text="Language documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/language/"
@@ -568,7 +568,7 @@ export function Language(props: { entity: Entity }) {
 // Sizes
 const SizesDescription = (
   <>
-    The Size property indicates the size or duration of the resource.{" "}
+    Size metadata indicates the size or duration of the resource.{" "}
     <LearnMore
       text="Size documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/size/"
@@ -598,7 +598,7 @@ export function Sizes(props: { entity: Entity }) {
 // Formats
 const FormatsDescription = (
   <>
-    The Format property is for the technical format of the resource.{" "}
+    Format metadata is for the technical format of the resource.{" "}
     <LearnMore
       text="Fomat documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/format/"
@@ -628,7 +628,7 @@ export function Formats(props: { entity: Entity }) {
 // Version
 const VersionDescription = (
   <>
-    The Version property is for the version number of the resource.{" "}
+    Version metadata is for the version number of the resource.{" "}
     <LearnMore
       text="Version documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/version/"
@@ -658,7 +658,7 @@ export function Version(props: { entity: Entity }) {
 // Geo Location
 const GeoLocationDescription = (
   <>
-    The GeoLocation property is for the spatial region or named place related to
+    GeoLocation metadata is for the spatial region or named place related to
     the resource.{" "}
     <LearnMore
       text="GeoLocation documentation"
@@ -689,7 +689,7 @@ export function GeoLocation(props: { entity: Entity }) {
 // Related Item
 const RelatedItemDescription = (
   <>
-    The RelatedItem property connects resources to other resources, with or
+    RelatedItem metadata connects resources to other resources, with or
     without identifiers.{" "}
     <LearnMore
       text="RelatedItem documentation"
