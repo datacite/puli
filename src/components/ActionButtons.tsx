@@ -85,7 +85,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
           params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
           router.push(`/${props.entity.id}?${params.toString()}`);
         }}
-        className="text-xs bg-white w-full h-full"
+        className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
       <ComboboxContent>
         <ComboboxEmpty>No years found.</ComboboxEmpty>
@@ -99,14 +99,18 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
             )
               params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
+            const href = `/${props.entity.id}?${params.toString()}`;
+
             return (
-              <Link
-                href={`/${props.entity.id}?${params.toString()}`}
-                prefetch
+              <ComboboxItem
                 key={item.id}
+                value={item.id}
+                onClick={() => {
+                  router.push(href);
+                }}
               >
-                <ComboboxItem value={item.id}>{item.title}</ComboboxItem>
-              </Link>
+                {item.title}
+              </ComboboxItem>
             );
           }}
         </ComboboxList>
@@ -144,7 +148,7 @@ function FilterByResourceType(props: { entity: Entity }) {
           params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
           router.push(`/${props.entity.id}?${params.toString()}`);
         }}
-        className="text-xs bg-white w-full h-full"
+        className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
       <ComboboxContent>
         <ComboboxEmpty>No resource types found.</ComboboxEmpty>
@@ -156,14 +160,18 @@ function FilterByResourceType(props: { entity: Entity }) {
             if (searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) === item.id)
               params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
+            const href = `/${props.entity.id}?${params.toString()}`;
+
             return (
-              <Link
-                href={`/${props.entity.id}?${params.toString()}`}
-                prefetch
+              <ComboboxItem
                 key={item.id}
+                value={item.id}
+                onClick={() => {
+                  router.push(href);
+                }}
               >
-                <ComboboxItem value={item.id}>{item.type}</ComboboxItem>
-              </Link>
+                {item.type}
+              </ComboboxItem>
             );
           }}
         </ComboboxList>
@@ -194,11 +202,11 @@ function FilterByQuery(props: { entity: Entity }) {
   }
 
   return (
-    <div className="max-md:col-span-2 flex size-full">
+    <div className="max-md:col-span-2 flex size-full pl-6">
       <Input
         title="Filter using query string syntax"
         placeholder="Filter using query string syntax…"
-        className="text-xs bg-white px-6 py-2 h-full rounded-r-none border-r-0"
+        className="text-xs bg-white px-6 py-2 h-full rounded-l-[60px] border-r-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
@@ -206,7 +214,11 @@ function FilterByQuery(props: { entity: Entity }) {
       <Button
         type="submit"
         variant="outline"
-        className="rounded-l-none border-l-0 w-min"
+        className={cn(
+          "rounded-l-none rounded-r-[60px] border-l-0 w-min",
+          !disabled &&
+            "bg-datacite-blue-light border-datacite-blue-light text-white hover:bg-datacite-blue-light/90 hover:text-white",
+        )}
         disabled={disabled}
         asChild={!disabled}
       >
