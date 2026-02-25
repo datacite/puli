@@ -206,7 +206,7 @@ export function FundingReferences(props: { entity: Entity }) {
 // Publisher
 const PublisherDescription = (
   <>
-    The Publisher property connects resources to funding sources. Add
+    The Publisher property connects resources to publishers. Add
     publisherIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
       text="Publisher documentation"
