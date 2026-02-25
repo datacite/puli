@@ -42,11 +42,12 @@ function SectionHeader(props: {
   return (
     <H3
       className={cn(
-        "font-normal mt-2 mb-4 text-start w-full px-2",
+        "font-bold mt-6 mb-4 text-start self-stretch mx-2 text-muted-foreground/70 uppercase text-xs tracking-wide flex items-center gap-3",
         props.className,
       )}
     >
-      {props.children}
+      <span>{props.children}</span>
+      <span className="h-px flex-1 bg-current" />
     </H3>
   );
 }
@@ -57,7 +58,7 @@ function Section(props: {
 }) {
   const [numShown, setNumShown] = useState(INITIAL_NUM_SHOWN);
 
-  if (props.results.length === 0) return <i>No results found</i>;
+  if (props.results.length === 0) return <i className="text-xs text-muted-foreground/70 pt-2 pb-4">No results found.</i>;
 
   function onShowMore() {
     setNumShown(numShown + 10);
