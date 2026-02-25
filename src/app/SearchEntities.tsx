@@ -2,7 +2,12 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
-import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { SEARCH_PARAMETERS } from "@/constants";
 import { useDebounce } from "@/hooks";
 
@@ -26,13 +31,18 @@ export default function SearchEntities(props: { query: string | undefined }) {
   }
 
   return (
-    <Input
-      title="Search by repository or organization"
-      placeholder="Search by repository or organization…"
-      className="text-xs px-6 py-2 h-full bg-white"
-      value={query}
-      onChange={(e) => setQuery(e.target.value)}
-      onKeyDown={onKeyDown}
-    />
+    <InputGroup className="h-full bg-white rounded-[60px] p-2">
+      <InputGroupAddon align="inline-start" className="pl-4 pr-2">
+        <Search className="size-6" aria-hidden="true" />
+      </InputGroupAddon>
+      <InputGroupInput
+        title="Search by repository or organization"
+        placeholder="Search by repository or organization…"
+        className="px-6 py-2 h-full bg-white"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={onKeyDown}
+      />
+    </InputGroup>
   );
 }
