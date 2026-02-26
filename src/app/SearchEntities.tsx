@@ -31,14 +31,14 @@ export default function SearchEntities(props: { query: string | undefined }) {
   }
 
   return (
-    <InputGroup className="h-full bg-white rounded-[60px] p-2">
+    <InputGroup className="h-full bg-white rounded-[60px] p-2 shadow-sm">
       <InputGroupAddon align="inline-start" className="pl-4 pr-2">
         <Search className="size-6" aria-hidden="true" />
       </InputGroupAddon>
       <InputGroupInput
         title="Search by repository or organization"
         placeholder="Search by repository or organization…"
-        className="px-6 py-2 h-full bg-white"
+        className="px-6 py-2 h-full bg-white text-base md:text-base"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
