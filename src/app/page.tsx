@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { BookOpen, LayoutDashboard, Search } from "lucide-react";
 import InfoCard from "@/components/InfoCard";
-import { H2 } from "@/components/datacite/Headings";
+import { H1 } from "@/components/datacite/Headings";
 import DisplayEntities from "./DisplayEntities";
 import SearchEntities from "./SearchEntities";
 
@@ -12,8 +12,8 @@ export default async function Page({ searchParams }: PageProps<"/">) {
   return (
     <>
       <main className="flex flex-col gap-4 w-3xl mx-auto mt-8">
-        <H2 className="text-center mb-0">Evaluate metadata quality across DataCite</H2>
-        <p className="mb-4 text-center text-muted-foreground">Search for a DataCite repository or organization to view a metadata quality snapshot.</p>
+        <H1 className="text-center mb-0 text-datacite-blue-dark">Evaluate metadata quality across DataCite</H1>
+        <p className="mb-4 text-center text-datacite-blue-dark">Search for a DataCite repository or organization to view a metadata quality snapshot.</p>
 
         <div className="relative">
           <SearchEntities query={queryString} />
