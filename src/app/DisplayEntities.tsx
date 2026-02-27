@@ -90,7 +90,7 @@ function EntityItem(props: {
 }) {
   return (
     <Item size="sm" className="w-full px-2 py-1" asChild>
-      <Link href={`/${props.entity.id}`} prefetch className="size-full">
+      <Link href={`/${props.entity.id}`} prefetch={false} className="size-full">
         <ItemContent className="gap-0">
           <ItemTitle>{props.entity.name}</ItemTitle>
           <ItemDescription className="text-muted-foreground/75">
