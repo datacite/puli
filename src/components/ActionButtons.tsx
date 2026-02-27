@@ -14,6 +14,7 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
 import { SEARCH_PARAMETERS } from "@/constants";
 import { useDois } from "@/data/fetch";
 import { cn } from "@/lib/utils";
@@ -59,7 +60,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
 function FilterByRegistrationYear(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const [open, setOpen] = useState(false);
   const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
@@ -75,6 +76,8 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.title}
       value={value}
+      open={open}
+      onOpenChange={setOpen}
       disabled={isPending}
     >
       <ComboboxInput
@@ -105,11 +108,15 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
               <ComboboxItem
                 key={item.id}
                 value={item.id}
-                onClick={() => {
-                  router.push(href);
-                }}
+                onClick={() => setOpen(false)}
               >
-                {item.title}
+                <Link href={href} prefetch className="size-full">
+                  <Item size="sm" className="px-0 py-0.5">
+                    <ItemContent className="gap-0">
+                      <ItemTitle>{item.title}</ItemTitle>
+                    </ItemContent>
+                  </Item>
+                </Link>
               </ComboboxItem>
             );
           }}
@@ -122,7 +129,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
 function FilterByResourceType(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  const [open, setOpen] = useState(false);
   const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
@@ -138,6 +145,8 @@ function FilterByResourceType(props: { entity: Entity }) {
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.type}
       value={value}
+      open={open}
+      onOpenChange={setOpen}
       disabled={isPending}
     >
       <ComboboxInput
@@ -166,11 +175,15 @@ function FilterByResourceType(props: { entity: Entity }) {
               <ComboboxItem
                 key={item.id}
                 value={item.id}
-                onClick={() => {
-                  router.push(href);
-                }}
+                onClick={() => setOpen(false)}
               >
-                {item.type}
+                <Link href={href} prefetch className="size-full">
+                  <Item size="sm" className="px-0 py-0.5">
+                    <ItemContent className="gap-0">
+                      <ItemTitle>{item.type}</ItemTitle>
+                    </ItemContent>
+                  </Item>
+                </Link>
               </ComboboxItem>
             );
           }}
@@ -217,7 +230,7 @@ function FilterByQuery(props: { entity: Entity }) {
         className={cn(
           "rounded-l-none rounded-r-[60px] border-l-0 w-min",
           !disabled &&
-            "bg-datacite-blue-light border-datacite-blue-light text-white hover:bg-datacite-blue-light/90 hover:text-white",
+          "bg-datacite-blue-light border-datacite-blue-light text-white hover:bg-datacite-blue-light/90 hover:text-white",
         )}
         disabled={disabled}
         asChild={!disabled}
