@@ -66,6 +66,7 @@ function ViewInCommons(props: { entity: Entity }) {
     <a
       href={href}
       target="_blank"
+      rel="noopener noreferrer"
       className="text-datacite-blue-light text-[0.8em] flex items-center gap-1"
     >
       View in Commons <ExternalLink size={"1em"} />
@@ -86,6 +87,7 @@ function ViewInApi(props: { entity: Entity }) {
     <a
       href={href}
       target="_blank"
+      rel="noopener noreferrer"
       className="text-datacite-blue-light text-[0.8em] flex items-center gap-1"
     >
       View in REST API <ExternalLink size={"1em"} />
