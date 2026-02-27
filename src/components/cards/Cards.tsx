@@ -284,8 +284,8 @@ export function ResourceType(props: { entity: Entity }) {
 // Subjects
 const SubjectsDescription = (
   <>
-    Subject metadata contains subject terms or keywords describing the
-    resource. Use controlled vocabulary terms to improve discoverability.{" "}
+    Subject metadata contains subject terms or keywords describing the resource.
+    Use controlled vocabulary terms to improve discoverability.{" "}
     <LearnMore
       text="Subject documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/subject/"
@@ -325,8 +325,8 @@ export function Subjects(props: { entity: Entity }) {
 // Descriptions
 const DescriptionsDescription = (
   <>
-    Description metadata is recommended for a general description of a
-    resource. Include an abstract to improve discoverability.{" "}
+    Description metadata is recommended for a general description of a resource.
+    Include an abstract to improve discoverability.{" "}
     <LearnMore
       text="Description documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/description/"
@@ -400,8 +400,8 @@ export function Titles(props: { entity: Entity }) {
 // Rights
 const RightsDescription = (
   <>
-    Rights metadata contains information about how the resource can be
-    reused, such as a license. Use standardized rights identifiers to improve
+    Rights metadata contains information about how the resource can be reused,
+    such as a license. Use standardized rights identifiers to improve
     discoverability.{" "}
     <LearnMore
       text="Rights documentation"
@@ -438,9 +438,8 @@ export function Rights(props: { entity: Entity }) {
 // Dates
 const DatesDescription = (
   <>
-    Date metadata contains dates relevant to the resource. Include all
-    relevant dates with their corresponding dateTypes to improve
-    discoverability.{" "}
+    Date metadata contains dates relevant to the resource. Include all relevant
+    dates with their corresponding dateTypes to improve discoverability.{" "}
     <LearnMore
       text="Date documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/date/"
@@ -476,8 +475,8 @@ export function Dates(props: { entity: Entity }) {
 // Publication Year
 const PublicationYearDescription = (
   <>
-    PublicationYear metadata is for the year when the resource was or will
-    be made publicly available.{" "}
+    PublicationYear metadata is for the year when the resource was or will be
+    made publicly available.{" "}
     <LearnMore
       text="PublicationYear documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/publicationyear/"
@@ -600,7 +599,7 @@ const FormatsDescription = (
   <>
     Format metadata is for the technical format of the resource.{" "}
     <LearnMore
-      text="Fomat documentation"
+      text="Format documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/format/"
     />
   </>
@@ -658,8 +657,8 @@ export function Version(props: { entity: Entity }) {
 // Geo Location
 const GeoLocationDescription = (
   <>
-    GeoLocation metadata is for the spatial region or named place related to
-    the resource.{" "}
+    GeoLocation metadata is for the spatial region or named place related to the
+    resource.{" "}
     <LearnMore
       text="GeoLocation documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/geolocation/"
@@ -689,8 +688,8 @@ export function GeoLocation(props: { entity: Entity }) {
 // Related Item
 const RelatedItemDescription = (
   <>
-    RelatedItem metadata connects resources to other resources, with or
-    without identifiers.{" "}
+    RelatedItem metadata connects resources to other resources, with or without
+    identifiers.{" "}
     <LearnMore
       text="RelatedItem documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/relateditem/"
