@@ -1,8 +1,8 @@
 "use client";
 
+import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
-import { Search } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
@@ -24,14 +24,14 @@ export default function SearchEntities(props: { query: string | undefined }) {
   useDebounce(query, () => router.push(href), 500);
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    if (e.key !== "Enter") return
+    if (e.key !== "Enter") return;
 
     e.preventDefault();
     router.push(href);
   }
 
   return (
-    <InputGroup className="h-full bg-white rounded-[60px] p-2 shadow-sm">
+    <InputGroup className="h-full max-w-3xl mx-auto bg-white rounded-[60px] p-2 shadow-sm">
       <InputGroupAddon align="inline-start" className="pl-4 pr-2">
         <Search className="size-6" aria-hidden="true" />
       </InputGroupAddon>

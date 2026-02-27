@@ -23,7 +23,9 @@ export default function DisplayEntities(props: { query: string | undefined }) {
   if (!props.query || !data) return null;
 
   return (
-    <Card className={`w-full p-2 ${isFetching ? "opacity-50" : ""}`}>
+    <Card
+      className={`w-full max-w-3xl mx-auto p-2 ${isFetching ? "opacity-50" : ""}`}
+    >
       <CardContent className="flex flex-col gap-2 px-0 mx-0 items-center justify-items-center">
         <SectionHeader>Repositories</SectionHeader>
         <Section results={data.clients} isFetching={isFetching} />
@@ -58,7 +60,12 @@ function Section(props: {
 }) {
   const [numShown, setNumShown] = useState(INITIAL_NUM_SHOWN);
 
-  if (props.results.length === 0) return <i className="text-xs text-muted-foreground/70 pt-2 pb-4">No results found.</i>;
+  if (props.results.length === 0)
+    return (
+      <i className="text-xs text-muted-foreground/70 pt-2 pb-4">
+        No results found.
+      </i>
+    );
 
   function onShowMore() {
     setNumShown(numShown + 10);
