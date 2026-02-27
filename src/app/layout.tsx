@@ -7,8 +7,8 @@ import Header from "./Header";
 import Providers from "./Providers";
 
 export const metadata: Metadata = {
-  title: "Metadata Analytics",
-  description: "DataCite Metadata Analytics Dashboard",
+  title: "DataCite Metadata Dashboard",
+  description: "DataCite Metadata Dashboard",
 };
 
 export default function RootLayout({

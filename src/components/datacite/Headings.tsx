@@ -2,7 +2,7 @@ import { dmSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 
 export function H1({ className, ...props }: React.ComponentProps<"h1">) {
-  return <h1 className={cn("", className)} {...props} />;
+  return <h1 className={cn("text-5xl font-bold", dmSans.className, className)} {...props} />;
 }
 
 export function H2({ className, ...props }: React.ComponentProps<"h2">) {

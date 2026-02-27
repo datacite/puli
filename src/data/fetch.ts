@@ -1,5 +1,6 @@
+import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { COMPLETENESS_FIELDS } from "@/constants";
-import { useQueryEntity, useQueryId } from "@/hooks";
+import { useQuery } from "@/hooks";
 import type {
   ApiClient,
   ApiDois,
@@ -9,13 +10,12 @@ import type {
   Filters,
 } from "@/types";
 import {
-  buildInitialData,
+  buildPlaceholderData,
   createFormat,
   fetchDatacite,
   fetchFields,
   isClient,
 } from "@/util";
-import { useQuery } from "@tanstack/react-query";
 
 // Global Search /////////////////////////////////
 
@@ -47,10 +47,9 @@ export async function searchEntities(
 }
 
 export function useSearchEntities(query: string | undefined) {
-  return useQuery({
+  return useTanstackQuery({
     queryKey: ["search entities", query],
     queryFn: () => searchEntities(query || ""),
-    staleTime: 0,
   });
 }
 
@@ -104,7 +103,8 @@ async function apiDataToEntity(
 }
 
 const getData = async <T extends { data: unknown }>(url: string) =>
-  ((await (await fetchDatacite(url)).json()) as T).data as T["data"];
+  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)
+    .data as T["data"];
 
 // Overview //////////////////////////////////////
 
@@ -142,23 +142,19 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     total: doisMeta.total,
     resourceTypeData,
     registrationYears,
-    registrationsData: registrationYears.reverse().map((f) => ({
+    registrationsData: [...registrationYears].reverse().map((f) => ({
       year: f.id,
       count: f.count,
     })),
   };
 }
 
-export function useEntity() {
-  return useQueryId("entity", fetchEntity);
-}
-
 const LAST_10_YEARS = Array.from({ length: 10 }, (_, i) =>
   (new Date().getFullYear() - (9 - i)).toString(),
 );
 
-export function useDois() {
-  return useQueryEntity("overview", fetchDois, {
+export function useDois(entity: Entity) {
+  return useQuery(entity, "overview", fetchDois, {
     total: 0,
     registrationYears: LAST_10_YEARS.map((id) => ({ id, title: id, count: 0 })),
     registrationsData: LAST_10_YEARS.map((year) => ({ year, count: 0 })),
@@ -181,9 +177,9 @@ export const fetchDoisSearchParams = (entity: Entity, filters: Filters) =>
 const formatCreators = createFormat((p, d) => ({
   creators: p[0],
   properties: p.slice(1, 5),
-  nameIdentifier: p[5],
+  nameIdentifier: p.slice(5, 7),
   nameIdentifierScheme: d[0],
-  affiliation: p.slice(-2),
+  affiliation: p.slice(-3),
   affiliationIdentifierScheme: d[1],
 }));
 
@@ -195,22 +191,23 @@ export const fetchCreators = async (entity: Entity, filters: Filters) =>
     formatCreators,
   );
 
-export function useCreators() {
-  return useQueryEntity(
+export function useCreators(entity: Entity) {
+  return useQuery(
+    entity,
     "creators",
     fetchCreators,
-    buildInitialData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
+    buildPlaceholderData(formatCreators, COMPLETENESS_FIELDS.CREATORS),
   );
 }
 
 // Contributors
 const formatContributors = createFormat((p, d) => ({
   contributors: p[0],
-  properties: p.slice(1, 5),
+  properties: p.slice(1, 6),
   contributorType: d[0],
-  nameIdentifier: p[5],
+  nameIdentifier: p.slice(6, 8),
   nameIdentifierScheme: d[1],
-  affiliation: p.slice(-2),
+  affiliation: p.slice(-3),
   affiliationIdentifierScheme: d[2],
 }));
 
@@ -222,20 +219,24 @@ export const fetchContributors = async (entity: Entity, filters: Filters) =>
     formatContributors,
   );
 
-export function useContributors() {
-  return useQueryEntity(
+export function useContributors(entity: Entity) {
+  return useQuery(
+    entity,
     "contributors",
     fetchContributors,
-    buildInitialData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
+    buildPlaceholderData(formatContributors, COMPLETENESS_FIELDS.CONTRIBUTORS),
   );
 }
 
 // Related Identifiers
 const formatRelatedIdentifiers = createFormat((p, d) => ({
   relatedIdentifiers: p[0],
-  relationType: d[0],
-  relatedIdentifierType: d[1],
-  resourceTypeGeneral: d[2],
+  relationType: p[1],
+  relationTypeDistribution: d[0],
+  relatedIdentifierType: p[2],
+  relatedIdentifierTypeDistribution: d[1],
+  resourceTypeGeneral: p[3],
+  resourceTypeGeneralDistribution: d[2],
 }));
 
 export const fetchRelatedIdentifiers = async (
@@ -249,11 +250,12 @@ export const fetchRelatedIdentifiers = async (
     formatRelatedIdentifiers,
   );
 
-export function useRelatedIdentifiers() {
-  return useQueryEntity(
+export function useRelatedIdentifiers(entity: Entity) {
+  return useQuery(
+    entity,
     "relatedIdentifiers",
     fetchRelatedIdentifiers,
-    buildInitialData(
+    buildPlaceholderData(
       formatRelatedIdentifiers,
       COMPLETENESS_FIELDS.RELATED_IDENTIFIERS,
     ),
@@ -263,7 +265,7 @@ export function useRelatedIdentifiers() {
 // Funding References
 const formatFundingReferences = createFormat((p, d) => ({
   fundingReferences: p[0],
-  funderProperties: p.slice(1, 3),
+  funderProperties: p.slice(1, 4),
   funderIdentifierType: d[0],
   awardProperties: p.slice(-3),
 }));
@@ -279,11 +281,12 @@ export const fetchFundingReferences = async (
     formatFundingReferences,
   );
 
-export function useFundingReferences() {
-  return useQueryEntity(
+export function useFundingReferences(entity: Entity) {
+  return useQuery(
+    entity,
     "fundingReferences",
     fetchFundingReferences,
-    buildInitialData(
+    buildPlaceholderData(
       formatFundingReferences,
       COMPLETENESS_FIELDS.FUNDING_REFERENCES,
     ),
@@ -293,7 +296,7 @@ export function useFundingReferences() {
 // Publisher
 const formatPublisher = createFormat((p, d) => ({
   publisher: p[0],
-  publisherIdentifier: p[1],
+  publisherIdentifier: p.slice(1, 3),
   publisherIdentifierScheme: d[0],
 }));
 
@@ -305,11 +308,12 @@ export const fetchPublisher = async (entity: Entity, filters: Filters) =>
     formatPublisher,
   );
 
-export function usePublisher() {
-  return useQueryEntity(
+export function usePublisher(entity: Entity) {
+  return useQuery(
+    entity,
     "publisher",
     fetchPublisher,
-    buildInitialData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
+    buildPlaceholderData(formatPublisher, COMPLETENESS_FIELDS.PUBLISHER),
   );
 }
 
@@ -328,11 +332,12 @@ export const fetchResourceType = async (entity: Entity, filters: Filters) =>
     formatResourceType,
   );
 
-export function useResourceType() {
-  return useQueryEntity(
+export function useResourceType(entity: Entity) {
+  return useQuery(
+    entity,
     "resourceType",
     fetchResourceType,
-    buildInitialData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
+    buildPlaceholderData(formatResourceType, COMPLETENESS_FIELDS.RESOURCE_TYPE),
   );
 }
 
@@ -352,17 +357,19 @@ export const fetchSubjects = async (entity: Entity, filters: Filters) =>
     formatSubjects,
   );
 
-export function useSubjects() {
-  return useQueryEntity(
+export function useSubjects(entity: Entity) {
+  return useQuery(
+    entity,
     "subjects",
     fetchSubjects,
-    buildInitialData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
+    buildPlaceholderData(formatSubjects, COMPLETENESS_FIELDS.SUBJECTS),
   );
 }
 
 // Descriptions
 const formatDescriptions = createFormat((p, d) => ({
   descriptions: p[0],
+  descriptionsProperties: p.slice(1, 2),
   descriptionType: d[0],
 }));
 
@@ -374,28 +381,31 @@ export const fetchDescriptions = async (entity: Entity, filters: Filters) =>
     formatDescriptions,
   );
 
-export function useDescriptions() {
-  return useQueryEntity(
+export function useDescriptions(entity: Entity) {
+  return useQuery(
+    entity,
     "descriptions",
     fetchDescriptions,
-    buildInitialData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
+    buildPlaceholderData(formatDescriptions, COMPLETENESS_FIELDS.DESCRIPTIONS),
   );
 }
 
 // Titles
 const formatTitles = createFormat((p, d) => ({
   titles: p[0],
+  titleProperties: p.slice(1, 2),
   titleType: d[0],
 }));
 
 export const fetchTitles = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.TITLES, filters, formatTitles);
 
-export function useTitles() {
-  return useQueryEntity(
+export function useTitles(entity: Entity) {
+  return useQuery(
+    entity,
     "titles",
     fetchTitles,
-    buildInitialData(formatTitles, COMPLETENESS_FIELDS.TITLES),
+    buildPlaceholderData(formatTitles, COMPLETENESS_FIELDS.TITLES),
   );
 }
 
@@ -409,29 +419,31 @@ const formatRights = createFormat((p, d) => ({
 export const fetchRights = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.RIGHTS, filters, formatRights);
 
-export function useRights() {
-  return useQueryEntity(
+export function useRights(entity: Entity) {
+  return useQuery(
+    entity,
     "rights",
     fetchRights,
-    buildInitialData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
+    buildPlaceholderData(formatRights, COMPLETENESS_FIELDS.RIGHTS),
   );
 }
 
 // Dates
 const formatDates = createFormat((p, d) => ({
   dates: p[0],
+  dateProperties: p.slice(1),
   dateType: d[0],
-  dateInformation: p[1],
 }));
 
 export const fetchDates = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.DATES, filters, formatDates);
 
-export function useDates() {
-  return useQueryEntity(
+export function useDates(entity: Entity) {
+  return useQuery(
+    entity,
     "dates",
     fetchDates,
-    buildInitialData(formatDates, COMPLETENESS_FIELDS.DATES),
+    buildPlaceholderData(formatDates, COMPLETENESS_FIELDS.DATES),
   );
 }
 
@@ -450,10 +462,11 @@ const formatOther = createFormat((p) => ({
 export const fetchOther = async (entity: Entity, filters: Filters) =>
   await fetchFields(entity, COMPLETENESS_FIELDS.OTHER, filters, formatOther);
 
-export function useOther() {
-  return useQueryEntity(
+export function useOther(entity: Entity) {
+  return useQuery(
+    entity,
     "other",
     fetchOther,
-    buildInitialData(formatOther, COMPLETENESS_FIELDS.OTHER),
+    buildPlaceholderData(formatOther, COMPLETENESS_FIELDS.OTHER),
   );
 }

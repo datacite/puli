@@ -20,11 +20,12 @@ import {
   useSubjects,
   useTitles,
 } from "@/data/fetch";
+import type { Entity } from "@/types";
 
 // Creators
 const CreatorsDescription = (
   <>
-    The Creator property supports citation and connects resources to people and
+    Creator metadata supports citation and connects resources to people and
     organizations. Add nameIdentifiers with ORCID iDs and ROR IDs and
     affiliationIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
@@ -34,8 +35,10 @@ const CreatorsDescription = (
   </>
 );
 
-export function Creators() {
-  const { isPending, isFetching, isError, data, error } = useCreators();
+export function Creators(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useCreators(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -51,7 +54,7 @@ export function Creators() {
     >
       <PresentChart data={data.properties} />
       <CardColumn>
-        <PresentBar {...data.nameIdentifier} />
+        <PresentChart data={data.nameIdentifier} />
         <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
@@ -68,18 +71,20 @@ export function Creators() {
 // Contributors
 const ContributorsDescription = (
   <>
-    The Contributor property connects resources to people and organizations. Add
+    Contributor metadata connects resources to people and organizations. Add
     nameIdentifiers with ORCID iDs and ROR IDs and affiliationIdentifiers with
     ROR IDs for the highest impact.{" "}
     <LearnMore
       text="Contributor documentation"
-      href="https://datacite-metadata-schema.readthedocs.io/en/4.6/properties/contributor/"
+      href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/contributor/"
     />
   </>
 );
 
-export function Contributors() {
-  const { isPending, isFetching, isError, data, error } = useContributors();
+export function Contributors(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useContributors(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -97,7 +102,7 @@ export function Contributors() {
         <DistributionChart {...data.contributorType} className="mt-4" />
       </CardColumn>
       <CardColumn>
-        <PresentBar {...data.nameIdentifier} />
+        <PresentChart data={data.nameIdentifier} />
         <DistributionChart {...data.nameIdentifierScheme} className="mt-4" />
       </CardColumn>
       <CardColumn>
@@ -114,7 +119,7 @@ export function Contributors() {
 // Related Identifiers
 const RelatedIdentifiersDescription = (
   <>
-    The RelatedIdentifier property connects resources to other resources.
+    RelatedIdentifier metadata connects resources to other resources.
     RelatedIdentifiers with the DOI relatedIdentifierType have the highest
     impact.{" "}
     <LearnMore
@@ -124,9 +129,10 @@ const RelatedIdentifiersDescription = (
   </>
 );
 
-export function RelatedIdentifiers() {
-  const { isPending, isFetching, isError, data, error } =
-    useRelatedIdentifiers();
+export function RelatedIdentifiers(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useRelatedIdentifiers(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={3} className="md:col-span-full" />;
@@ -140,9 +146,18 @@ export function RelatedIdentifiers() {
       isHighImpact={data.relatedIdentifiers.isHighImpact}
       className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.relationType} />
-      <DistributionChart {...data.relatedIdentifierType} />
-      <DistributionChart {...data.resourceTypeGeneral} />
+      <CardColumn>
+        <PresentBar {...data.relationType} />
+        <DistributionChart {...data.relationTypeDistribution} />
+      </CardColumn>
+      <CardColumn>
+        <PresentBar {...data.relatedIdentifierType} />
+        <DistributionChart {...data.relatedIdentifierTypeDistribution} />
+      </CardColumn>
+      <CardColumn>
+        <PresentBar {...data.resourceTypeGeneral} />
+        <DistributionChart {...data.resourceTypeGeneralDistribution} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -150,7 +165,7 @@ export function RelatedIdentifiers() {
 // Funding References
 const FundingReferencesDescription = (
   <>
-    The FundingReference property connects resources to funding sources. Add
+    FundingReference metadata connects resources to funding sources. Add
     funderIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
       text="FundingReference documentation"
@@ -159,9 +174,10 @@ const FundingReferencesDescription = (
   </>
 );
 
-export function FundingReferences() {
-  const { isPending, isFetching, isError, data, error } =
-    useFundingReferences();
+export function FundingReferences(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useFundingReferences(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -190,7 +206,7 @@ export function FundingReferences() {
 // Publisher
 const PublisherDescription = (
   <>
-    The Publisher property connects resources to funding sources. Add
+    Publisher metadata connects resources to publishers. Add
     publisherIdentifiers with ROR IDs for the highest impact.{" "}
     <LearnMore
       text="Publisher documentation"
@@ -199,8 +215,10 @@ const PublisherDescription = (
   </>
 );
 
-export function Publisher() {
-  const { isPending, isFetching, isError, data, error } = usePublisher();
+export function Publisher(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = usePublisher(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -215,7 +233,7 @@ export function Publisher() {
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
-        <PresentBar {...data.publisherIdentifier} />
+        <PresentChart data={data.publisherIdentifier} />
         <DistributionChart
           {...data.publisherIdentifierScheme}
           className="mt-4"
@@ -228,7 +246,7 @@ export function Publisher() {
 // Resource Type
 const ResourceTypeDescription = (
   <>
-    The ResourceType property describes the type of resource. Select the most
+    ResourceType metadata describes the type of resource. Select the most
     specific applicable resourceTypeGeneral value to improve discoverability.
     Avoid using “Text” and “Other” where possible.{" "}
     <LearnMore
@@ -238,8 +256,10 @@ const ResourceTypeDescription = (
   </>
 );
 
-export function ResourceType() {
-  const { isPending, isFetching, isError, data, error } = useResourceType();
+export function ResourceType(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useResourceType(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -264,8 +284,8 @@ export function ResourceType() {
 // Subjects
 const SubjectsDescription = (
   <>
-    The Subject property contains subject terms or keywords describing the
-    resource. Use controlled vocabulary terms to improve discoverability.{" "}
+    Subject metadata contains subject terms or keywords describing the resource.
+    Use controlled vocabulary terms to improve discoverability.{" "}
     <LearnMore
       text="Subject documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/subject/"
@@ -273,8 +293,10 @@ const SubjectsDescription = (
   </>
 );
 
-export function Subjects() {
-  const { isPending, isFetching, isError, data, error } = useSubjects();
+export function Subjects(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useSubjects(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -303,8 +325,8 @@ export function Subjects() {
 // Descriptions
 const DescriptionsDescription = (
   <>
-    The Description property is recommended for a general description of a
-    resource. Include an abstract to improve discoverability.{" "}
+    Description metadata is recommended for a general description of a resource.
+    Include an abstract to improve discoverability.{" "}
     <LearnMore
       text="Description documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/description/"
@@ -312,8 +334,10 @@ const DescriptionsDescription = (
   </>
 );
 
-export function Descriptions() {
-  const { isPending, isFetching, isError, data, error } = useDescriptions();
+export function Descriptions(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useDescriptions(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -327,7 +351,10 @@ export function Descriptions() {
       isHighImpact={data.descriptions.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.descriptionType} />
+      <CardColumn>
+        <PresentChart data={data.descriptionsProperties} />
+        <DistributionChart {...data.descriptionType} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -335,7 +362,7 @@ export function Descriptions() {
 // Titles
 const TitlesDescription = (
   <>
-    The Title property contains the name of the resource and is used in the
+    Title metadata contains the name of the resource and is used in the
     citation. Include additional titles where applicable to improve
     discoverability.{" "}
     <LearnMore
@@ -345,8 +372,10 @@ const TitlesDescription = (
   </>
 );
 
-export function Titles() {
-  const { isPending, isFetching, isError, data, error } = useTitles();
+export function Titles(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useTitles(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -360,7 +389,10 @@ export function Titles() {
       isHighImpact={data.titles.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
-      <DistributionChart {...data.titleType} />
+      <CardColumn>
+        <PresentChart data={data.titleProperties} />
+        <DistributionChart {...data.titleType} />
+      </CardColumn>
     </ChartsCard>
   );
 }
@@ -368,8 +400,8 @@ export function Titles() {
 // Rights
 const RightsDescription = (
   <>
-    The Rights property contains information about how the resource can be
-    reused, such as a license. Use standardized rights identifiers to improve
+    Rights metadata contains information about how the resource can be reused,
+    such as a license. Use standardized rights identifiers to improve
     discoverability.{" "}
     <LearnMore
       text="Rights documentation"
@@ -378,8 +410,10 @@ const RightsDescription = (
   </>
 );
 
-export function Rights() {
-  const { isPending, isFetching, isError, data, error } = useRights();
+export function Rights(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useRights(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -404,9 +438,8 @@ export function Rights() {
 // Dates
 const DatesDescription = (
   <>
-    The Date property contains dates relevant to the resource. Include all
-    relevant dates with their corresponding dateTypes to improve
-    discoverability.{" "}
+    Date metadata contains dates relevant to the resource. Include all relevant
+    dates with their corresponding dateTypes to improve discoverability.{" "}
     <LearnMore
       text="Date documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/date/"
@@ -414,8 +447,10 @@ const DatesDescription = (
   </>
 );
 
-export function Dates() {
-  const { isPending, isFetching, isError, data, error } = useDates();
+export function Dates(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useDates(
+    props.entity,
+  );
 
   if (isPending)
     return <ChartsCardSkeleton columns={1} className="md:col-span-[2]" />;
@@ -430,8 +465,8 @@ export function Dates() {
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
       <CardColumn>
+        <PresentChart data={data.dateProperties} />
         <DistributionChart {...data.dateType} className="mb-6" />
-        <PresentBar {...data.dateInformation} />
       </CardColumn>
     </ChartsCard>
   );
@@ -440,8 +475,8 @@ export function Dates() {
 // Publication Year
 const PublicationYearDescription = (
   <>
-    The PublicationYear property is for the year when the resource was or will
-    be made publicly available.{" "}
+    PublicationYear metadata is for the year when the resource was or will be
+    made publicly available.{" "}
     <LearnMore
       text="PublicationYear documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/publicationyear/"
@@ -449,8 +484,10 @@ const PublicationYearDescription = (
   </>
 );
 
-export function PublicationYear() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function PublicationYear(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -469,7 +506,7 @@ export function PublicationYear() {
 // Alternate Identifiers
 const AlternateIdentifiersDescription = (
   <>
-    The AlternateIdentifier property contains alternate identifiers for the
+    AlternateIdentifier metadata contains alternate identifiers for the
     resource, such as local identifiers.{" "}
     <LearnMore
       text="AlternateIdentifier documentation"
@@ -478,8 +515,10 @@ const AlternateIdentifiersDescription = (
   </>
 );
 
-export function AlternateIdentifiers() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function AlternateIdentifiers(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -498,7 +537,7 @@ export function AlternateIdentifiers() {
 // Language
 const LanguageDescription = (
   <>
-    The Language property is for the primary language of the resource.{" "}
+    Language metadata is for the primary language of the resource.{" "}
     <LearnMore
       text="Language documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/language/"
@@ -506,8 +545,10 @@ const LanguageDescription = (
   </>
 );
 
-export function Language() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Language(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -526,7 +567,7 @@ export function Language() {
 // Sizes
 const SizesDescription = (
   <>
-    The Size property indicates the size or duration of the resource.{" "}
+    Size metadata indicates the size or duration of the resource.{" "}
     <LearnMore
       text="Size documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/size/"
@@ -534,8 +575,10 @@ const SizesDescription = (
   </>
 );
 
-export function Sizes() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Sizes(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -554,16 +597,18 @@ export function Sizes() {
 // Formats
 const FormatsDescription = (
   <>
-    The Format property is for the technical format of the resource.{" "}
+    Format metadata is for the technical format of the resource.{" "}
     <LearnMore
-      text="Fomat documentation"
+      text="Format documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/format/"
     />
   </>
 );
 
-export function Formats() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Formats(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -582,7 +627,7 @@ export function Formats() {
 // Version
 const VersionDescription = (
   <>
-    The Version property is for the version number of the resource.{" "}
+    Version metadata is for the version number of the resource.{" "}
     <LearnMore
       text="Version documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/version/"
@@ -590,8 +635,10 @@ const VersionDescription = (
   </>
 );
 
-export function Version() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function Version(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -610,8 +657,8 @@ export function Version() {
 // Geo Location
 const GeoLocationDescription = (
   <>
-    The GeoLocation property is for the spatial region or named place related to
-    the resource.{" "}
+    GeoLocation metadata is for the spatial region or named place related to the
+    resource.{" "}
     <LearnMore
       text="GeoLocation documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/geolocation/"
@@ -619,8 +666,10 @@ const GeoLocationDescription = (
   </>
 );
 
-export function GeoLocation() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function GeoLocation(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;
@@ -639,8 +688,8 @@ export function GeoLocation() {
 // Related Item
 const RelatedItemDescription = (
   <>
-    The RelatedItem property connects resources to other resources, with or
-    without identifiers.{" "}
+    RelatedItem metadata connects resources to other resources, with or without
+    identifiers.{" "}
     <LearnMore
       text="RelatedItem documentation"
       href="https://datacite-metadata-schema.readthedocs.io/en/4/properties/relateditem/"
@@ -648,8 +697,10 @@ const RelatedItemDescription = (
   </>
 );
 
-export function RelatedItem() {
-  const { isPending, isFetching, isError, data, error } = useOther();
+export function RelatedItem(props: { entity: Entity }) {
+  const { isPending, isFetching, isError, data, error } = useOther(
+    props.entity,
+  );
 
   if (isPending) return <ChartsCardSkeleton />;
   if (isError) return `Error: ${error}`;

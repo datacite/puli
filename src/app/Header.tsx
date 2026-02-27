@@ -7,7 +7,7 @@ export default function Header() {
   return (
     <header className="py-4 px-6">
       <H1 className="w-max">
-        <Link href="/">
+        <Link href="/" prefetch>
           <Image src={logo} alt="DataCite logo" height={75} className="" />
         </Link>
       </H1>

@@ -91,7 +91,7 @@ function toDistributionProps(item?: Distribution): DistributionProps {
   };
 }
 
-export function buildInitialData<R>(
+export function buildPlaceholderData<R>(
   format: Format<R>,
   fields: { present: readonly string[]; distribution: readonly string[] },
 ) {

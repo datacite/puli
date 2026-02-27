@@ -1,14 +1,27 @@
 "use client";
 
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { FILTERS, SEARCH_PARAMETERS } from "@/constants";
 import type { Entity, Filters } from "@/types";
-import { useEntity } from "./data/fetch";
 
-export function useId() {
-  const { id: slug } = useParams<{ id?: string[] }>();
-  return slug?.[0] || "";
+export function useDebounce<T>(
+  value: T,
+  callback: (value: T) => void,
+  delay: number,
+) {
+  const [debounceValue, setDebounceValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceValue(value);
+      callback(value);
+    }, delay);
+    return () => clearTimeout(handler);
+  }, [value, callback, delay]);
+
+  return debounceValue;
 }
 
 export function useFilters() {
@@ -27,35 +40,18 @@ export function useFilters() {
   } satisfies Filters;
 }
 
-export function useQueryId<R>(
+export function useQuery<R>(
+  entity: Entity,
   key: string,
-  fetch: (id: string, filters: Filters) => Promise<R>,
-  initialData?: R,
-  enabled?: boolean,
+  fetch: (entity: Entity, filters: Filters) => Promise<R>,
+  placeholderData?: R,
 ) {
-  const id = useId();
   const filters = useFilters();
 
   return useTanstackQuery({
-    queryKey: [id, filters, key],
-    queryFn: () => fetch(id, filters),
-    initialData,
-    staleTime: 0,
-    enabled,
+    queryKey: [entity.id, filters, key],
+    queryFn: () => fetch(entity, filters),
+    // @ts-expect-error I don't know exactly why this is giving a type error but it works
+    placeholderData,
   });
-}
-
-export function useQueryEntity<R>(
-  key: string,
-  fetch: (entity: Entity, filters: Filters) => Promise<R>,
-  initialData?: R,
-) {
-  const { data: entity } = useEntity();
-
-  return useQueryId<R>(
-    key,
-    (_, filters) => fetch(entity!, filters),
-    initialData,
-    !!entity,
-  );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
+import { Info } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
@@ -14,20 +14,26 @@ import {
   ComboboxList,
 } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
-import { API_URL_DATACITE, COMMONS_URL, SEARCH_PARAMETERS } from "@/constants";
-import { fetchDoisSearchParams, useDois, useEntity } from "@/data/fetch";
-import { useFilters, useId } from "@/hooks";
+import { Item, ItemContent, ItemTitle } from "@/components/ui/item";
+import { SEARCH_PARAMETERS } from "@/constants";
+import { useDois } from "@/data/fetch";
 import { cn } from "@/lib/utils";
+import type { Entity } from "@/types";
 
-export default function ActionButtons() {
+export default function ActionButtons(props: { entity: Entity }) {
   return (
     <ButtonsGrid>
-      <FilterByRegistrationYear />
-      <FilterByResourceType />
-      <FilterByQuery />
-
-      <ViewInCommons />
-      <ViewInApi />
+      <FilterByRegistrationYear entity={props.entity} />
+      <FilterByResourceType entity={props.entity} />
+      <FilterByQuery entity={props.entity} />
+      <a
+        href="https://support.datacite.org/docs/queries"
+        target="_blank"
+        rel="noopener"
+        className="text-datacite-blue-light text-[0.8em] flex items-center gap-1 -col-start-2"
+      >
+        <Info size={"1em"} /> How can I use filter queries?
+      </a>
     </ButtonsGrid>
   );
 }
@@ -46,17 +52,16 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
   return (
     <div
       {...props}
-      className="w-full grid grid-cols-4 md:grid-cols-[repeat(2,1fr)_2fr_repeat(2,min-content)] gap-x-2 gap-y-4"
+      className="w-full grid grid-cols-4 auto-rows-min md:grid-cols-[repeat(2,1fr)_2fr] gap-x-2 gap-y-1 justify-items-end"
     />
   );
 }
 
-function FilterByRegistrationYear() {
+function FilterByRegistrationYear(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
-
-  const { isPending, isError, data, error } = useDois();
+  const [open, setOpen] = useState(false);
+  const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
 
@@ -71,6 +76,8 @@ function FilterByRegistrationYear() {
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.title}
       value={value}
+      open={open}
+      onOpenChange={setOpen}
       disabled={isPending}
     >
       <ComboboxInput
@@ -79,9 +86,9 @@ function FilterByRegistrationYear() {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
-          router.push(`/${id}?${params.toString()}`);
+          router.push(`/${props.entity.id}?${params.toString()}`);
         }}
-        className="text-xs w-full h-full"
+        className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
       <ComboboxContent>
         <ComboboxEmpty>No years found.</ComboboxEmpty>
@@ -95,10 +102,22 @@ function FilterByRegistrationYear() {
             )
               params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
+            const href = `/${props.entity.id}?${params.toString()}`;
+
             return (
-              <Link href={`/${id}?${params.toString()}`} key={item.id}>
-                <ComboboxItem value={item.id}>{item.title}</ComboboxItem>
-              </Link>
+              <ComboboxItem
+                key={item.id}
+                value={item.id}
+                onClick={() => setOpen(false)}
+              >
+                <Link href={href} prefetch className="size-full">
+                  <Item size="sm" className="px-0 py-0.5">
+                    <ItemContent className="gap-0">
+                      <ItemTitle>{item.title}</ItemTitle>
+                    </ItemContent>
+                  </Item>
+                </Link>
+              </ComboboxItem>
             );
           }}
         </ComboboxList>
@@ -107,12 +126,11 @@ function FilterByRegistrationYear() {
   );
 }
 
-function FilterByResourceType() {
+function FilterByResourceType(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
-
-  const { isPending, isError, data, error } = useDois();
+  const [open, setOpen] = useState(false);
+  const { isPending, isError, data, error } = useDois(props.entity);
 
   if (isError) return `Error: ${error}`;
 
@@ -127,6 +145,8 @@ function FilterByResourceType() {
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.type}
       value={value}
+      open={open}
+      onOpenChange={setOpen}
       disabled={isPending}
     >
       <ComboboxInput
@@ -135,9 +155,9 @@ function FilterByResourceType() {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
-          router.push(`/${id}?${params.toString()}`);
+          router.push(`/${props.entity.id}?${params.toString()}`);
         }}
-        className="text-xs w-full h-full"
+        className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
       <ComboboxContent>
         <ComboboxEmpty>No resource types found.</ComboboxEmpty>
@@ -149,10 +169,22 @@ function FilterByResourceType() {
             if (searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) === item.id)
               params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
+            const href = `/${props.entity.id}?${params.toString()}`;
+
             return (
-              <Link href={`/${id}?${params.toString()}`} key={item.id}>
-                <ComboboxItem value={item.id}>{item.type}</ComboboxItem>
-              </Link>
+              <ComboboxItem
+                key={item.id}
+                value={item.id}
+                onClick={() => setOpen(false)}
+              >
+                <Link href={href} prefetch className="size-full">
+                  <Item size="sm" className="px-0 py-0.5">
+                    <ItemContent className="gap-0">
+                      <ItemTitle>{item.type}</ItemTitle>
+                    </ItemContent>
+                  </Item>
+                </Link>
+              </ComboboxItem>
             );
           }}
         </ComboboxList>
@@ -161,10 +193,9 @@ function FilterByResourceType() {
   );
 }
 
-function FilterByQuery() {
+function FilterByQuery(props: { entity: Entity }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const id = useId();
   const [query, setQuery] = useState(
     searchParams.get(SEARCH_PARAMETERS.QUERY) || "",
   );
@@ -172,7 +203,7 @@ function FilterByQuery() {
   const params = new URLSearchParams(searchParams.toString());
   params.set(SEARCH_PARAMETERS.QUERY, query);
   if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
-  const href = `/${id}?${params.toString()}`;
+  const href = `/${props.entity.id}?${params.toString()}`;
 
   const disabled = !query.trim();
 
@@ -184,11 +215,11 @@ function FilterByQuery() {
   }
 
   return (
-    <div className="max-md:col-span-2 flex md:mr-10 h-full">
+    <div className="max-md:col-span-2 flex size-full pl-6">
       <Input
-        title="filter by text input"
-        placeholder="Enter query..."
-        className="text-xs px-6 py-2 h-full rounded-r-none border-r-0"
+        title="Filter using query string syntax"
+        placeholder="Filter using query string syntax…"
+        className="text-xs bg-white px-6 py-2 h-full rounded-l-[60px] border-r-0"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onKeyDown={onKeyDown}
@@ -196,62 +227,18 @@ function FilterByQuery() {
       <Button
         type="submit"
         variant="outline"
-        className="rounded-l-none border-l-0 w-min"
+        className={cn(
+          "rounded-l-none rounded-r-[60px] border-l-0 w-min",
+          !disabled &&
+          "bg-datacite-blue-light border-datacite-blue-light text-white hover:bg-datacite-blue-light/90 hover:text-white",
+        )}
         disabled={disabled}
         asChild={!disabled}
       >
-        <Link href={href}>Filter by Query</Link>
+        <Link href={href} prefetch>
+          Filter by Query
+        </Link>
       </Button>
     </div>
-  );
-}
-
-function ViewInCommons() {
-  const { data: entity } = useEntity();
-  const filters = useFilters();
-
-  if (!entity) return null;
-
-  const doisSearchParam = new URLSearchParams({
-    filterQuery: filters.query || "",
-    published: filters.registered || "",
-    "resource-type": filters.resourceType || "",
-  }).toString();
-
-  const href =
-    entity.type === "client"
-      ? `${COMMONS_URL}/repositories/${entity.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${entity.type}_id:${entity.id}&${doisSearchParam}`;
-
-  return (
-    <Button className="max-md:col-span-2" asChild>
-      <a href={href} target="_blank">
-        View Records in Commons{" "}
-        <ExternalLink className="stroke-muted-foreground" />
-      </a>
-    </Button>
-  );
-}
-
-function ViewInApi() {
-  const { isError, data: entity, error } = useEntity();
-  const filters = useFilters();
-
-  if (isError) return `Error: ${error}`;
-  if (!entity) return null;
-
-  const doisSearchParam = new URLSearchParams(
-    fetchDoisSearchParams(entity, filters),
-  ).toString();
-
-  const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
-
-  return (
-    <Button className="max-md:col-span-2" asChild>
-      <a href={href} target="_blank">
-        View Records in REST API{" "}
-        <ExternalLink className="stroke-muted-foreground" />
-      </a>
-    </Button>
   );
 }
