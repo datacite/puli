@@ -122,6 +122,7 @@ export async function fetchDois(entity: Entity, filters: Filters) {
   const doisSearchParam = new URLSearchParams({
     ...fetchDoisSearchParams(entity, filters),
     facets: ["resourceTypes", "registered"].join(","),
+    "disable-facets": "false",
     "page[size]": "0",
   }).toString();
 
