@@ -23,7 +23,7 @@ export function asRoundedPercent(value: number, places = 1) {
 }
 
 export function asNumber(value: number) {
-  return value.toLocaleString();
+  return value.toLocaleString("en-US");
 }
 
 export function fetchApiBase(
