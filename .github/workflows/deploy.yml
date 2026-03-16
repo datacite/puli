@@ -18,5 +18,4 @@ jobs:
           scope: ${{ secrets.TEAM_ID}}
           vercel-project-name: 'puli'
           alias-domains: |
-            metadata.datacite.vercel.app
             metadata.stage.datacite.org
