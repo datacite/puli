@@ -3,6 +3,7 @@ import "./globals.css";
 import Script from "next/script";
 import LoadingIndicator from "@/components/LoadingIndicator";
 import { barlow } from "@/lib/fonts";
+import Footer from "./Footer";
 import Header from "./Header";
 import Providers from "./Providers";
 
@@ -18,12 +19,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${barlow.className} antialiased bg-gray-100`}>
+      <body
+        className={`${barlow.className} antialiased bg-datacite-gray grid grid-rows-[min-content_1fr_auto] h-dvh max-h-dvh`}
+      >
         <Providers>
           <Header />
           <div className="flex flex-col gap-12 py-4 max-w-7xl mx-auto px-6">
             {children}
           </div>
+          <Footer />
           <LoadingIndicator />
         </Providers>
         <Script id="feedback-button">

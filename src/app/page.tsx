@@ -10,7 +10,7 @@ export default async function Page({ searchParams }: PageProps<"/">) {
   const queryString = Array.isArray(query) ? query[0] : query;
 
   return (
-    <main className="flex flex-col gap-4 max-w-6xl mx-auto mb-50">
+    <main className="flex flex-col gap-4 max-w-6xl mx-auto">
       <H1 className="text-center mb-0 text-datacite-blue-dark">
         Evaluate metadata quality across DataCite
       </H1>
