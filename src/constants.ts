@@ -187,7 +187,7 @@ const PUBLISHER_ID = "publisher_obj.publisherIdentifier";
 const PUBLISHER_ID_SCHEME = "publisher_obj.publisherIdentifierScheme";
 
 //// Resource Type
-const TYPES = "types";
+const TYPES = "types.resourceTypeGeneral";
 const TYPES_RESOURCE_TYPE = "types.resourceType";
 const TYPES_RESOURCE_TYPE_GENERAL = "types.resourceTypeGeneral";
 
@@ -287,7 +287,6 @@ export const FIELDS: {
   [PUBLISHER_ID_SCHEME]: { label: "publisherIdentifierScheme" },
 
   // Resource Type
-  [TYPES]: { label: "ResourceType" },
   [TYPES_RESOURCE_TYPE]: { label: "resourceType" },
   [TYPES_RESOURCE_TYPE_GENERAL]: { label: "resourceTypeGeneral" },
 

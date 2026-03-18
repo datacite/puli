@@ -328,7 +328,7 @@ export function usePublisher(entity: Entity) {
 
 // Resource Type
 const formatResourceType = createFormat((p, d) => ({
-  resourceType: p[0],
+  resourceType: { ...p[0], property: "ResourceType" },
   properties: p.slice(1),
   resourceTypeGeneral: d[0],
 }));
