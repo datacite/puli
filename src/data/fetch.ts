@@ -127,9 +127,7 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     "page[size]": "0",
   }).toString();
 
-  const doisMeta = (
-    (await (await fetchDatacite(`dois?${doisSearchParam}`)).json()) as ApiDois
-  ).meta;
+  const doisMeta = await get<ApiDois>(`dois?${doisSearchParam}`, "meta");
 
   const resourceTypeData =
     doisMeta.resourceTypes?.map((f) => ({
