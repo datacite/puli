@@ -31,8 +31,8 @@ export async function searchEntities(
   }).toString();
 
   const [clientsData, providersData] = await Promise.all([
-    getData<ApiClient<true>>(`clients?${searchParams}`),
-    getData<ApiProvider<true>>(`providers?${searchParams}`),
+    get<ApiClient<true>>(`clients?${searchParams}`, "data"),
+    get<ApiProvider<true>>(`providers?${searchParams}`, "data"),
   ]);
 
   const [clients, providers] = await Promise.all([
@@ -78,8 +78,9 @@ async function apiDataToEntity(
   } as Entity;
 
   if (populateChildren && data.type !== "clients") {
-    const childrenData = await getData<ApiEntity<true>>(
+    const childrenData = await get<ApiEntity<true>>(
       `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
+      "data",
     );
 
     entity.children = childrenData.map((child) => ({
@@ -102,17 +103,17 @@ async function apiDataToEntity(
   return entity;
 }
 
-const getData = async <T extends { data: unknown }>(url: string) =>
-  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)
-    .data as T["data"];
+const get = async <T extends object>(url: string, p: keyof T) =>
+  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)[p];
 
 // Overview //////////////////////////////////////
 
 export async function fetchEntity(id: string | null): Promise<Entity | null> {
   if (!id) return null;
 
-  const data = await getData<ApiEntity>(
+  const data = await get<ApiEntity>(
     `${isClient(id) ? "clients" : "providers"}/${id}`,
+    "data",
   );
 
   return apiDataToEntity(data, true, true);
