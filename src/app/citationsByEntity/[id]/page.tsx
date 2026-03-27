@@ -25,11 +25,11 @@ if (citationsOverTime.length > 0) {
     year: item.id,
     count: item.count,
   }));
-  const yearNums = mapped.map((item) => parseInt(item.year, 10));
+  const yearNums = mapped.map((item: { year: string; count: number }) => parseInt(item.year, 10));
   const minYear = Math.min(...yearNums);
   const maxYear = new Date().getFullYear();
   const yearToCount: Record<string, number> = {};
-  mapped.forEach((item) => {
+  mapped.forEach((item: { year: string; count: number }) => {
     yearToCount[item.year] = item.count;
   });
   for (let y = minYear; y <= maxYear; y++) {

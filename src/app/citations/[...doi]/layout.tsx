@@ -5,7 +5,7 @@ import { fetchEntity } from "@/data/fetch";
 
 export default async function Layout({
   children,
-}: LayoutProps<"citations">) {
+}: LayoutProps<"/citations/[...doi]">) {
 
   return (
     <>
