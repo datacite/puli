@@ -11,6 +11,9 @@ export type DoiRecord = {
     citationCount?: number;
     viewCount?: number;
     downloadCount?: number;
+    publicationYear?: string;
+    publisher?: string;
+    agency?: string;
   };
 };
 

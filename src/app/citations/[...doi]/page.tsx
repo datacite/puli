@@ -21,8 +21,8 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { doi } = await params;
-  const doi_id = doi.join("/");
-
+  const doi_id = Array.isArray(doi) ? doi.join("/") : doi;
+  
   // Fetch the DOI record and events
   const [record, eventsResult, doisRecords] = await Promise.all([
     fetchDoiRecord(doi_id),
