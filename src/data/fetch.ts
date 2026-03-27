@@ -1,3 +1,4 @@
+
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import { COMPLETENESS_FIELDS } from "@/constants";
 import { useQuery } from "@/hooks";
@@ -470,4 +471,59 @@ export function useOther(entity: Entity) {
     fetchOther,
     buildPlaceholderData(formatOther, COMPLETENESS_FIELDS.OTHER),
   );
+}
+
+// Always fetch from production DataCite API
+export async function fetchDoiRecord(doi: string) {
+  const url = `https://api.datacite.org/dois/${encodeURIComponent(doi)}`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOI record: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+export async function fetchEvents(doi: string) {
+  const url = `https://api.datacite.org/events?doi=${encodeURIComponent(doi)}&page[size]=1000&query=NOT source_id:datacite-resolution`;
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOI events: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+export async function fetchDoisRecords(query: string) {
+  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25&include_other_registration_agencies=true&disable-facets=false&facets=resourceTypes`;
+  console.log("Fetching DOIs with query:", url);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
+  }
+const data = await response.json();
+console.log("DOIs records response:", data);
+  return data;
+}
+
+export async function fetchEntityCitations(query: string) {
+  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25&disable-facets=false&facets=citations&sort=-citation-count`;
+  console.log("Fetching DOIs with query:", url);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
+  }
+const data = await response.json();
+console.log("DOIs records response:", data.meta);
+  return data;
 }
