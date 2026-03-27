@@ -61,7 +61,7 @@ export function DoiRecordItem({ record }: DoiRecordItemProps) {
         https://doi.org/{record.attributes.doi}
       </div>
                <div className="text-gray-500 text-sm mt-2">
-            {record.attributes.publicationYear} · {record.attributes.publisher} · via {record.attributes.agency && record.attributes.agency.charAt(0).toUpperCase() + record.attributes.agency.slice(1)}
+            {record.attributes.publicationYear} · {record.attributes.publisher} {record.attributes.agency && " · via " + record.attributes.agency.charAt(0).toUpperCase() + record.attributes.agency.slice(1)}
             </div>
       <div className="text-gray-500 line-clamp-3 text-sm mt-2">
         {record.attributes.descriptions?.[0]?.description}
