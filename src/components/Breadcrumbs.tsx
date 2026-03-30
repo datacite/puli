@@ -49,26 +49,22 @@ export default function Breadcrumbs(props: { entity: Entity }) {
         {pages.map((page, index) => (
           <React.Fragment key={page.id || index}>
             {index > 0 && <Separator />}
-            <ChildrenSelect entity={page} items={page.parent?.children || []}>
+            <SiblingSelect parent={page.parent} selected={page}>
               <BreadcrumbContent active={props.entity} entity={page} />
-            </ChildrenSelect>
+            </SiblingSelect>
           </React.Fragment>
         ))}
 
         {props.entity && props.entity.children.length > 0 && (
           <>
             <Separator />
-            <ChildrenSelect
-              entity={props.entity}
-              items={props.entity.children}
-              className="opacity-70"
-            >
+            <SiblingSelect parent={props.entity} className="opacity-70">
               Select{" "}
               {props.entity.subtype === "consortium"
                 ? "organization"
                 : "repository"}
               ...
-            </ChildrenSelect>
+            </SiblingSelect>
           </>
         )}
       </BreadcrumbList>
@@ -126,47 +122,48 @@ function BreadcrumbContent(props: {
   );
 }
 
-function ChildrenSelect(props: {
-  entity: Entity;
-  items: { id: string; name: string }[];
+function SiblingSelect(props: {
+  parent: Entity | null;
+  selected?: Entity;
   children?: ReactNode;
   className?: string;
 }) {
+  const items = props.parent?.children || [];
   const searchParams = useSearchParams();
 
-  if (props.items.length === 0) return props.children;
+  if (items.length === 0) return props.children;
 
   return (
     <Combobox
-      items={props.items}
+      items={items}
       itemToStringValue={(item) => item.id}
       itemToStringLabel={(item) => item.name}
-      value={props.entity}
+      value={props.selected}
       isItemEqualToValue={(item, value) => item.id === value.id}
       filter={(itemValue, query) =>
         itemValue.id.toLowerCase().indexOf(query.toLowerCase()) !== -1 ||
         itemValue.name.toLowerCase().indexOf(query.toLowerCase()) !== -1
       }
-      disabled={props.items.length === 0}
+      disabled={items.length === 0}
     >
       <ComboboxTrigger
         render={
           <Button variant="ghost" className={cn("h-min py-0", props.className)}>
             {props.children}
-            {props.items.length > 0 && <ChevronsUpDown />}
+            {items.length > 0 && <ChevronsUpDown />}
           </Button>
         }
       />
       <ComboboxContent className="w-125">
         <ComboboxInput
-          placeholder={`Search ${props.entity.name || props.entity.id}`}
+          placeholder={`Search ${props.parent?.name}`}
           showTrigger={false}
         />
         <ComboboxEmpty>
           No{" "}
-          {props.entity.type === "consortium"
-            ? "organizations"
-            : "repositories"}{" "}
+          {props.parent?.type === "provider"
+            ? "repositories"
+            : "organizations"}{" "}
           found.
         </ComboboxEmpty>
         <ComboboxList>
