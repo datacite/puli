@@ -487,7 +487,7 @@ export async function fetchDoiRecord(doi: string) {
 }
 
 export async function fetchEvents(doi: string) {
-  const url = `https://api.datacite.org/events?doi=${encodeURIComponent(doi)}&page[size]=1000&query=NOT source_id:datacite-resolution`;
+  const url = `https://api.datacite.org/events?page[size]=1000&query=(subj_id:"https://doi.org/${doi}" OR obj_id:"https://doi.org/${doi}") AND NOT source_id:datacite-resolution`;
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -513,8 +513,23 @@ console.log("DOIs records response:", data);
   return data;
 }
 
+export async function fetchDoisRecordsForMetadata(query: string) {
+  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25`;
+  console.log("Fetching DOIs with query:", url);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
+  }
+const data = await response.json();
+console.log("DOIs records response:", data);
+  return data;
+}
+
 export async function fetchEntityCitations(query: string) {
-  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25&disable-facets=false&facets=citations&sort=-citation-count`;
+  const url = `https://api.datacite.org/dois?query=${query} AND citationCount:>0&page[size]=25&disable-facets=false&facets=citations&sort=-citation-count`;
   console.log("Fetching DOIs with query:", url);
   const response = await fetch(url, {
     method: "GET",
