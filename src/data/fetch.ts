@@ -31,8 +31,8 @@ export async function searchEntities(
   }).toString();
 
   const [clientsData, providersData] = await Promise.all([
-    getData<ApiClient<true>>(`clients?${searchParams}`),
-    getData<ApiProvider<true>>(`providers?${searchParams}`),
+    get<ApiClient<true>>(`clients?${searchParams}`, "data"),
+    get<ApiProvider<true>>(`providers?${searchParams}`, "data"),
   ]);
 
   const [clients, providers] = await Promise.all([
@@ -78,8 +78,9 @@ async function apiDataToEntity(
   } as Entity;
 
   if (populateChildren && data.type !== "clients") {
-    const childrenData = await getData<ApiEntity<true>>(
+    const childrenData = await get<ApiEntity<true>>(
       `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
+      "data",
     );
 
     entity.children = childrenData.map((child) => ({
@@ -102,17 +103,17 @@ async function apiDataToEntity(
   return entity;
 }
 
-const getData = async <T extends { data: unknown }>(url: string) =>
-  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)
-    .data as T["data"];
+const get = async <T extends object>(url: string, p: keyof T) =>
+  ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)[p];
 
 // Overview //////////////////////////////////////
 
 export async function fetchEntity(id: string | null): Promise<Entity | null> {
   if (!id) return null;
 
-  const data = await getData<ApiEntity>(
+  const data = await get<ApiEntity>(
     `${isClient(id) ? "clients" : "providers"}/${id}`,
+    "data",
   );
 
   return apiDataToEntity(data, true, true);
@@ -126,9 +127,7 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     "page[size]": "0",
   }).toString();
 
-  const doisMeta = (
-    (await (await fetchDatacite(`dois?${doisSearchParam}`)).json()) as ApiDois
-  ).meta;
+  const doisMeta = await get<ApiDois>(`dois?${doisSearchParam}`, "meta");
 
   const resourceTypeData =
     doisMeta.resourceTypes?.map((f) => ({
@@ -138,15 +137,26 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     })) || [];
 
   const registrationYears = doisMeta.registered || [];
+  const currentYear = new Date().getFullYear();
+  const minYear = Math.min(
+    ...registrationYears.map((ry) => Number(ry.id)).concat(currentYear - 10),
+  );
+
+  // Generate the chart data
+  // use given data when can, and default missing years' counts to 0
+  const registrationsData = Array.from(
+    { length: currentYear - minYear + 1 },
+    (_, i) => (minYear + i).toString(),
+  ).map((year) => ({
+    year,
+    count: registrationYears.find((ry) => ry.id === year)?.count ?? 0,
+  }));
 
   return {
     total: doisMeta.total,
     resourceTypeData,
     registrationYears,
-    registrationsData: [...registrationYears].reverse().map((f) => ({
-      year: f.id,
-      count: f.count,
-    })),
+    registrationsData,
   };
 }
 
@@ -320,7 +330,7 @@ export function usePublisher(entity: Entity) {
 
 // Resource Type
 const formatResourceType = createFormat((p, d) => ({
-  resourceType: p[0],
+  resourceType: { ...p[0], property: "ResourceType" },
   properties: p.slice(1),
   resourceTypeGeneral: d[0],
 }));
