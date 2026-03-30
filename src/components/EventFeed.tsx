@@ -41,18 +41,18 @@ export default function EventFeed({ events, doi }: EventFeedProps) {
             {idx !== events.length - 1 && (
               <span className="absolute left-1.5 top-10 w-0.5 h-[calc(100%_-_12px)] bg-gray-700/40 z-0" aria-hidden="true" />
             )}
-            <span className="absolute left-0 top-2 flex items-center justify-center w-3 h-3 rounded-full bg-[#243B54]" />
-            <div className="ml-8 flex-1 flex flex-col justify-center">
-              <div className="flex items-center gap-2 text-sm text-gray-600 min-h-[28px]">
+            <span className="absolute left-0 top-2 flex justify-center w-3 h-3 rounded-full bg-[#243B54]" />
+            <div className="ml-8 flex-1 flex flex-col justify-center w-full pr-2">
+              <div className="flex items-start gap-2 text-sm text-gray-600 min-h-[28px]">
                 {event.attributes["subj-id"].startsWith("https://doi.org/") ? (
                   <Link
-                    href={`/citations/${event.attributes["subj-id"].replace("https://doi.org/", "")}`}
+                    href={`/dois/${event.attributes["subj-id"].replace("https://doi.org/", "")}`}
                     className="font-semibold bg-[#e6f0fa] text-[#003366] rounded-full px-3 py-1 text-xs inline-block text-center max-w-xs overflow-hidden truncate hover:underline"
                     title={event.attributes["subj-id"]}
                     scroll={false}
                     shallow
                   >
-                    {event.attributes["subj-id"].includes(doi) ? <span className="mr-1">✔</span> : ""}
+                    {event.attributes["subj-id"].replace("https://doi.org/", "" ) === doi ? <span className="mr-1">✔</span> : ""}
                     {event.attributes["subj-id"].replace("https://doi.org/", "")}
                   </Link>
                 ) : (
@@ -60,7 +60,7 @@ export default function EventFeed({ events, doi }: EventFeedProps) {
                     className="font-semibold bg-[#e6f0fa] text-[#003366] rounded-full px-3 py-1 text-xs inline-block text-center max-w-xs overflow-hidden truncate"
                     title={event.attributes["subj-id"]}
                   >
-                    {event.attributes["subj-id"].includes(doi) ? <span className="mr-1">✔</span> : ""}
+                    {event.attributes["subj-id"].replace("https://doi.org/", "" ) === doi ? <span className="mr-1">✔</span> : ""}
                     {event.attributes["subj-id"].replace("https://doi.org/", "")}
                   </span>
                 )}
@@ -71,13 +71,13 @@ export default function EventFeed({ events, doi }: EventFeedProps) {
                 <span className="text-gray-500">→</span>
                 {event.attributes["obj-id"].startsWith("https://doi.org/") ? (
                   <Link
-                    href={`/citations/${event.attributes["obj-id"].replace("https://doi.org/", "")}`}
+                    href={`/dois/${event.attributes["obj-id"].replace("https://doi.org/", "")}`}
                     className="font-semibold bg-[#e6f0fa] text-[#003366] rounded-full px-3 py-1 text-xs inline-block text-center max-w-xs overflow-hidden truncate hover:underline"
                     title={event.attributes["obj-id"]}
                     scroll={false}
                     shallow
                   >
-                    {event.attributes["obj-id"].includes(doi) ? <span className="mr-1">✔</span> : ""}
+                    {event.attributes["obj-id"].replace("https://doi.org/", "" ) === doi ? <span className="mr-1">✔</span> : ""}
                     {event.attributes["obj-id"].replace("https://doi.org/", "")}
                   </Link>
                 ) : (
@@ -85,7 +85,7 @@ export default function EventFeed({ events, doi }: EventFeedProps) {
                     className="font-semibold bg-[#e6f0fa] text-[#003366] rounded-full px-3 py-1 text-xs inline-block text-center max-w-xs overflow-hidden truncate"
                     title={event.attributes["obj-id"]}
                   >
-                    {event.attributes["obj-id"].includes(doi) ? <span className="mr-1">✔</span> : ""}
+                    {event.attributes["obj-id"].replace("https://doi.org/", "" ) === doi ? <span className="mr-1">✔</span> : ""}
                     {event.attributes["obj-id"].replace("https://doi.org/", "")}
                   </span>
                 )}

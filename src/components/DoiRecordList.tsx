@@ -48,7 +48,7 @@ type DoiRecordItemProps = {
 export function DoiRecordItem({ record }: DoiRecordItemProps) {
   return (
         <Link
-      href={`/citations/${record.attributes.doi}`}
+      href={`/dois/${record.attributes.doi}`}
       className="cursor-pointer"
       scroll={false}
       shallow

@@ -64,7 +64,10 @@ if (citationsOverTime.length > 0) {
           <div className="bg-card text-card-foreground border p-8 shadow-sm">
             <h3 className="text-xl font-bold mb-4">Citations By Record Publication Year</h3>
             <div className="max-w-300">
-              <DoiRegistrationsChart data={chartData} />
+              { chartData.length > 0 ?
+              <DoiRegistrationsChart data={chartData} /> :
+              <p>No citations found.</p>
+              }
             </div>
           </div>
         </div>
@@ -72,7 +75,10 @@ if (citationsOverTime.length > 0) {
           <div className="bg-card text-card-foreground border p-8 shadow-sm">
             <h3 className="text-xl font-bold mb-4">Most Cited Records</h3>
             <div className="max-w-300">
-              <DoiRecordList records={doisRecords.data} />
+              { doisRecords.data.length > 0 ?
+              <DoiRecordList records={doisRecords.data} /> :
+              <p>No citations found.</p>
+              }
              </div>
           </div>
         </div>
