@@ -137,13 +137,15 @@ export async function fetchDois(entity: Entity, filters: Filters) {
     })) || [];
 
   const registrationYears = doisMeta.registered || [];
-  const minYear = Math.min(...registrationYears.map((ry) => Number(ry.id)));
-  const maxYear = Math.max(...registrationYears.map((ry) => Number(ry.id)));
+  const currentYear = new Date().getFullYear();
+  const minYear = Math.min(
+    ...registrationYears.map((ry) => Number(ry.id)).concat(currentYear - 10),
+  );
 
   // Generate the chart data
   // use given data when can, and default missing years' counts to 0
   const registrationsData = Array.from(
-    { length: maxYear - minYear + 1 },
+    { length: currentYear - minYear + 1 },
     (_, i) => (minYear + i).toString(),
   ).map((year) => ({
     year,
