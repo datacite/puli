@@ -103,7 +103,7 @@ function Brands() {
       <a href={BRAND_URLS.mastodon}>
         <SiMastodon size={24} />
       </a>
-      <a href={BRAND_URLS.linkedin}>LinkedIn</a>
+      {/* <a href={BRAND_URLS.linkedin}>LinkedIn</a> */}
       <a href={BRAND_URLS.youtube}>
         <SiYoutube size={24} />
       </a>
