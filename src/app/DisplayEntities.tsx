@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import Link from "next/link";
 import { useState } from "react";
 import { EntityBadge } from "@/components/Badges";
@@ -89,7 +90,14 @@ function EntityItem(props: {
   entity: { id: string; name: string; subtype: string };
 }) {
   return (
-    <Item size="sm" className="w-full px-2 py-1" asChild>
+    <Item
+      onClick={() =>
+        track("global search", { on: "result", action: "clicked" })
+      }
+      size="sm"
+      className="w-full px-2 py-1"
+      asChild
+    >
       <Link href={`/${props.entity.id}`} prefetch={false} className="size-full">
         <ItemContent className="gap-0">
           <ItemTitle>{props.entity.name}</ItemTitle>

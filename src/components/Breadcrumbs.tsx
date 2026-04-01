@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { ChevronsUpDown, Home, Slash } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -86,6 +87,11 @@ function BreadcrumbContent(props: {
 }) {
   const className = `flex flex-row items-center ${props.entity.id === props.active.id ? "bg-black/0 font-semibold" : ""}`;
 
+  function onClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+    track("breadcrumbs", { on: "breadcrumb entity", action: "clicked" });
+    e.stopPropagation();
+  }
+
   const BreadcrumbPageLink = (wrapperProps: { children: ReactNode }) =>
     props.entity.id === props.active.id ? (
       <BreadcrumbPage {...wrapperProps} className={className} />
@@ -94,7 +100,7 @@ function BreadcrumbContent(props: {
         {...wrapperProps}
         href={`/${props.entity.id}`}
         className={className}
-        onMouseDown={(e) => e.stopPropagation()}
+        onMouseDown={onClick}
       />
     );
 
@@ -161,15 +167,22 @@ function SiblingSelect(props: {
         />
         <ComboboxEmpty>
           No{" "}
-          {props.parent?.type === "provider"
-            ? "repositories"
-            : "organizations"}{" "}
+          {props.parent?.type === "provider" ? "repositories" : "organizations"}{" "}
           found.
         </ComboboxEmpty>
         <ComboboxList>
           {(item: Entity) => {
             return (
-              <ComboboxItem value={item} key={item.id}>
+              <ComboboxItem
+                onClick={() =>
+                  track("breadcrumbs", {
+                    on: "dropdown entity",
+                    action: "clicked",
+                  })
+                }
+                value={item}
+                key={item.id}
+              >
                 <Link
                   href={`/${item.id}?${searchParams.toString()}`}
                   prefetch
