@@ -13,13 +13,14 @@ export function useDebounce<T>(
 ) {
   const [debounceValue, setDebounceValue] = useState(value);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: callback changes every render
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebounceValue(value);
       callback(value);
     }, delay);
     return () => clearTimeout(handler);
-  }, [value, callback, delay]);
+  }, [value, delay]);
 
   return debounceValue;
 }
