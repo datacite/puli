@@ -74,7 +74,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
   function onItemClick() {
     track("filters", {
       on: "registration year",
-      action: "filter clicked",
+      action: "clicked",
     });
     setOpen(false);
   }
@@ -147,7 +147,7 @@ function FilterByResourceType(props: { entity: Entity }) {
   function onItemClick() {
     track("filters", {
       on: "resource type",
-      action: "filter clicked",
+      action: "clicked",
     });
     setOpen(false);
   }
@@ -219,7 +219,7 @@ function FilterByQuery(props: { entity: Entity }) {
   const trackQuery = () =>
     track("filters", {
       on: "query",
-      action: "query submitted",
+      action: "submitted",
     });
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {

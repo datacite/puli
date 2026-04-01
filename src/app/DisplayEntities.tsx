@@ -91,7 +91,9 @@ function EntityItem(props: {
 }) {
   return (
     <Item
-      onClick={() => track("global search", { action: "entity clicked" })}
+      onClick={() =>
+        track("global search", { on: "result", action: "clicked" })
+      }
       size="sm"
       className="w-full px-2 py-1"
       asChild

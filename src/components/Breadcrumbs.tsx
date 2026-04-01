@@ -88,7 +88,7 @@ function BreadcrumbContent(props: {
   const className = `flex flex-row items-center ${props.entity.id === props.active.id ? "bg-black/0 font-semibold" : ""}`;
 
   function onClick(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
-    track("breadcrumbs", { on: "breadcrumb item", action: "entity clicked" });
+    track("breadcrumbs", { on: "breadcrumb entity", action: "clicked" });
     e.stopPropagation();
   }
 
@@ -176,8 +176,8 @@ function SiblingSelect(props: {
               <ComboboxItem
                 onClick={() =>
                   track("breadcrumbs", {
-                    on: "dropdown",
-                    action: "entity clicked",
+                    on: "dropdown entity",
+                    action: "clicked",
                   })
                 }
                 value={item}
