@@ -1,5 +1,6 @@
 "use client";
 
+import { track } from "@vercel/analytics";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -70,6 +71,14 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
       (y) => y.id === searchParams.get(SEARCH_PARAMETERS.REGISTRATION_YEAR),
     ) || null;
 
+  function onItemClick() {
+    track("filters", {
+      on: "registration year",
+      action: "filter clicked",
+    });
+    setOpen(false);
+  }
+
   return (
     <Combobox
       items={data?.registrationYears ?? []}
@@ -105,11 +114,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
             const href = `/${props.entity.id}?${params.toString()}`;
 
             return (
-              <ComboboxItem
-                key={item.id}
-                value={item.id}
-                onClick={() => setOpen(false)}
-              >
+              <ComboboxItem key={item.id} value={item.id} onClick={onItemClick}>
                 <Link href={href} prefetch className="size-full">
                   <Item size="sm" className="px-0 py-0.5">
                     <ItemContent className="gap-0">
@@ -138,6 +143,14 @@ function FilterByResourceType(props: { entity: Entity }) {
     data?.resourceTypeData.find(
       (rt) => rt.id === searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE),
     ) || null;
+
+  function onItemClick() {
+    track("filters", {
+      on: "resource type",
+      action: "filter clicked",
+    });
+    setOpen(false);
+  }
 
   return (
     <Combobox
@@ -172,11 +185,7 @@ function FilterByResourceType(props: { entity: Entity }) {
             const href = `/${props.entity.id}?${params.toString()}`;
 
             return (
-              <ComboboxItem
-                key={item.id}
-                value={item.id}
-                onClick={() => setOpen(false)}
-              >
+              <ComboboxItem key={item.id} value={item.id} onClick={onItemClick}>
                 <Link href={href} prefetch className="size-full">
                   <Item size="sm" className="px-0 py-0.5">
                     <ItemContent className="gap-0">
@@ -207,9 +216,16 @@ function FilterByQuery(props: { entity: Entity }) {
 
   const disabled = !query.trim();
 
+  const trackQuery = () =>
+    track("filters", {
+      on: "query",
+      action: "query submitted",
+    });
+
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
+      trackQuery();
       router.push(href);
     }
   }
@@ -234,6 +250,7 @@ function FilterByQuery(props: { entity: Entity }) {
         )}
         disabled={disabled}
         asChild={!disabled}
+        onClick={trackQuery}
       >
         <Link href={href} prefetch>
           Filter by Query
