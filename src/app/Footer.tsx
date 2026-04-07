@@ -23,23 +23,6 @@ export default function Footer() {
           <Brands />
         </Section>
         <Status />
-        <Section title="Funding">
-          <ul className="max-w-sm">
-            <li>
-              The work on DataCite Commons is supported by funding from the
-              European Union’s Horizon 2020 research and innovation programme
-              under grant agreement No{" "}
-              <a
-                href="https://cordis.europa.eu/project/id/777523"
-                target="_blank"
-                rel="noreferrer"
-              >
-                777523
-              </a>
-              .
-            </li>
-          </ul>
-        </Section>
       </Column>
     </footer>
   );
