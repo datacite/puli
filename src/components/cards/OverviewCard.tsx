@@ -58,9 +58,9 @@ function ViewInCommons(props: { entity: Entity }) {
   }).toString();
 
   const href =
-    props.entity.type === "client"
+    props.entity.role === "client"
       ? `${COMMONS_URL}/repositories/${props.entity.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${props.entity.type}_id:${props.entity.id}&${doisSearchParam}`;
+      : `${COMMONS_URL}/doi.org?query=${props.entity.role}_id:${props.entity.id}&${doisSearchParam}`;
 
   return (
     <a

@@ -29,7 +29,7 @@ import {
   ItemTitle,
 } from "@/components/ui/item";
 import { cn } from "@/lib/utils";
-import type { Entity } from "@/types";
+import type { ChildEntity, Entity } from "@/types";
 import { EntityBadge } from "./Badges";
 import { Button } from "./ui/button";
 
@@ -61,7 +61,7 @@ export default function Breadcrumbs(props: { entity: Entity }) {
             <Separator />
             <SiblingSelect parent={props.entity} className="opacity-70">
               Select{" "}
-              {props.entity.subtype === "consortium"
+              {props.entity.type === "consortium"
                 ? "organization"
                 : "repository"}
               ...
@@ -83,7 +83,7 @@ function Separator() {
 
 function BreadcrumbContent(props: {
   active: { id: string };
-  entity: { id: string; name: string; subtype: string };
+  entity: { id: string; name: string; type: string };
 }) {
   const className = `flex flex-row items-center ${props.entity.id === props.active.id ? "bg-black/0 font-semibold" : ""}`;
 
@@ -130,7 +130,7 @@ function BreadcrumbContent(props: {
 
 function SiblingSelect(props: {
   parent: Entity | null;
-  selected?: Entity;
+  selected?: ChildEntity<string>;
   children?: ReactNode;
   className?: string;
 }) {
@@ -167,7 +167,7 @@ function SiblingSelect(props: {
         />
         <ComboboxEmpty>
           No{" "}
-          {props.parent?.type === "provider" ? "repositories" : "organizations"}{" "}
+          {props.parent?.role === "provider" ? "repositories" : "organizations"}{" "}
           found.
         </ComboboxEmpty>
         <ComboboxList>

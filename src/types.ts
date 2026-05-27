@@ -1,6 +1,46 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
 
+type EntityBase = {
+  id: string;
+  name: string;
+};
+
+export type ChildEntity<T extends string> = EntityBase & {
+  type: T;
+};
+
+export type Repository = EntityBase & {
+  role: "client";
+  type: "repository";
+  parent: Entity | null;
+  children: [];
+};
+export type DirectMember = EntityBase & {
+  role: "provider";
+  type: "direct_member";
+  parent: null;
+  children: ChildEntity<"repository">[];
+};
+export type ConsortiumOrganization = EntityBase & {
+  role: "provider";
+  type: "consortium_organization";
+  parent: Entity | null;
+  children: ChildEntity<"repository">[];
+};
+export type Consortium = EntityBase & {
+  role: "consortium";
+  type: "consortium";
+  parent: null;
+  children: ChildEntity<"consortium_organization">[];
+};
+
+export type Entity =
+  | Repository
+  | DirectMember
+  | ConsortiumOrganization
+  | Consortium;
+
 // Api
 export type Relationship<
   Title extends string,
@@ -85,27 +125,6 @@ export type ApiDois = {
 };
 
 // Other
-export type Entity = {
-  id: string;
-  type: "client" | "provider" | "consortium";
-  subtype:
-  | "repository"
-  | "direct_member"
-  | "consortium_organization"
-  | "consortium";
-  name: string;
-  children: {
-    id: string;
-    name: string;
-    subtype:
-    | "repository"
-    | "direct_member"
-    | "consortium_organization"
-    | "consortium";
-  }[];
-  parent: Entity | null;
-};
-
 export type Facet = {
   id: string;
   title: string;
