@@ -34,12 +34,19 @@ export type Consortium = EntityBase & {
   parent: null;
   children: ChildEntity<"consortium_organization">[];
 };
+export type DataCite = EntityBase & {
+  role: "datacite";
+  type: "";
+  parent: null;
+  children: [];
+};
 
 export type Entity =
   | Repository
   | DirectMember
   | ConsortiumOrganization
-  | Consortium;
+  | Consortium
+  | DataCite;
 
 // Api
 export type Relationship<

@@ -1,5 +1,9 @@
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
-import { COMPLETENESS_FIELDS } from "@/constants";
+import {
+  ALL_OF_DATACITE_ID,
+  ALL_OF_DATACITE_NAME,
+  COMPLETENESS_FIELDS,
+} from "@/constants";
 import { useQuery } from "@/hooks";
 import type {
   ApiClient,
@@ -8,6 +12,7 @@ import type {
   ApiProvider,
   Consortium,
   ConsortiumOrganization,
+  DataCite,
   DirectMember,
   Entity,
   Filters,
@@ -146,9 +151,16 @@ const get = async <T extends object>(url: string, p: keyof T) =>
   ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)[p];
 
 // Overview //////////////////////////////////////
-
 export async function fetchEntity(id: string | null): Promise<Entity | null> {
-  if (!id) return null;
+  if (!id || id === ALL_OF_DATACITE_ID)
+    return {
+      id: "‎ ", // invisible character to ensure the name is properly centered in the UI
+      name: ALL_OF_DATACITE_NAME,
+      role: "datacite",
+      type: "",
+      parent: null,
+      children: [],
+    } satisfies DataCite;
 
   const data = await get<ApiEntity>(
     `${isClient(id) ? "clients" : "providers"}/${id}`,
@@ -214,7 +226,7 @@ export function useDois(entity: Entity) {
 
 export const fetchDoisSearchParams = (entity: Entity, filters: Filters) =>
   ({
-    [`${entity.role}-id`]: entity.id,
+    ...(entity.role !== "datacite" && { [`${entity.role}-id`]: entity.id }),
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",
