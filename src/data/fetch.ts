@@ -152,9 +152,10 @@ const get = async <T extends object>(url: string, p: keyof T) =>
 
 // Overview //////////////////////////////////////
 export async function fetchEntity(id: string | null): Promise<Entity | null> {
-  if (!id || id === ALL_OF_DATACITE_ID)
+  if (!id) return null;
+  if (id === ALL_OF_DATACITE_ID)
     return {
-      id: "‎ ", // invisible character to ensure the name is properly centered in the UI
+      id: ALL_OF_DATACITE_ID,
       name: ALL_OF_DATACITE_NAME,
       role: "datacite",
       type: "",

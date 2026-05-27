@@ -1,6 +1,6 @@
 import { pascal } from "@/util";
 
-export const ALL_OF_DATACITE_ID = "all-of-datacite" as const;
+export const ALL_OF_DATACITE_ID = "*" as const;
 export const ALL_OF_DATACITE_NAME = "All of DataCite" as const;
 
 // URLs
