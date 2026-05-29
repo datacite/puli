@@ -57,13 +57,15 @@ function ViewInCommons(props: { entity: Entity }) {
     "resource-type": filters.resourceType || "",
   }).toString();
 
-  const queryPrefix =
-    props.entity.role === "datacite" ? "" : `${props.entity.role}_id:`;
+  const query =
+    props.entity.role === "datacite"
+      ? "*"
+      : `${props.entity.role}_id:${props.entity.id}`;
 
   const href =
     props.entity.role === "client"
       ? `${COMMONS_URL}/repositories/${props.entity.id}?${doisSearchParam}`
-      : `${COMMONS_URL}/doi.org?query=${queryPrefix}${props.entity.id}&${doisSearchParam}`;
+      : `${COMMONS_URL}/doi.org?query=${query}&${doisSearchParam}`;
 
   return (
     <a
