@@ -57,7 +57,7 @@ function SectionHeader(props: {
 
 function Section(props: {
   isFetching: boolean;
-  results: { id: string; name: string; subtype: string }[];
+  results: { id: string; name: string; type: string }[];
 }) {
   const [numShown, setNumShown] = useState(INITIAL_NUM_SHOWN);
 
@@ -87,7 +87,7 @@ function Section(props: {
 }
 
 function EntityItem(props: {
-  entity: { id: string; name: string; subtype: string };
+  entity: { id: string; name: string; type: string };
 }) {
   return (
     <Item

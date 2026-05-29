@@ -4,12 +4,12 @@ import { cn } from "@/lib/utils";
 const DEFAULT_CLASS =
   "rounded-[40px] text-[0.8em] text-datacite-blue-dark bg-datacite-blue-light/20 p-y-0 p-x-1 border-none";
 
-export function EntityBadge(props: { entity: { subtype: string } }) {
-  if (!props.entity.subtype) return null;
+export function EntityBadge(props: { entity: { type: string } }) {
+  if (!props.entity.type) return null;
 
   return (
     <Badge variant="outline" className={DEFAULT_CLASS}>
-      {props.entity.subtype
+      {props.entity.type
         .replaceAll("_", " ")
         .replace(/\b\w/g, (s) => s.toUpperCase())}
     </Badge>

@@ -1,13 +1,22 @@
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
-import { COMPLETENESS_FIELDS } from "@/constants";
+import {
+  ALL_OF_DATACITE_ID,
+  ALL_OF_DATACITE_NAME,
+  COMPLETENESS_FIELDS,
+} from "@/constants";
 import { useQuery } from "@/hooks";
 import type {
   ApiClient,
   ApiDois,
   ApiEntity,
   ApiProvider,
+  Consortium,
+  ConsortiumOrganization,
+  DataCite,
+  DirectMember,
   Entity,
   Filters,
+  Repository,
 } from "@/types";
 import {
   buildPlaceholderData,
@@ -57,59 +66,102 @@ async function apiDataToEntity(
   data: ApiEntity["data"],
   populateChildren = false,
   fetchParent = false,
-) {
+): Promise<Entity | null> {
   if (!data) return null;
 
-  const entity = {
+  const entityBase = {
     id: data.id,
-    type:
-      data.type === "clients"
-        ? ("client" as const)
-        : data.attributes.memberType === "consortium"
-          ? ("consortium" as const)
-          : ("provider" as const),
-    subtype:
-      data.type === "clients"
-        ? ("repository" as const)
-        : data.attributes.memberType,
     name: data.attributes.name,
-    children: [],
-    parent: null,
-  } as Entity;
+  };
 
-  if (populateChildren && data.type !== "clients") {
-    const childrenData = await get<ApiEntity<true>>(
-      `${data.attributes.memberType === "consortium" ? "providers" : "clients"}?page[size]=1000&${data.attributes.memberType === "consortium" ? "consortium" : "provider"}-id=${data.id}`,
-      "data",
-    );
+  // Handle repository
+  if (data.type === "clients") {
+    const parent = fetchParent
+      ? await fetchEntity(data.relationships.provider.data.id)
+      : null;
 
-    entity.children = childrenData.map((child) => ({
-      id: child.id,
-      name: child.attributes.name,
-      subtype:
-        child.type === "clients"
-          ? ("repository" as const)
-          : child.attributes.memberType,
-    }));
+    return {
+      ...entityBase,
+      role: "client",
+      type: "repository",
+      parent,
+      children: [],
+    } satisfies Repository;
   }
 
-  if (fetchParent)
-    entity.parent = await fetchEntity(
-      data.type === "clients"
-        ? data.relationships.provider.data.id
-        : data.relationships.consortium?.data.id || null,
-    );
+  // Handle consortium
+  if (data.attributes.memberType === "consortium") {
+    const childrenData = populateChildren
+      ? await get<ApiProvider<true>>(
+        `providers?page[size]=1000&consortium-id=${data.id}`,
+        "data",
+      )
+      : [];
 
-  return entity;
+    const children = childrenData.map((child) => ({
+      id: child.id,
+      name: child.attributes.name,
+      type: "consortium_organization" as const,
+    }));
+
+    return {
+      ...entityBase,
+      role: "consortium",
+      type: "consortium",
+      parent: null,
+      children,
+    } satisfies Consortium;
+  }
+
+  // Handle direct member and consortium organization
+  const childrenData = populateChildren
+    ? await get<ApiClient<true>>(
+      `clients?page[size]=1000&provider-id=${data.id}`,
+      "data",
+    )
+    : [];
+
+  const children = childrenData.map((child) => ({
+    id: child.id,
+    name: child.attributes.name,
+    type: "repository" as const,
+  }));
+
+  if (data.attributes.memberType === "direct_member")
+    return {
+      ...entityBase,
+      role: "provider",
+      type: "direct_member",
+      parent: null,
+      children,
+    } satisfies DirectMember;
+
+  return {
+    ...entityBase,
+    role: "provider",
+    type: "consortium_organization",
+    parent: fetchParent
+      ? await fetchEntity(data.relationships.consortium?.data.id || null)
+      : null,
+    children,
+  } satisfies ConsortiumOrganization;
 }
 
 const get = async <T extends object>(url: string, p: keyof T) =>
   ((await (await fetchDatacite(url, { cache: "force-cache" })).json()) as T)[p];
 
 // Overview //////////////////////////////////////
-
 export async function fetchEntity(id: string | null): Promise<Entity | null> {
   if (!id) return null;
+  if (id === ALL_OF_DATACITE_ID)
+    return {
+      id: ALL_OF_DATACITE_ID,
+      name: ALL_OF_DATACITE_NAME,
+      role: "datacite",
+      type: "",
+      parent: null,
+      children: [],
+    } satisfies DataCite;
 
   const data = await get<ApiEntity>(
     `${isClient(id) ? "clients" : "providers"}/${id}`,
@@ -175,7 +227,7 @@ export function useDois(entity: Entity) {
 
 export const fetchDoisSearchParams = (entity: Entity, filters: Filters) =>
   ({
-    [`${entity.type}-id`]: entity.id,
+    ...(entity.role !== "datacite" && { [`${entity.role}-id`]: entity.id }),
     query: filters.query || "",
     registered: filters.registered || "",
     "resource-type-id": filters.resourceType || "",

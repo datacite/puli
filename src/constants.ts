@@ -1,5 +1,8 @@
 import { pascal } from "@/util";
 
+export const ALL_OF_DATACITE_ID = "_all" as const;
+export const ALL_OF_DATACITE_NAME = "All of DataCite" as const;
+
 // URLs
 const API_URL_DATACITE_STAGE = "https://api.stage.datacite.org";
 const COMMONS_URL_STAGE = "https://commons.stage.datacite.org";

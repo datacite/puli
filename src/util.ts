@@ -112,7 +112,7 @@ export async function fetchFields<R>(
   format: Format<R>,
 ): Promise<R> {
   const searchParams = new URLSearchParams({
-    [`${entity.type}_id`]: entity.id,
+    ...(entity.role !== "datacite" && { [`${entity.role}_id`]: entity.id }),
     present: fields.present.join(","),
     distribution: fields.distribution.join(","),
     query: filters.openSearchQuery || "",
