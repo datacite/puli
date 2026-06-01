@@ -1,17 +1,26 @@
 import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import type { Entity } from "@/types";
 
 const DEFAULT_CLASS =
   "rounded-[40px] text-[0.8em] text-datacite-blue-dark bg-datacite-blue-light/20 p-y-0 p-x-1 border-none";
 
-export function EntityBadge(props: { entity: { type: string } }) {
+const MEMBER_TYPE_LABEL = {
+  repository: "Repository",
+  direct_member: "Institutional Member",
+  consortium: "Consortium Member",
+  consortium_organization: "Consortium Organization",
+} as const;
+
+export function EntityBadge(props: { entity: { type: Entity["type"] } }) {
   if (!props.entity.type) return null;
+
+  const label = MEMBER_TYPE_LABEL[props.entity.type];
+  if (!label) return null;
 
   return (
     <Badge variant="outline" className={DEFAULT_CLASS}>
-      {props.entity.type
-        .replaceAll("_", " ")
-        .replace(/\b\w/g, (s) => s.toUpperCase())}
+      {label}
     </Badge>
   );
 }
