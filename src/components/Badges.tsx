@@ -1,6 +1,5 @@
 import { Badge, type BadgeProps } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { Entity } from "@/types";
 
 const DEFAULT_CLASS =
   "rounded-[40px] text-[0.8em] text-datacite-blue-dark bg-datacite-blue-light/20 p-y-0 p-x-1 border-none";
@@ -13,11 +12,11 @@ const MEMBER_TYPE_LABEL = {
   member_only: "Institutional Member",
 } as const;
 
-export function EntityBadge(props: { entity: { type: Entity["type"] } }) {
-  if (!props.entity.type) return null;
+export function EntityBadge(props: { entity: { type: string } }) {
+  const entityType = props.entity.type;
+  if (!entityType || !(entityType in MEMBER_TYPE_LABEL)) return null;
 
-  const label = MEMBER_TYPE_LABEL[props.entity.type];
-  if (!label) return null;
+  const label = MEMBER_TYPE_LABEL[entityType as keyof typeof MEMBER_TYPE_LABEL];
 
   return (
     <Badge variant="outline" className={DEFAULT_CLASS}>
