@@ -10,6 +10,7 @@ const MEMBER_TYPE_LABEL = {
   direct_member: "Institutional Member",
   consortium: "Consortium Member",
   consortium_organization: "Consortium Organization",
+  member_only: "Institutional Member",
 } as const;
 
 export function EntityBadge(props: { entity: { type: Entity["type"] } }) {

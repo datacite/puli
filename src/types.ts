@@ -34,6 +34,12 @@ export type Consortium = EntityBase & {
   parent: null;
   children: ChildEntity<"consortium_organization">[];
 };
+export type MemberOnly = EntityBase & {
+  role: "provider";
+  type: "member_only";
+  parent: null;
+  children: [];
+};
 export type DataCite = EntityBase & {
   role: "datacite";
   type: "";
@@ -46,6 +52,7 @@ export type Entity =
   | DirectMember
   | ConsortiumOrganization
   | Consortium
+  | MemberOnly
   | DataCite;
 
 // Api
@@ -108,7 +115,13 @@ export type ApiClient<IsArray extends boolean = false> = ApiResponse<
 
 export type ApiProvider<IsArray extends boolean = false> = ApiResponse<
   "providers",
-  { memberType: "direct_member" | "consortium_organization" | "consortium" },
+  {
+    memberType:
+    | "direct_member"
+    | "consortium_organization"
+    | "consortium"
+    | "member_only";
+  },
   [
     Relationship<"consortium", true>,
     Relationship<"clients", false, true>,
