@@ -4,6 +4,7 @@ import { H1 } from "@/components/datacite/Headings";
 import InfoCard from "@/components/InfoCard";
 import DisplayEntities from "./DisplayEntities";
 import SearchEntities from "./SearchEntities";
+import { ALL_OF_DATACITE_ID } from "@/constants";
 
 export default async function Page({ searchParams }: PageProps<"/">) {
   const { query = undefined } = await searchParams;
@@ -36,7 +37,19 @@ function InfoCards() {
       <InfoCard
         icon={Search}
         title="What can I explore?"
-        body="Search for a DataCite Member, Consortium Organization, or Repository to view a metadata quality snapshot and explore opportunities for improvement."
+        body={
+          <>
+            Search for a DataCite Member, Consortium Organization, or Repository
+            to view a metadata quality snapshot and explore opportunities for
+            improvement. You can also view a{" "}
+            <Link
+              href={ALL_OF_DATACITE_ID}
+              className="text-datacite-blue-light"
+            >
+              snapshot for all DataCite metadata.
+            </Link>
+          </>
+        }
       />
       <InfoCard
         icon={BookOpen}
