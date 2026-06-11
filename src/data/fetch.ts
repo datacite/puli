@@ -16,6 +16,7 @@ import type {
   DirectMember,
   Entity,
   Filters,
+  MemberOnly,
   Repository,
 } from "@/types";
 import {
@@ -87,6 +88,17 @@ async function apiDataToEntity(
       parent,
       children: [],
     } satisfies Repository;
+  }
+
+  // Handle member only
+  if (data.attributes.memberType === "member_only") {
+    return {
+      ...entityBase,
+      role: "provider",
+      type: "member_only",
+      parent: null,
+      children: [],
+    } satisfies MemberOnly;
   }
 
   // Handle consortium
