@@ -51,7 +51,7 @@ export default function ResourceTypesChart(props: Props) {
           dataKey="count"
           nameKey="type"
           innerRadius="55%"
-          paddingAngle={4}
+          paddingAngle={0}
           cornerRadius={BAR.radius}
         />
       </PieChart>
