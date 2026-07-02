@@ -71,7 +71,10 @@ function toPresentProps(item?: Present): PresentProps {
 
   return {
     property: field?.label || item.field,
+    metadataField: item.field,
     present: item.percent,
+    withCount: item.count,
+    withoutCount: item.absent_count,
     isHighImpact: field?.isHighImpact || false,
   };
 }
