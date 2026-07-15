@@ -65,50 +65,6 @@ export const STATUS_URLS = {
   datacite: "http://status.datacite.org",
 };
 
-// Colors
-const PALETTE_OTHER = {
-  Other: "gray",
-  Missing: "#555",
-  Unknown: "#555",
-} as const;
-
-// Source: https://gist.github.com/kjgarza/30558b663d4fd36e7d9970a6b5bdebe6
-export const PALETTE_RESOURCE_TYPE = {
-  ...PALETTE_OTHER,
-  Audiovisual: "#AEC7E8",
-  Award: "#D4AF37",
-  Book: "#FF7F0E",
-  "Book Chapter": "#FFBB78",
-  Collection: "#D62728",
-  "Computational Notebook": "#FF9896",
-  "Conference Paper": "#9467BD",
-  "Conference Proceeding": "#C5B0D5",
-  "Data Paper": "#8C564B",
-  Dataset: "#1F77B4",
-  Dissertation: "#C49C94",
-  Event: "#E377C2",
-  Image: "#F7B6D2",
-  Instrument: "#35424A",
-  "Interactive Resource": "#7F7F7F",
-  Journal: "#C7C7C7",
-  "Journal Article": "#BCBD22",
-  Model: "#DBDB8D",
-  "Output Management Plan": "#17BECF",
-  "Peer Review": "#9EDAE5",
-  "Physical Object": "#3182BD",
-  Preprint: "#6BAED6",
-  Project: "#AB8DF8",
-  Report: "#9ECAE1",
-  Service: "#C6DBEF",
-  Software: "#E6550D",
-  Sound: "#FD8D3C",
-  Standard: "#FDAE6B",
-  "Study Registration": "#6DBB5E",
-  Text: "#FDD0A2",
-  Workflow: "#9F4639",
-  Other: "#C59088",
-} as const;
-
 // Chart
 export const CHART = {
   bar: {

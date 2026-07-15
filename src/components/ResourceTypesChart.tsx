@@ -1,5 +1,6 @@
 "use client";
 
+import { RESOURCE_TYPE } from "maltipoo";
 import { type LegendProps, Pie, PieChart } from "recharts";
 import {
   type ChartConfig,
@@ -8,7 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { CHART, PALETTE_RESOURCE_TYPE } from "@/constants";
+import { CHART } from "@/constants";
 
 export type ResourceTypeData = {
   type: string;
@@ -28,8 +29,8 @@ const chartConfig = {
 export default function ResourceTypesChart(props: Props) {
   const data = props.data.map((d) => ({
     fill:
-      PALETTE_RESOURCE_TYPE[d.type as keyof typeof PALETTE_RESOURCE_TYPE] ||
-      PALETTE_RESOURCE_TYPE.Unknown,
+      RESOURCE_TYPE[d.type as keyof typeof RESOURCE_TYPE] ||
+      RESOURCE_TYPE.Unknown,
     ...d,
   }));
 
