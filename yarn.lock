@@ -1575,6 +1575,10 @@ magic-string@^0.30.19:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.5.5"
 
+"maltipoo@https://github.com/datacite/maltipoo#2.2.0":
+  version "2.2.0"
+  resolved "https://github.com/datacite/maltipoo#54c75153700853d29ce9df34246adf588b052aff"
+
 minipass@^7.0.4, minipass@^7.1.2:
   version "7.1.2"
   resolved "https://registry.npmjs.org/minipass/-/minipass-7.1.2.tgz"
