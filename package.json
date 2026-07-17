@@ -22,7 +22,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "lucide-react": "^0.545.0",
-    "maltipoo": "https://github.com/datacite/maltipoo#2.2.5",
+    "maltipoo": "https://github.com/datacite/maltipoo#2.2.6",
     "next": "16.0.10",
     "radix-ui": "^1.4.3",
     "react": "19.2.0",
