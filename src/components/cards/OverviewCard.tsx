@@ -82,9 +82,11 @@ function ViewInCommons(props: { entity: Entity }) {
 function ViewInApi(props: { entity: Entity }) {
   const filters = useFilters();
 
-  const doisSearchParam = new URLSearchParams(
-    fetchDoisSearchParams(props.entity, filters),
-  ).toString();
+  const doisSearchParam = new URLSearchParams({
+    ...fetchDoisSearchParams(props.entity, filters),
+    affiliation: "true",
+    publisher: "true",
+  }).toString();
 
   const href = `${API_URL_DATACITE}/dois?${doisSearchParam}`;
 
