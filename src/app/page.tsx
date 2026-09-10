@@ -11,17 +11,16 @@ export default async function Page({ searchParams }: PageProps<"/">) {
   const queryString = Array.isArray(query) ? query[0] : query;
 
   return (
-    <main className="flex flex-col gap-4 max-w-6xl mx-auto">
+    <main className="mx-auto flex min-h-[12rem] max-w-6xl flex-col justify-center gap-4">
       <H1 className="text-center mb-0 text-datacite-blue-dark">
-        Evaluate metadata quality across DataCite
+        Search across DataCite
       </H1>
-      <p className="mb-4 text-center text-datacite-blue-dark">
-        Search for a DataCite repository or organization to view a metadata
-        quality snapshot.
+      <p className="mb-4 text-center text-datacite-blue-dark max-w-2xl">
+        Enter a search and find DOIs, DataCite Organizations and Repositories, and reports for ROR organizations and ORCID researchers.
       </p>
-
+{/* 
       <SearchEntities query={queryString} />
-      {queryString ? <DisplayEntities query={queryString} /> : <InfoCards />}
+      {queryString ? <DisplayEntities query={queryString} /> : <InfoCards />} */}
     </main>
   );
 }

@@ -5,11 +5,14 @@ const DEFAULT_CLASS =
   "rounded-[40px] text-[0.8em] text-datacite-blue-dark bg-datacite-blue-light/20 p-y-0 p-x-1 border-none";
 
 const MEMBER_TYPE_LABEL = {
+  doi: "DOI",
   repository: "Repository",
+  ror_report: "Organizational Report",
   direct_member: "Institutional Member",
   consortium: "Consortium Member",
   consortium_organization: "Consortium Organization",
   member_only: "Institutional Member",
+  orcid_report: "Researcher Report",
 } as const;
 
 export function EntityBadge(props: { entity: { type: string } }) {

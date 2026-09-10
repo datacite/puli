@@ -16,6 +16,7 @@ export interface Props extends Omit<ComponentProps<"div">, "title"> {
   title: string | ReactNode;
   description: string | ReactNode;
   present: number | ReactNode;
+  metadataField?: string;
   isHighImpact?: boolean;
 }
 
@@ -23,6 +24,7 @@ export default function ChartsCard({
   title,
   description,
   present,
+  metadataField,
   isHighImpact = false,
   className,
   children,
@@ -52,7 +54,7 @@ export default function ChartsCard({
 
       <CardContent className="grid md:grid-cols-[150px_repeat(auto-fit,0_minmax(0,1fr))] justify-center gap-8">
         {typeof present === "number" ? (
-          <RadialChart present={present} />
+          <RadialChart present={present} metadataField={metadataField} />
         ) : (
           present
         )}

@@ -1,7 +1,22 @@
 import type { Props as DistributionProps } from "@/components/DistributionChart";
 import type { Props as PresentProps } from "@/components/PresentBar";
-import { API_URL_COMPLETENESS, API_URL_DATACITE, FIELDS } from "@/constants";
-import type { Distribution, Entity, Filters, Format, Present } from "@/types";
+import {
+  API_URL_COMPLETENESS,
+  API_URL_DATACITE,
+  FIELDS,
+} from "@/constants";
+import type {
+  Distribution,
+  DoiFacetValue,
+  DoiFacetValueField,
+  DoiFacetValueFormat,
+  Entity,
+  Filters,
+  Format,
+  Present,
+} from "@/types";
+
+export type MetadataDrilldownKind = "with" | "without";
 
 export function pascal(str: string) {
   return str
@@ -24,6 +39,139 @@ export function asRoundedPercent(value: number, places = 1) {
 
 export function asNumber(value: number) {
   return value.toLocaleString("en-US");
+}
+
+export function escapeQuery(query: string) {
+  return query.replace(/[+\-=&|><!(){}[\]^"~*?:\\/.]/g, "\\$&");
+}
+
+export function escapeDoiQuery(query: string) {
+  return query.replace(/[+\-=&|><!(){}[\]^"~*?:\\.]/g, "\\$&");
+}
+
+export function normalizeDoiBaseQuery(query: string, advancedSearch?: boolean) {
+  const trimmed = query.trim();
+  if (!trimmed) return "";
+  return advancedSearch ? trimmed : escapeDoiQuery(trimmed);
+}
+
+export function formatMissingFacetTitle(value: string) {
+  if (/^[a-z0-9]+(?:[-_][a-z0-9]+)+$/.test(value)) {
+    return value
+      .split(/[-_]+/)
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ");
+  }
+
+  return value;
+}
+
+export function buildDoiFacetClause(
+  queryField: string,
+  values: DoiFacetValue[],
+  valueField: DoiFacetValueField = "title",
+  valueFormat: DoiFacetValueFormat = "raw",
+  valuePrefix = "",
+) {
+  if (values.length === 0) return "";
+
+  if (valueFormat === "year-range") {
+    const ranges = values
+      .map((value) => (valueField === "id" ? value.id : value.title))
+      .filter((year) => /^\d{4}$/.test(year))
+      .map((year) => `[${year}-01-01 TO ${year}-12-31]`);
+
+    if (ranges.length === 0) return "";
+    if (ranges.length === 1) return `${queryField}:${ranges[0]}`;
+
+    return `${queryField}:(${ranges.join(" OR ")})`;
+  }
+
+  if (values.length === 1) {
+    const raw = valueField === "id" ? values[0].id : values[0].title;
+    return `${queryField}:"${(valuePrefix + raw).replace(/"/g, '\\"')}"`;
+  }
+
+  const joined = values
+    .map((value) => {
+      const raw = valueField === "id" ? value.id : value.title;
+      return `"${(valuePrefix + raw).replace(/"/g, '\\"')}"`;
+    })
+    .join(" OR ");
+
+  return `${queryField}:(${joined})`;
+}
+
+export function buildCombinedDoiQuery(baseQuery: string, facetClauses: string[]) {
+  const cleanBase = baseQuery.trim();
+  const cleanFacets = facetClauses.filter(Boolean);
+
+  if (!cleanBase && cleanFacets.length === 0) return "";
+  if (!cleanBase) return cleanFacets.join(" AND ");
+  if (cleanFacets.length === 0) return cleanBase;
+
+  return `(${cleanBase}) AND (${cleanFacets.join(" AND ")})`;
+}
+
+export function withFixedDoiQuery(fixedQuery: string | undefined, query: string) {
+  if (!fixedQuery?.trim()) return query;
+
+  const clean = query.trim();
+  return clean ? `(${fixedQuery}) AND (${clean})` : fixedQuery;
+}
+
+export function parseCommaSeparatedParam(value: string | null) {
+  if (!value) return [] as string[];
+
+  return value
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+export function getDoiFacetStoredValues(
+  values: Record<string, DoiFacetValue[]>,
+  facetKey: string,
+  valueField?: DoiFacetValueField,
+) {
+  const field = valueField === "id" ? "id" : "title";
+  return values[facetKey]?.map((item) => item[field]) || [];
+}
+
+export function buildMetadataDrilldownQuery({
+  field,
+  kind,
+  value,
+}: {
+  field: string;
+  kind: MetadataDrilldownKind;
+  value?: string;
+}) {
+  const hasValue = typeof value === "string" && value.trim().length > 0;
+  if (hasValue) {
+    return `${kind === "without" ? "NOT " : ""}${field}:"${value.trim()}"`;
+  }
+
+  return `${kind === "without" ? "NOT " : ""}${field}:*`;
+}
+
+export function buildEntityScopeClause(
+  entityId: string | undefined,
+  entityType?: Entity["type"],
+) {
+  if (!entityId) return undefined;
+
+  const scopeField = entityType === "repository"
+    ? "client.id"
+    : entityType === "consortium"
+      ? "consortium_id"
+      : entityType
+        ? "provider.id"
+        : entityId.includes(".")
+          ? "client.id"
+          : "provider.id";
+
+  return `${scopeField}:${entityId}`;
 }
 
 export function fetchApiBase(
@@ -87,6 +235,7 @@ function toDistributionProps(item?: Distribution): DistributionProps {
 
   return {
     property: field?.label || item.field,
+    metadataField: item.field,
     data: item.values.map((value) => ({
       value: value.value,
       present: value.percent,
@@ -153,3 +302,10 @@ export function findBuilder<T, U>(
 ) {
   return (b: U) => array.find((a) => fn(a, b)) || defaultValue;
 }
+
+export function formatFieldName(field: string) {
+  const fields = field.split(".");
+  const formatted = fields.map((f) => FIELDS[f]?.label || f).join(" > ");
+  return formatted.charAt(0).toLowerCase() + formatted.slice(1);
+}
+

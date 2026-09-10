@@ -49,6 +49,7 @@ export function Creators(props: { entity: Entity }) {
       title={data.creators.property}
       description={CreatorsDescription}
       present={data.creators.present}
+      metadataField={data.creators.metadataField}
       isHighImpact={data.creators.isHighImpact}
       className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
@@ -94,6 +95,7 @@ export function Contributors(props: { entity: Entity }) {
       title={data.contributors.property}
       description={ContributorsDescription}
       present={data.contributors.present}
+      metadataField={data.contributors.metadataField}
       isHighImpact={data.contributors.isHighImpact}
       className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
@@ -143,6 +145,7 @@ export function RelatedIdentifiers(props: { entity: Entity }) {
       title={data.relatedIdentifiers.property}
       description={RelatedIdentifiersDescription}
       present={data.relatedIdentifiers.present}
+      metadataField={data.relatedIdentifiers.metadataField}
       isHighImpact={data.relatedIdentifiers.isHighImpact}
       className={`md:col-span-full ${isFetching ? "opacity-50" : ""}`}
     >
@@ -188,6 +191,7 @@ export function FundingReferences(props: { entity: Entity }) {
       title={data.fundingReferences.property}
       description={FundingReferencesDescription}
       present={data.fundingReferences.present}
+      metadataField={data.fundingReferences.metadataField}
       isHighImpact={data.fundingReferences.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -229,6 +233,7 @@ export function Publisher(props: { entity: Entity }) {
       title={data.publisher.property}
       description={PublisherDescription}
       present={data.publisher.present}
+      metadataField={data.publisher.metadataField}
       isHighImpact={data.publisher.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -270,6 +275,7 @@ export function ResourceType(props: { entity: Entity }) {
       title={data.resourceType.property}
       description={ResourceTypeDescription}
       present={data.resourceType.present}
+      metadataField={data.resourceType.metadataField}
       isHighImpact={data.resourceType.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -307,6 +313,7 @@ export function Subjects(props: { entity: Entity }) {
       title={data.subjects.property}
       description={SubjectsDescription}
       present={data.subjects.present}
+      metadataField={data.subjects.metadataField}
       isHighImpact={data.subjects.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -348,6 +355,7 @@ export function Descriptions(props: { entity: Entity }) {
       title={data.descriptions.property}
       description={DescriptionsDescription}
       present={data.descriptions.present}
+      metadataField={data.descriptions.metadataField}
       isHighImpact={data.descriptions.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -386,6 +394,7 @@ export function Titles(props: { entity: Entity }) {
       title={data.titles.property}
       description={TitlesDescription}
       present={data.titles.present}
+      metadataField={data.titles.metadataField}
       isHighImpact={data.titles.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -424,6 +433,7 @@ export function Rights(props: { entity: Entity }) {
       title={data.rights.property}
       description={RightsDescription}
       present={data.rights.present}
+      metadataField={data.rights.metadataField}
       isHighImpact={data.rights.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -461,6 +471,7 @@ export function Dates(props: { entity: Entity }) {
       title={data.dates.property}
       description={DatesDescription}
       present={data.dates.present}
+      metadataField={data.dates.metadataField}
       isHighImpact={data.dates.isHighImpact}
       className={`md:col-span-[2] ${isFetching ? "opacity-50" : ""}`}
     >
@@ -497,6 +508,7 @@ export function PublicationYear(props: { entity: Entity }) {
       title={data.publicationYear.property}
       description={PublicationYearDescription}
       present={data.publicationYear.present}
+      metadataField={data.publicationYear.metadataField}
       isHighImpact={data.publicationYear.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -528,6 +540,7 @@ export function AlternateIdentifiers(props: { entity: Entity }) {
       title={data.alternateIdentifiers.property}
       description={AlternateIdentifiersDescription}
       present={data.alternateIdentifiers.present}
+      metadataField={data.alternateIdentifiers.metadataField}
       isHighImpact={data.alternateIdentifiers.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -558,6 +571,7 @@ export function Language(props: { entity: Entity }) {
       title={data.language.property}
       description={LanguageDescription}
       present={data.language.present}
+      metadataField={data.language.metadataField}
       isHighImpact={data.language.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -588,6 +602,7 @@ export function Sizes(props: { entity: Entity }) {
       title={data.sizes.property}
       description={SizesDescription}
       present={data.sizes.present}
+      metadataField={data.sizes.metadataField}
       isHighImpact={data.sizes.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -618,6 +633,7 @@ export function Formats(props: { entity: Entity }) {
       title={data.formats.property}
       description={FormatsDescription}
       present={data.formats.present}
+      metadataField={data.formats.metadataField}
       isHighImpact={data.formats.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -648,6 +664,7 @@ export function Version(props: { entity: Entity }) {
       title={data.version.property}
       description={VersionDescription}
       present={data.version.present}
+      metadataField={data.version.metadataField}
       isHighImpact={data.version.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -679,6 +696,7 @@ export function GeoLocation(props: { entity: Entity }) {
       title={data.geoLocation.property}
       description={GeoLocationDescription}
       present={data.geoLocation.present}
+      metadataField={data.geoLocation.metadataField}
       isHighImpact={data.geoLocation.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />
@@ -710,6 +728,7 @@ export function RelatedItem(props: { entity: Entity }) {
       title={data.relatedItem.property}
       description={RelatedItemDescription}
       present={data.relatedItem.present}
+      metadataField={data.relatedItem.metadataField}
       isHighImpact={data.relatedItem.isHighImpact}
       className={isFetching ? "opacity-50" : ""}
     />

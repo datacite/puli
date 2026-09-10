@@ -3,7 +3,7 @@
 import { track } from "@vercel/analytics";
 import { Info } from "lucide-react";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { type KeyboardEvent, useState } from "react";
 import { Button as Btn } from "@/components/ui/button";
 import {
@@ -59,6 +59,7 @@ function ButtonsGrid(props: React.ComponentProps<"div">) {
 }
 
 function FilterByRegistrationYear(props: { entity: Entity }) {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -95,7 +96,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
-          router.push(`/${props.entity.id}?${params.toString()}`);
+          router.push(`${pathname}?${params.toString()}`);
         }}
         className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
@@ -111,7 +112,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
             )
               params.delete(SEARCH_PARAMETERS.REGISTRATION_YEAR);
 
-            const href = `/${props.entity.id}?${params.toString()}`;
+            const href = `${pathname}?${params.toString()}`;
 
             return (
               <ComboboxItem key={item.id} value={item.id} onClick={onItemClick}>
@@ -132,6 +133,7 @@ function FilterByRegistrationYear(props: { entity: Entity }) {
 }
 
 function FilterByResourceType(props: { entity: Entity }) {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState(false);
@@ -168,7 +170,7 @@ function FilterByResourceType(props: { entity: Entity }) {
         onClear={() => {
           const params = new URLSearchParams(searchParams.toString());
           params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
-          router.push(`/${props.entity.id}?${params.toString()}`);
+          router.push(`${pathname}?${params.toString()}`);
         }}
         className="text-xs bg-white w-full h-full rounded-[60px] px-2"
       />
@@ -182,7 +184,7 @@ function FilterByResourceType(props: { entity: Entity }) {
             if (searchParams.get(SEARCH_PARAMETERS.RESOURCE_TYPE) === item.id)
               params.delete(SEARCH_PARAMETERS.RESOURCE_TYPE);
 
-            const href = `/${props.entity.id}?${params.toString()}`;
+            const href = `${pathname}?${params.toString()}`;
 
             return (
               <ComboboxItem key={item.id} value={item.id} onClick={onItemClick}>
@@ -203,6 +205,7 @@ function FilterByResourceType(props: { entity: Entity }) {
 }
 
 function FilterByQuery(props: { entity: Entity }) {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(
@@ -212,7 +215,7 @@ function FilterByQuery(props: { entity: Entity }) {
   const params = new URLSearchParams(searchParams.toString());
   params.set(SEARCH_PARAMETERS.QUERY, query);
   if (!query.trim()) params.delete(SEARCH_PARAMETERS.QUERY);
-  const href = `/${props.entity.id}?${params.toString()}`;
+  const href = `${pathname}?${params.toString()}`;
 
   const disabled = !query.trim();
 

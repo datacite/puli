@@ -47,6 +47,31 @@ export type DataCite = EntityBase & {
   children: [];
 };
 
+export type HeaderInfo = {
+  title: string;
+  id: string;
+  labels: HeaderLabels[];
+};
+
+export type HeaderLabels = {
+  type: string;
+  content: string;
+  icon: React.ReactNode;
+};
+
+export type ResultListItem = {
+  id: string;
+  title: string;
+  href: string;
+  subtitle?: string;
+  subtitleHref?: string;
+  subtitleExternal?: boolean;
+  secondaryLine?: string;
+  description?: string;
+  attributes?: HeaderLabels[];
+  badge?: React.ReactNode;
+};
+
 export type Entity =
   | Repository
   | DirectMember
@@ -149,6 +174,180 @@ export type Facet = {
   id: string;
   title: string;
   count: number;
+};
+
+export type DoiRecord = {
+  id: string;
+  attributes: {
+    titles: { title: string }[];
+    doi: string;
+    descriptions?: { description: string }[];
+    types: { resourceTypeGeneral?: string };
+    version: string;
+    citationCount?: number;
+    viewCount?: number;
+    downloadCount?: number;
+    publicationYear?: string | number;
+    publisher?: string;
+    agency?: string;
+  };
+  relationships?: {
+    client?: {
+      data?: {
+        id: string;
+      };
+    };
+    versionOf?: {
+      data?: Array<{
+        id: string;
+      }>;
+    };
+  };
+};
+
+export type DoiRecordsResponse = {
+  data?: DoiRecord[];
+  meta?: {
+    total?: number;
+  };
+};
+
+export type DoiFacetValue = {
+  id: string;
+  title: string;
+  count: number;
+};
+
+export type DoiFacetValueField = "id" | "title";
+
+export type DoiFacetValueFormat = "raw" | "year-range";
+
+export type DoiFacetConfig = {
+  key: string;
+  label: string;
+  queryField: string;
+  valueField?: DoiFacetValueField;
+  valueFormat?: DoiFacetValueFormat;
+  valuePrefix?: string;
+  icon?: React.ReactNode;
+};
+
+export type SelectOption = {
+  id: string;
+  title: string;
+};
+
+export type DoiMetricFacet = "viewCount" | "downloadCount" | "citationCount";
+
+export type DoiMetricState = {
+  value: number | null;
+  isLoading: boolean;
+  isError?: boolean;
+};
+
+type HeaderIdentity = {
+  title: string;
+  id: string;
+};
+
+export type DoiHeaderData = HeaderIdentity & {
+  resourceTypeGeneral: string;
+  publicationYear: string;
+  publisher: string;
+  version: string;
+  citationCount: string;
+  versionOfRelationshipIds: string[];
+};
+
+export type RorHeaderData = HeaderIdentity & {
+  country: string;
+  types: string;
+};
+
+export type OrcidHeaderData = HeaderIdentity & {
+  otherNames: string;
+  employer: string;
+};
+
+export type DoiSearchResult = {
+  id: string;
+  doi: string;
+  title: string;
+  resourceTypeGeneral?: string;
+  publicationYear?: string;
+  publisher?: string;
+};
+
+export type RorOrganization = {
+  id: string;
+  names?: Array<{
+    value: string;
+    types?: string[];
+  }>;
+  locations?: Array<{
+    geonames_details?: {
+      name?: string;
+      country_name?: string;
+    };
+  }>;
+  types?: string[];
+};
+
+export type RorSearchResult = {
+  id: string;
+  pathId: string;
+  name: string;
+  nameVariations?: string[];
+  city?: string;
+  country?: string;
+  types?: string[];
+};
+
+export type OrcidRecord = {
+  "orcid-identifier"?: {
+    uri?: string;
+  };
+  "activities-summary"?: {
+    employments?: {
+      "affiliation-group"?: Array<{
+        summaries?: Array<{
+          "employment-summary"?: {
+            organization?: {
+              name?: string;
+            };
+          };
+        }>;
+      }>;
+    };
+  };
+  person?: {
+    name?: {
+      "given-names"?: {
+        value?: string;
+      };
+      "family-name"?: {
+        value?: string;
+      };
+    };
+    "other-names"?: {
+      "other-name"?: Array<{
+        value?: string;
+      }>;
+    };
+  };
+};
+
+export type OrcidSearchResult = {
+  id: string;
+  name: string;
+  otherNames?: string[];
+  employerNames?: string[];
+  institutionNames?: string[];
+};
+
+export type PaginatedSearchResult<T> = {
+  items: T[];
+  total: number;
 };
 
 export type Present = {

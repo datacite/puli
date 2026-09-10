@@ -1,16 +1,22 @@
-import Image from "next/image";
-import Link from "next/link";
-import { H1 } from "@/components/datacite/Headings";
-import logo from "./DataCite-Logo.png";
+"use client";
+
+import { Suspense } from "react";
+import GlobalSearch from "@/components/GlobalSearch";
 
 export default function Header() {
+
   return (
-    <header className="py-4 px-6">
-      <H1 className="w-max">
+    <header className="flex bg-datacite-blue-dark items-center gap-6 px-6 py-4">
+      {/* <H1 className="w-max shrink-0">
         <Link href="/" prefetch>
           <Image src={logo} alt="DataCite logo" height={35} className="" />
         </Link>
-      </H1>
+      </H1> */}
+        <div className="flex min-w-0 flex-1 justify-center">
+          <Suspense fallback={<div className="h-10 w-full" />}>
+            <GlobalSearch />
+          </Suspense>
+        </div>
     </header>
   );
 }

@@ -1,6 +1,7 @@
 
 import { useQuery as useTanstackQuery } from "@tanstack/react-query";
 import {
+  API_URL_DATACITE,
   ALL_OF_DATACITE_ID,
   ALL_OF_DATACITE_NAME,
   COMPLETENESS_FIELDS,
@@ -11,34 +12,87 @@ import type {
   ApiDois,
   ApiEntity,
   ApiProvider,
+  DoiSearchResult,
   Consortium,
   ConsortiumOrganization,
   DataCite,
   DirectMember,
+  DoiFacetValue,
+  DoiMetricFacet,
+  DoiRecordsResponse,
   Entity,
   Filters,
   MemberOnly,
+  OrcidRecord,
+  OrcidSearchResult,
+  PaginatedSearchResult,
   Repository,
+  RorOrganization,
+  RorSearchResult,
 } from "@/types";
 import {
   buildPlaceholderData,
   createFormat,
+  escapeDoiQuery,
+  escapeQuery,
   fetchDatacite,
   fetchFields,
   isClient,
 } from "@/util";
 
-// Global Search /////////////////////////////////
+type DoiRequestOptions = {
+  query: string;
+  pageSize?: number;
+  pageNumber?: number;
+  sort?: string;
+  disableFacets?: boolean;
+  facets?: string;
+  includeOtherRegistrationAgencies?: boolean;
+  mailto?: string;
+};
+
+function buildDoiSearchParams(options: DoiRequestOptions): URLSearchParams {
+  const searchParams = new URLSearchParams({
+    query: options.query,
+    "page[size]": String(options.pageSize ?? 25),
+  });
+
+  if (options.pageNumber && options.pageNumber > 0) {
+    searchParams.set("page[number]", String(options.pageNumber));
+  }
+  if (options.sort?.trim()) {
+    searchParams.set("sort", options.sort.trim());
+  }
+  if (typeof options.disableFacets === "boolean") {
+    searchParams.set("disable-facets", options.disableFacets ? "true" : "false");
+  }
+  if (options.facets?.trim()) {
+    searchParams.set("facets", options.facets.trim());
+  }
+  if (options.includeOtherRegistrationAgencies) {
+    searchParams.set("include_other_registration_agencies", "true");
+  }
+  if (options.mailto?.trim()) {
+    searchParams.set("mailto", options.mailto.trim());
+  }
+
+  return searchParams;
+}
+
+function buildDoisApiUrl(options: DoiRequestOptions): string {
+  return `${API_URL_DATACITE}/dois?${buildDoiSearchParams(options).toString()}`;
+}
 
 export async function searchEntities(
   query: string,
+  options?: { advancedSearch?: boolean },
 ): Promise<{ clients: Entity[]; providers: Entity[] }> {
   if (!query) return { clients: [], providers: [] };
 
   const searchParams = new URLSearchParams({
-    query,
+    query: options?.advancedSearch ? query : escapeQuery(query),
     sort: "relevance",
-    "page[size]": "1000",
+    "page[size]": "5",
   }).toString();
 
   const [clientsData, providersData] = await Promise.all([
@@ -547,9 +601,8 @@ export function useOther(entity: Entity) {
   );
 }
 
-// Always fetch from production DataCite API
 export async function fetchDoiRecord(doi: string) {
-  const url = `https://api.datacite.org/dois/${encodeURIComponent(doi)}`;
+  const url = `${API_URL_DATACITE}/dois/${doi}`;
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -560,8 +613,38 @@ export async function fetchDoiRecord(doi: string) {
   return response.json();
 }
 
+export async function fetchRorOrganization(id: string): Promise<RorOrganization> {
+  const response = await fetch(`https://api.ror.org/v2/organizations/${id}`, {
+    next: { revalidate: 3600 },
+  });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ROR organization: ${response.statusText}`);
+  }
+
+  return (await response.json()) as RorOrganization;
+}
+
+export async function fetchOrcidRecord(id: string): Promise<OrcidRecord> {
+  const response = await fetch(`https://pub.orcid.org/v3.0/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 3600 },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ORCID record: ${response.statusText}`);
+  }
+
+  return (await response.json()) as OrcidRecord;
+}
+
 export async function fetchEvents(doi: string) {
-  const url = `https://api.datacite.org/events?page[size]=1000&query=(subj_id:"https://doi.org/${doi}" OR obj_id:"https://doi.org/${doi}") AND NOT source_id:datacite-resolution`;
+  const searchParams = new URLSearchParams({
+    "page[size]": "1000",
+    query: `(subj_id:"https://doi.org/${doi}" OR obj_id:"https://doi.org/${doi}") AND NOT source_id:datacite-resolution`,
+  });
+  const url = `${API_URL_DATACITE}/events?${searchParams.toString()}`;
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -572,9 +655,17 @@ export async function fetchEvents(doi: string) {
   return response.json();
 }
 
-export async function fetchDoisRecords(query: string) {
-  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25&include_other_registration_agencies=true&disable-facets=false&facets=resourceTypes`;
-  console.log("Fetching DOIs with query:", url);
+export async function fetchDoisRecords(
+  query: string,
+  options?: { pageSize?: number; sort?: string; pageNumber?: number },
+): Promise<DoiRecordsResponse> {
+  const url = buildDoisApiUrl({
+    query,
+    pageSize: options?.pageSize,
+    pageNumber: options?.pageNumber,
+    sort: options?.sort,
+    includeOtherRegistrationAgencies: true,
+  });
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -582,14 +673,522 @@ export async function fetchDoisRecords(query: string) {
   if (!response.ok) {
     throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
   }
-const data = await response.json();
-console.log("DOIs records response:", data);
-  return data;
+
+  return response.json() as Promise<DoiRecordsResponse>;
+}
+
+export const DOI_CSV_EXPORT_PAGE_SIZE = 1000;
+
+type DoiCsvExportOptions = {
+  pageSize?: number;
+  pageNumber?: number;
+  sort?: string;
+};
+
+export function buildDoiExportUrl(
+  query: string,
+  options?: DoiCsvExportOptions,
+) {
+  return buildDoisApiUrl({
+    query,
+    pageSize: options?.pageSize,
+    pageNumber: options?.pageNumber,
+    sort: options?.sort,
+    includeOtherRegistrationAgencies: true,
+  });
+}
+
+export async function fetchDoiCsvPage(
+  query: string,
+  options?: DoiCsvExportOptions,
+): Promise<string> {
+  const url = buildDoiExportUrl(query, options);
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "text/csv" },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOI CSV export: ${response.statusText}`);
+  }
+
+  return response.text();
+}
+
+export function mergeCsvDocuments(csvPages: string[]): string {
+  if (csvPages.length === 0) return "";
+
+  return csvPages
+    .map((page, index) => {
+      if (index === 0) return page.trimEnd();
+
+      const newlineIndex = page.indexOf("\n");
+      if (newlineIndex === -1) return "";
+
+      return page.slice(newlineIndex + 1).trimEnd();
+    })
+    .filter(Boolean)
+    .join("\n");
+}
+
+export async function searchDois(query: string, options?: { advancedSearch?: boolean }): Promise<DoiSearchResult[]> {
+  if (!query.trim()) return [];
+
+  const searchParams = new URLSearchParams({
+    query: options?.advancedSearch ? query : escapeDoiQuery(query),
+    "page[size]": "5",
+    include_other_registration_agencies: "true",
+    sort: "relevance",
+  });
+
+  const response = await fetch(`${API_URL_DATACITE}/dois?${searchParams.toString()}`, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+
+  if (!response.ok) return [];
+
+  const data = (await response.json()) as {
+    data?: Array<{
+      id: string;
+      attributes: {
+        doi: string;
+        titles?: Array<{ title: string }>;
+        types?: { resourceTypeGeneral?: string };
+        publicationYear?: string;
+        publisher?: string;
+      };
+    }>;
+  };
+
+  return (data.data || []).map((item) => ({
+    id: item.id,
+    doi: item.attributes.doi,
+    title: item.attributes.titles?.[0]?.title || "Untitled",
+    resourceTypeGeneral: item.attributes.types?.resourceTypeGeneral,
+    publicationYear: item.attributes.publicationYear,
+    publisher: item.attributes.publisher,
+  }));
+}
+
+type RorSearchApiResponse = {
+  items?: RorOrganization[];
+  number_of_results?: number;
+};
+
+function mapRorOrganizationToSearchResult(item: RorOrganization): RorSearchResult {
+  const displayName =
+    item.names?.find((name) => name.types?.includes("ror_display"))?.value ||
+    item.names?.[0]?.value ||
+    "Unknown Organization";
+
+  const nameVariations = (item.names || [])
+    .map((name) => name.value)
+    .filter(
+      (value, index, all) => value && value !== displayName && all.indexOf(value) === index,
+    );
+
+  return {
+    id: item.id,
+    pathId: item.id.replace("https://ror.org/", ""),
+    name: displayName,
+    nameVariations,
+    city: item.locations?.[0]?.geonames_details?.name,
+    country: item.locations?.[0]?.geonames_details?.country_name,
+    types: item.types,
+  };
+}
+
+async function fetchRorSearchApiData(query: string, page?: number): Promise<RorSearchApiResponse> {
+  const escapedRorQuery = escapeQuery(query);
+  const searchParams = new URLSearchParams({ query: escapedRorQuery });
+  if (page && page > 0) {
+    searchParams.set("page", String(page));
+  }
+
+  const response = await fetch(`https://api.ror.org/v2/organizations?${searchParams.toString()}`);
+  if (!response.ok) {
+    return { items: [], number_of_results: 0 };
+  }
+
+  return (await response.json()) as RorSearchApiResponse;
+}
+
+export async function searchRor(query: string, _options?: { advancedSearch?: boolean }): Promise<RorSearchResult[]> {
+  if (!query.trim()) return [];
+
+  const data = await fetchRorSearchApiData(query);
+  return (data.items || []).slice(0, 5).map(mapRorOrganizationToSearchResult);
+}
+
+type OrcidExpandedSearchItem = {
+  "orcid-id": string;
+  "given-names"?: string | null;
+  "family-names"?: string | null;
+  "credit-name"?: string | null;
+  "other-name"?: string[];
+  "employer-name"?: string[];
+  "institution-name"?: string[];
+};
+
+type OrcidExpandedSearchResponse = {
+  "expanded-result"?: OrcidExpandedSearchItem[];
+  "num-found"?: number;
+};
+
+function mapOrcidExpandedSearchItem(item: OrcidExpandedSearchItem): OrcidSearchResult {
+  const given = item["given-names"] || "";
+  const family = item["family-names"] || "";
+  const credit = item["credit-name"] || "";
+
+  return {
+    id: item["orcid-id"],
+    name: credit || [given, family].filter(Boolean).join(" ") || item["orcid-id"],
+    otherNames: (item["other-name"] || []).filter(Boolean),
+    employerNames: (item["employer-name"] || item["institution-name"] || []).filter(Boolean),
+    institutionNames: (item["institution-name"] || []).filter(Boolean),
+  };
+}
+
+async function fetchOrcidExpandedSearchData(query: string, rows: number, start: number): Promise<OrcidExpandedSearchResponse> {
+  const searchParams = new URLSearchParams({
+    q: query,
+    rows: String(rows),
+    start: String(start),
+  });
+
+  const response = await fetch(`https://pub.orcid.org/v3.0/expanded-search?${searchParams.toString()}`, {
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      accept: "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    return { "expanded-result": [], "num-found": 0 };
+  }
+
+  return (await response.json()) as OrcidExpandedSearchResponse;
+}
+
+export async function searchOrcid(query: string, options?: { advancedSearch?: boolean }): Promise<OrcidSearchResult[]> {
+  if (!query.trim()) return [];
+
+  const data = await fetchOrcidExpandedSearchData(query, 25, 0);
+  return (data["expanded-result"] || [])
+    .slice(0, 5)
+    .map(mapOrcidExpandedSearchItem);
+}
+
+type SearchModeOptions = {
+  advancedSearch?: boolean;
+};
+
+export async function searchEntitiesPaginated(
+  query: string,
+  type: "clients" | "providers",
+  page: number = 1,
+  pageSize: number = 25,
+  options?: SearchModeOptions,
+): Promise<PaginatedSearchResult<Entity>> {
+  if (!query) return { items: [], total: 0 };
+
+  const queryParam = options?.advancedSearch ? query : escapeQuery(query);
+
+  const searchParams = new URLSearchParams({
+    query: queryParam,
+    sort: "relevance",
+    "page[number]": String(page),
+    "page[size]": String(pageSize),
+  }).toString();
+
+  const endpoint = type === "clients" ? "clients" : "providers";
+  const payload = (await (await fetchDatacite(`${endpoint}?${searchParams}`, { cache: "force-cache" })).json()) as {
+    data: Array<ApiEntity["data"]>;
+    meta?: { total?: number };
+  };
+
+  const apiData = payload.data;
+  const meta = payload.meta;
+
+  const entities = await Promise.all(apiData.map((d) => apiDataToEntity(d)));
+
+  return {
+    items: entities.filter((e) => e !== null),
+    total: meta?.total ?? 0,
+  };
+}
+
+export async function searchRorPaginated(
+  query: string,
+  page: number = 1,
+  _options?: SearchModeOptions,
+): Promise<PaginatedSearchResult<RorSearchResult>> {
+  if (!query.trim()) return { items: [], total: 0 };
+
+  const data = await fetchRorSearchApiData(query, page);
+  const items = (data.items || []).map(mapRorOrganizationToSearchResult);
+
+  return {
+    items,
+    total: data.number_of_results ?? 0,
+  };
+}
+
+export async function searchOrcidPaginated(
+  query: string,
+  page: number = 1,
+  options?: SearchModeOptions,
+): Promise<PaginatedSearchResult<OrcidSearchResult>> {
+  if (!query.trim()) return { items: [], total: 0 };
+
+  const pageSize = 25;
+  const start = (page - 1) * pageSize;
+
+  const data = await fetchOrcidExpandedSearchData(query, pageSize, start);
+  const items = (data["expanded-result"] || []).map(mapOrcidExpandedSearchItem);
+
+  return {
+    items,
+    total: data["num-found"] ?? 0,
+  };
+}
+
+export async function fetchDoisTotal(query: string): Promise<number> {
+  const url = buildDoisApiUrl({
+    query,
+    pageSize: 0,
+    includeOtherRegistrationAgencies: true,
+  });
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOIs total: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as { meta?: { total?: number } };
+  return data.meta?.total ?? 0;
+}
+
+type DoiFacetApiResponse = {
+  meta: {
+    [facetName: string]: DoiFacetValue[] | number;
+  };
+};
+
+type OpenAlexWorkResponse = {
+  id?: string;
+  cited_by_count?: number;
+};
+
+type OpenAireMeasure = {
+  "@id"?: string;
+  "@score"?: string | number;
+};
+
+type OpenAireResultEntity = {
+  measure?: OpenAireMeasure | OpenAireMeasure[];
+};
+
+type OpenAireResultRecord = {
+  metadata?: {
+    "oaf:entity"?: {
+      "oaf:result"?: OpenAireResultEntity;
+    };
+  };
+};
+
+type OpenAireResponse = {
+  response?: {
+    header?: {
+      total?: {
+        $?: string | number;
+      };
+    };
+    results?: {
+      result?: OpenAireResultRecord | OpenAireResultRecord[];
+    };
+  };
+};
+
+type OpenCitationsCountResponse = Array<{
+  count?: string | number;
+}>;
+
+export async function fetchOpenAlexWorkByDoi(doi: string): Promise<{
+  id: string;
+  citedByCount: number;
+} | null> {
+  const trimmedDoi = doi.trim();
+  if (!trimmedDoi) return null;
+
+  const url = `https://api.openalex.org/works/doi:${encodeURIComponent(trimmedDoi)}`;
+  const response = await fetch(url, {
+    method: "GET",
+    next: { revalidate: 3600 },
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch OpenAlex work: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as OpenAlexWorkResponse;
+  if (!data.id) return null;
+
+  return {
+    id: data.id,
+    citedByCount: Number.isFinite(data.cited_by_count)
+      ? Number(data.cited_by_count)
+      : 0,
+  };
+}
+
+export async function fetchOpenAireWorkByDoi(doi: string): Promise<{
+  id: string;
+  citedByCount: number;
+} | null> {
+  const trimmedDoi = doi.trim();
+  if (!trimmedDoi) return null;
+
+  const apiUrl = `https://api.openaire.eu/search/researchProducts?doi=${encodeURIComponent(trimmedDoi)}&format=json`;
+  const response = await fetch(apiUrl, {
+    method: "GET",
+    headers: { accept: "application/json" },
+    next: { revalidate: 3600 },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch OpenAIRE work: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as OpenAireResponse;
+  const totalRaw = data.response?.header?.total?.$;
+  const total = Number(totalRaw);
+
+  if (!Number.isFinite(total) || total <= 0) {
+    return null;
+  }
+
+  const resultNode = data.response?.results?.result;
+  const firstResult = Array.isArray(resultNode) ? resultNode[0] : resultNode;
+  const measureNode =
+    firstResult?.metadata?.["oaf:entity"]?.["oaf:result"]?.measure;
+  const measures = Array.isArray(measureNode)
+    ? measureNode
+    : measureNode
+      ? [measureNode]
+      : [];
+
+  const citationMeasure = measures.find(
+    (measure) => measure?.["@id"] === "citationCount",
+  );
+  const citedByCount = Number(citationMeasure?.["@score"]);
+
+  return {
+    id: `https://explore.openaire.eu/search/publication?pid=${encodeURIComponent(trimmedDoi)}`,
+    citedByCount: Number.isFinite(citedByCount) ? citedByCount : 0,
+  };
+}
+
+export async function fetchOpenCitationsByDoi(doi: string): Promise<{
+  id: string;
+  citedByCount: number;
+} | null> {
+  const trimmedDoi = doi.trim();
+  if (!trimmedDoi) return null;
+
+  const apiUrl = `https://api.opencitations.net/index/v2/citation-count/doi:${encodeURIComponent(trimmedDoi)}`;
+  const response = await fetch(apiUrl, {
+    method: "GET",
+    next: { revalidate: 3600 },
+  });
+
+  if (response.status === 404) {
+    return null;
+  }
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch OpenCitations count: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as OpenCitationsCountResponse;
+  const first = Array.isArray(data) ? data[0] : undefined;
+  if (!first) return null;
+
+  const parsedCount = Number(first.count);
+  if (!Number.isFinite(parsedCount) || parsedCount <= 0) {
+    return null;
+  }
+
+  return {
+    id: `https://search.opencitations.net/search?text=${encodeURIComponent(trimmedDoi)}&rule=citeddoi`,
+    citedByCount: parsedCount,
+  };
+}
+
+export async function fetchDoiFacetValues(
+  facetName: string,
+  query = "",
+): Promise<DoiFacetValue[]> {
+  const url = buildDoisApiUrl({
+    query: query.trim(),
+    pageSize: 0,
+    disableFacets: false,
+    facets: facetName,
+    includeOtherRegistrationAgencies: true,
+  });
+  const response = await fetch(url, {
+    method: "GET",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOI facet values: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as DoiFacetApiResponse;
+  const values = data.meta?.[facetName];
+
+  return Array.isArray(values) ? values : [];
+}
+
+export async function fetchDoiMetricTotal(
+  metric: DoiMetricFacet,
+  query = "",
+): Promise<number> {
+  const url = buildDoisApiUrl({
+    query: query.trim(),
+    pageSize: 0,
+    disableFacets: false,
+    facets: metric,
+  });
+  const response = await fetch(url, {
+    method: "GET",
+    headers: { accept: "application/vnd.api+json" },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch DOI ${metric} total: ${response.statusText}`);
+  }
+
+  const data = (await response.json()) as { meta?: Record<string, unknown> };
+  const value = Number(data.meta?.[metric]);
+  return Number.isFinite(value) ? value : 0;
 }
 
 export async function fetchDoisRecordsForMetadata(query: string) {
-  const url = `https://api.datacite.org/dois?query=${query}&page[size]=25`;
-  console.log("Fetching DOIs with query:", url);
+  const url = buildDoisApiUrl({
+    query,
+    pageSize: 25,
+  });
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -597,14 +1196,18 @@ export async function fetchDoisRecordsForMetadata(query: string) {
   if (!response.ok) {
     throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
   }
-const data = await response.json();
-console.log("DOIs records response:", data);
-  return data;
+
+  return response.json();
 }
 
 export async function fetchEntityCitations(query: string) {
-  const url = `https://api.datacite.org/dois?query=${query} AND citationCount:>0&page[size]=25&disable-facets=false&facets=citations&sort=-citation-count`;
-  console.log("Fetching DOIs with query:", url);
+  const url = buildDoisApiUrl({
+    query: `${query} AND citationCount:>0`,
+    pageSize: 25,
+    disableFacets: false,
+    facets: "citations",
+    sort: "-citation-count",
+  });
   const response = await fetch(url, {
     method: "GET",
     headers: { accept: "application/vnd.api+json" },
@@ -612,7 +1215,6 @@ export async function fetchEntityCitations(query: string) {
   if (!response.ok) {
     throw new Error(`Failed to fetch DOIs records: ${response.statusText}`);
   }
-const data = await response.json();
-console.log("DOIs records response:", data.meta);
-  return data;
+
+  return response.json();
 }

@@ -3,7 +3,6 @@
 import { track } from "@vercel/analytics";
 import { ChevronsUpDown, Home, Slash } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React, { type ReactNode } from "react";
 import {
   Breadcrumb,
@@ -34,15 +33,19 @@ import { EntityBadge } from "./Badges";
 import { Button } from "./ui/button";
 
 export default function Breadcrumbs(props: { entity: Entity }) {
-  const pages = [
-    props.entity?.parent?.parent,
-    props.entity?.parent,
-    props.entity,
-  ].filter((p) => !!p);
+  const pages: Entity[] = [];
+  const seen = new Set<string>();
+  let current: Entity | null = props.entity;
+
+  while (current && !seen.has(current.id)) {
+    pages.unshift(current);
+    seen.add(current.id);
+    current = current.parent;
+  }
 
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
+    <Breadcrumb className="w-full max-w-full px-6">
+      <BreadcrumbList className="w-full max-w-full">
         <BreadcrumbLink href="/">
           <Home />
         </BreadcrumbLink>
@@ -98,33 +101,42 @@ function BreadcrumbContent(props: {
     ) : (
       <BreadcrumbLink
         {...wrapperProps}
-        href={`/${props.entity.id}`}
+        href={`/org-repo/${props.entity.id}`}
         className={className}
         onMouseDown={onClick}
       />
     );
 
   return (
-    <BreadcrumbItem>
-      <BreadcrumbPageLink>
-        <Item className="p-0 pt-5">
-          <ItemContent className="gap-0">
-            <ItemTitle
-              className={
-                props.entity.id === props.active.id
-                  ? "bg-black/0 font-semibold"
-                  : ""
-              }
-            >
-              {props.entity.name} <EntityBadge entity={props.entity} />
-            </ItemTitle>
-            <ItemDescription className="text-muted-foreground/75 text-start">
-              {props.entity.id}
-            </ItemDescription>
-          </ItemContent>
-        </Item>
-      </BreadcrumbPageLink>
-    </BreadcrumbItem>
+    <BreadcrumbPageLink>
+      <BreadcrumbDisplay active={props.active} entity={props.entity} />
+    </BreadcrumbPageLink>
+  );
+}
+
+function BreadcrumbDisplay(props: {
+  active: { id: string };
+  entity: { id: string; name: string; type: string };
+}) {
+  return (
+    <Item className="p-0 pt-5">
+      <ItemContent className="gap-0 min-w-0">
+        <ItemTitle
+          className={cn(
+            "items-center gap-2",
+            props.entity.id === props.active.id ? "bg-black/0 font-semibold" : "",
+          )}
+        >
+          <span className="inline-block max-w-[10vw] truncate align-bottom">{props.entity.name}</span>
+          <span className="shrink-0">
+            <EntityBadge entity={props.entity} />
+          </span>
+        </ItemTitle>
+        <ItemDescription className="text-muted-foreground/75 text-start truncate">
+          {props.entity.id}
+        </ItemDescription>
+      </ItemContent>
+    </Item>
   );
 }
 
@@ -135,7 +147,6 @@ function SiblingSelect(props: {
   className?: string;
 }) {
   const items = props.parent?.children || [];
-  const searchParams = useSearchParams();
 
   if (items.length === 0) return props.children;
 
@@ -154,7 +165,13 @@ function SiblingSelect(props: {
     >
       <ComboboxTrigger
         render={
-          <Button variant="ghost" className={cn("h-min py-0", props.className)}>
+          <Button
+            variant="ghost"
+            className={cn(
+              "h-min py-0 min-w-0",
+              props.className,
+            )}
+          >
             {props.children}
             {items.length > 0 && <ChevronsUpDown />}
           </Button>
@@ -184,7 +201,7 @@ function SiblingSelect(props: {
                 key={item.id}
               >
                 <Link
-                  href={`/${item.id}?${searchParams.toString()}`}
+                  href={`/org-repo/${item.id}`}
                   prefetch
                   className="size-full"
                 >

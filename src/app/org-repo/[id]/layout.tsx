@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import ActionButtons from "@/components/ActionButtons";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { fetchEntity } from "@/data/fetch";
+import { getOrgRepoEntity } from "./orgRepoRecord";
 import Header from "./Header";
 
 export default async function Layout({
@@ -11,12 +11,12 @@ export default async function Layout({
   const { id } = await params;
 
   // Check if entity exists
-  const entity = await fetchEntity(id);
+  const entity = await getOrgRepoEntity(id);
   if (!entity) notFound();
 
   return (
     <>
-      <Header entity={entity} />
+      <Breadcrumbs entity={entity} />
       {children}
     </>
   );
