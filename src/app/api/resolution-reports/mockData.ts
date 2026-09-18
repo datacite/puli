@@ -20,8 +20,6 @@ export function buildResolutionReportsDocument(
     data: reports.map(toResolutionReportSummary),
     meta: {
       total: reports.length,
-      filteredTotal: reports.length,
-      prefix,
     },
   };
 }

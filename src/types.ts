@@ -422,8 +422,6 @@ export type ResolutionReportCollectionDocument = {
   data: ResolutionReportSummary[];
   meta: {
     total: number;
-    filteredTotal: number;
-    prefix?: string;
   };
 };
 
