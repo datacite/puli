@@ -401,7 +401,53 @@ export const RESOURCE_TYPE_FIELDS = {
   present: [TYPES, TYPES_RESOURCE_TYPE, TYPES_RESOURCE_TYPE_GENERAL],
   distribution: [TYPES_RESOURCE_TYPE_GENERAL],
 } as const;
-
+// Resolution Reports
+export const RESOLUTION_REPORTS = {
+  PREFIX_PARAM: "prefix",
+  REPORT_PARAM: "report",
+  PREFIX_OPTIONS: [
+    {
+      prefix: "10.11570",
+      repositoryName: "Example University Library",
+      repositoryId: "UNI.ID",
+    },
+    {
+      prefix: "10.82206",
+      repositoryName: "Data Repo",
+      repositoryId: "DATA.REPO",
+    },
+  ],
+  CHART_MODES: [
+    { value: "total-resolutions", label: "Total DOI Resolutions" },
+    { value: "unique-dois", label: "Resolutions of Unique DOIs" },
+  ],
+  CHART_CONFIG: {
+    totalAttemptedResolutions: {
+      label: "Total resolutions",
+      color: "#0F4C81",
+    },
+    totalUniqueDois: {
+      label: "Total unique DOIs resolved",
+      color: "#0F4C81",
+    },
+    successfulResolutions: {
+      label: "Successful resolutions",
+      color: "#00B1E2",
+    },
+    uniqueDoiSuccesses: {
+      label: "Unique DOIs successfully resolved",
+      color: "#00B1E2",
+    },
+    failedResolutions: {
+      label: "Failed resolutions",
+      color: "#7C8998",
+    },
+    uniqueDoiFailures: {
+      label: "Unique DOIs failed to resolve",
+      color: "#7C8998",
+    },
+  },
+} as const;
 export const SUBJECTS_FIELDS = {
   present: [SUBJECTS, SUBJECTS_SUBJECT_SCHEME, SUBJECTS_VALUE_URI],
   distribution: [SUBJECTS_SUBJECT_SCHEME],

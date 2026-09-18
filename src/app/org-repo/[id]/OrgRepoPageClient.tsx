@@ -12,6 +12,7 @@ import DoisPageClient from "@/app/dois/DoisPageClient";
 import { fetchDoisTotal } from "@/data/fetch";
 import { asNumber } from "@/util";
 import type { Entity } from "@/types";
+import ResolutionReports from "./ResolutionReports";
 
 type Props = {
   id: string;
@@ -116,11 +117,15 @@ export default function OrgRepoPageClient({
         content: <Suspense></Suspense>,
       },
       {
-        label: "Resolution Statistics",
-        value: "resolution-statistics",
+        label: "Resolution Metrics",
+        value: "resolution-metrics",
         groupLabel: "Impact",
         icon: <ChartBarBig className="size-4 shrink-0" />,
-        content: <Suspense></Suspense>,
+        content: (
+          <Suspense>
+            <ResolutionReports />
+          </Suspense>
+        ),
       },
       {
         label: `${entityLabel} Info`,

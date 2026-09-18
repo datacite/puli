@@ -372,6 +372,98 @@ export type Filters = {
   registered: string | null;
   openSearchQuery: string | null;
 };
+
+export type ResolutionReportSummaryMetrics = {
+  totalAttemptedResolutions: number;
+  successfulResolutions: number;
+  failedResolutions: number;
+  totalUniqueDois: number;
+  uniqueDoiSuccesses: number;
+  uniqueDoiFailures: number;
+};
+
+export type ResolutionReportTopSuccessfulDoi = {
+  doi: string;
+  resolutionCount: number;
+};
+
+export type ResolutionReportFailedDoi = {
+  doi: string;
+  resolutionCount: number;
+  top5FailedReferrers: string[];
+};
+
+export type ResolutionReportAttributes = {
+  prefix: string;
+  period: string;
+  summaryMetrics: ResolutionReportSummaryMetrics;
+  topSuccessfulDois: ResolutionReportTopSuccessfulDoi[];
+  failedDois: ResolutionReportFailedDoi[];
+} & Record<string, unknown>;
+
+export type ResolutionReportSummaryAttributes = Pick<
+  ResolutionReportAttributes,
+  "prefix" | "period" | "summaryMetrics"
+>;
+
+export type ResolutionReport = {
+  id: string;
+  type: "resolution-reports";
+  attributes: ResolutionReportAttributes;
+};
+
+export type ResolutionReportSummary = {
+  id: string;
+  type: "resolution-reports";
+  attributes: ResolutionReportSummaryAttributes;
+};
+
+export type ResolutionReportCollectionDocument = {
+  data: ResolutionReportSummary[];
+  meta: {
+    total: number;
+    filteredTotal: number;
+    prefix?: string;
+  };
+};
+
+export type ResolutionReportDocument = {
+  data: ResolutionReport;
+};
+
+// Resolution Reports Component Types
+export type PrefixOption = {
+  prefix: string;
+  repositoryName: string;
+  repositoryId: string;
+};
+
+export type ReportOption = {
+  id: string;
+  period: string;
+};
+
+export type ResolutionTrendPoint = {
+  id: string;
+  period: string;
+  totalAttemptedResolutions: number;
+  successfulResolutions: number;
+  failedResolutions: number;
+  totalUniqueDois: number;
+  uniqueDoiSuccesses: number;
+  uniqueDoiFailures: number;
+};
+
+export type ChartMode = "total-resolutions" | "unique-dois";
+
+export type JsonApiErrorDocument = {
+  errors: Array<{
+    status: string;
+    title: string;
+    detail?: string;
+  }>;
+};
+
 export type Format<R> = (
   present: PresentProps[],
   distribution: DistributionProps[],
