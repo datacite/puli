@@ -115,7 +115,7 @@ export function TrendChart({
 
   return (
     <div className="space-y-3">
-      <Toolbar className="mx-auto w-fit rounded-[60px] bg-muted p-1 text-datacite-dark-blue">
+      <Toolbar className="mx-auto w-fit border rounded-[60px] bg-muted p-1 text-datacite-dark-blue">
         <ToolbarGroup className="flex-nowrap items-center gap-1">
           {RESOLUTION_REPORTS.CHART_MODES.map((option) => {
             const isActive = mode === option.value;

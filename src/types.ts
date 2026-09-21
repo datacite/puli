@@ -181,6 +181,7 @@ export type DoiRecord = {
   attributes: {
     titles: { title: string }[];
     doi: string;
+    prefix?: string;
     descriptions?: { description: string }[];
     types: { resourceTypeGeneral?: string };
     version: string;
@@ -251,6 +252,7 @@ type HeaderIdentity = {
 };
 
 export type DoiHeaderData = HeaderIdentity & {
+  prefix?: string;
   resourceTypeGeneral: string;
   publicationYear: string;
   publisher: string;

@@ -8,6 +8,7 @@ import {
   Shapes,
   BookCheck,
   Building2,
+  MousePointerClick,
 } from "lucide-react";
 import { H3 } from "@/components/datacite/Headings";
 import { Card } from "@/components/ui/card";
@@ -20,6 +21,7 @@ import {
 import { asNumber } from "@/util";
 import type { DoiHeaderData, HeaderInfo } from "@/types";
 import IndexedInList from "./IndexedInList";
+import DoiUsageTab from "./DoiUsageTab";
 
 type Props = {
   id: string;
@@ -112,17 +114,22 @@ export default function DoiTabbedClient({ id, headerData }: Props) {
         ),
       },
       {
+        value: "resolution-metrics",
+        label: "Resolution Metrics",
+        groupLabel: "Impact",
+        icon: <MousePointerClick className="size-4 shrink-0" />,
+        content: (
+          <Suspense>
+            <DoiUsageTab doi={id} prefix={headerData.prefix} />
+          </Suspense>
+        ),
+      },
+      {
         value: "views-downloads",
         label: "Views & Downloads",
         groupLabel: "Impact",
         icon: <Eye className="size-4 shrink-0" />,
-        content: (
-          <Suspense>
-            <Card className="px-4">
-              <div>Views and downloads metrics could go here</div>
-            </Card>
-          </Suspense>
-        ),
+        content: <Suspense></Suspense>,
       },
       {
         value: "references",
@@ -193,7 +200,7 @@ export default function DoiTabbedClient({ id, headerData }: Props) {
         ),
       },
     ],
-    [id, otherVersionsQuery],
+    [headerData.prefix, id, otherVersionsQuery],
   );
 
   return (

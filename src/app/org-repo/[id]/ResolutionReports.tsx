@@ -142,7 +142,7 @@ export default function ResolutionReports() {
     rowId: doi.doi,
     doi: (
       <Link
-        href={`/dois/${doi.doi}`}
+        href={`/dois/${doi.doi}?tab=resolution-metrics`}
         className="inline-flex items-center gap-1 font-bold text-datacite-blue-dark transition-colors hover:text-datacite-blue-light"
       >
         {doi.doi}

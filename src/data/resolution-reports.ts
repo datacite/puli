@@ -1,5 +1,21 @@
-import { useQuery as useTanstackQuery } from "@tanstack/react-query";
+import { useQueries, useQuery as useTanstackQuery } from "@tanstack/react-query";
 import type { ResolutionReportCollectionDocument, ResolutionReport } from "@/types";
+
+type ResolutionReportQueryOptions = {
+  enabled?: boolean;
+};
+
+function buildResolutionReportDetailQuery(
+  id: string,
+  options?: ResolutionReportQueryOptions,
+) {
+  return {
+    queryKey: ["resolution-report-detail", id],
+    queryFn: () => fetchResolutionReportDetail(id),
+    enabled: options?.enabled ?? !!id,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  };
+}
 
 export async function fetchResolutionReportSummaries(prefix: string) {
   const response = await fetch(
@@ -39,11 +55,18 @@ export function useResolutionReportSummaries(prefix: string) {
   });
 }
 
-export function useResolutionReportDetail(id: string, options?: { enabled?: boolean }) {
-  return useTanstackQuery({
-    queryKey: ["resolution-report-detail", id],
-    queryFn: () => fetchResolutionReportDetail(id),
-    enabled: options?.enabled ?? !!id,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+export function useResolutionReportDetail(
+  id: string,
+  options?: ResolutionReportQueryOptions,
+) {
+  return useTanstackQuery(buildResolutionReportDetailQuery(id, options));
+}
+
+export function useResolutionReportDetails(
+  ids: string[],
+  options?: ResolutionReportQueryOptions,
+) {
+  return useQueries({
+    queries: ids.map((id) => buildResolutionReportDetailQuery(id, options)),
   });
 }

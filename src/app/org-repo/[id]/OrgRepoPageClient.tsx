@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, Quote, Shapes, Tag, Settings, KeyRound, Blocks, ChartBarBig } from "lucide-react";
+import { Eye, Quote, Shapes, Tag, Settings, KeyRound, Blocks, ChartBarBig, MousePointerClick } from "lucide-react";
 import { Suspense, useMemo } from "react";
 import * as Cards from "@/components/cards/Cards";
 import OverviewCard from "@/components/cards/OverviewCard";
@@ -110,22 +110,22 @@ export default function OrgRepoPageClient({
         getBadgeValue: async () => asNumber(await fetchDoisTotal(`${entityQuery} AND citationCount:>0`)),
       },
       {
-        label: "Views & Downloads",
-        value: "views-downloads",
-        groupLabel: "Impact",
-        icon: <Eye className="size-4 shrink-0" />,
-        content: <Suspense></Suspense>,
-      },
-      {
         label: "Resolution Metrics",
         value: "resolution-metrics",
         groupLabel: "Impact",
-        icon: <ChartBarBig className="size-4 shrink-0" />,
+        icon: <MousePointerClick className="size-4 shrink-0" />,
         content: (
           <Suspense>
             <ResolutionReports />
           </Suspense>
         ),
+      },
+      {
+        label: "Views & Downloads",
+        value: "views-downloads",
+        groupLabel: "Impact",
+        icon: <Eye className="size-4 shrink-0" />,
+        content: <Suspense></Suspense>,
       },
       {
         label: `${entityLabel} Info`,

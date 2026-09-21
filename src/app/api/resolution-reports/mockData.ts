@@ -956,12 +956,12 @@ const MOCK_DATA: RawResolutionReport[] = [
       "topSuccessfulDois": [
         {
           "doi": "10.11570/23.0029",
-          "resolutionCount": 116
+          "resolutionCount": 230
         },
-        {
-          "doi": "10.11570/25.0066",
-          "resolutionCount": 80
-        },
+        // {
+        //   "doi": "10.11570/25.0066",
+        //   "resolutionCount": 116
+        // },
         {
           "doi": "10.11570/26.0020",
           "resolutionCount": 77
@@ -1836,11 +1836,11 @@ const MOCK_DATA: RawResolutionReport[] = [
       "topSuccessfulDois": [
         {
           "doi": "10.11570/23.0029",
-          "resolutionCount": 116
+          "resolutionCount": 48
         },
         {
           "doi": "10.11570/25.0066",
-          "resolutionCount": 80
+          "resolutionCount": 45
         },
         {
           "doi": "10.11570/26.0020",

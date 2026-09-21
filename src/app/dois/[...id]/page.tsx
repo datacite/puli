@@ -24,6 +24,7 @@ export default async function DoiPage({ params }: PageProps) {
   const headerData: DoiHeaderData = {
     title: attributes?.titles?.[0]?.title || "Untitled",
     id: `https://doi.org/${id}`,
+    prefix: attributes?.prefix,
     resourceTypeGeneral: attributes?.types?.resourceTypeGeneral || "Unknown Type",
     publicationYear: attributes?.publicationYear?.toString() || "Unknown Year",
     publisher: attributes?.publisher || "Unknown Publisher",
